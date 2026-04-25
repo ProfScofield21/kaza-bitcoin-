@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thème 2 — Violet & Bitcoin</title>
+<style>
+  /* ══ THÈME 2 : VIOLET LIGHTNING ══
+     Mystérieux, crypto, numérique.
+     Fond très sombre tirant sur le violet nuit.
+     Accent violet vif #a855f7 à la place du bleu.
+     Ambiance : tech, cryptopunk, Lightning Network. */
+  :root {
+    --bg:    #080810;
+    --card:  #10101e;
+    --gold:  #f7931a;
+    --acc:   #a855f7;   /* ← ACCENT : violet vif */
+    --text:  #e2e0f0;
+    --muted: #7070a0;
+    --green: #34d399;
+    --red:   #f87171;
+    --border:#1e1e38;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; }
+
+  header {
+    background: linear-gradient(135deg, #0a0a18 0%, #12103a 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 24px 20px 20px;
+    text-align: center;
+  }
+  .logo-wrap { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:8px; }
+  .logo-svg  { width:68px; height:68px; }
+  .site-title { font-size:2.1rem; font-weight:800; color:var(--gold); letter-spacing:1px; }
+  .site-title span { color:var(--acc); }
+  .site-subtitle { color:var(--muted); font-size:0.9rem; margin-top:4px; }
+
+  .badge-theme {
+    display:inline-block; margin:12px auto 0;
+    background:#1a0a30; color:var(--acc);
+    border:1px solid var(--acc); border-radius:20px;
+    padding:4px 14px; font-size:0.8rem; font-weight:700; letter-spacing:0.5px;
+  }
+
+  .band { padding:12px 20px; text-align:center; font-size:0.88rem; line-height:1.6; }
+  .band-how {
+    background: linear-gradient(90deg, #0c0a20, #140e30, #0c0a20);
+    border-bottom: 1px solid #2a1a50;
+    color: #c4b0f0;
+  }
+  .band-how strong { color:var(--acc); }
+  .band-how .sats  { font-size:1.05rem; font-weight:800; color:var(--gold); }
+  .band-contact {
+    background: #0d0d1a;
+    border-bottom: 2px solid var(--border);
+    color: var(--muted);
+  }
+  .band-contact a { color:var(--gold); text-decoration:none; }
+
+  .filters { padding:14px 20px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; background:#0a0a16; border-bottom:1px solid var(--border); }
+  .filter-btn { background:#14142a; color:var(--muted); border:1px solid #2a2a50; border-radius:20px; padding:6px 14px; font-size:0.82rem; cursor:pointer; }
+  .filter-btn.active { background:var(--gold); color:#000; border-color:var(--gold); font-weight:700; }
+
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; padding:22px 20px; max-width:900px; margin:0 auto; }
+
+  .book-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column; }
+  .book-card.emprunte { border-color:#2a0a0a; opacity:0.65; }
+  .card-img-wrap { width:100%; aspect-ratio:2/3; background:#080816; position:relative; }
+  .card-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+  .status-badge { position:absolute; top:8px; right:8px; font-size:0.68rem; font-weight:700; padding:3px 8px; border-radius:20px; }
+  .badge-dispo    { background:var(--green); color:#000; }
+  .badge-emprunte { background:var(--red);   color:#fff; }
+  .card-body { padding:11px; flex:1; display:flex; flex-direction:column; gap:4px; }
+  .card-title  { font-size:0.85rem; font-weight:700; color:var(--text); line-height:1.3; }
+  .card-author { font-size:0.75rem; color:#c084fc; }
+  .card-meta   { font-size:0.7rem;  color:var(--muted); }
+  .card-cat    { font-size:0.66rem; font-weight:700; padding:2px 7px; border-radius:10px; display:inline-block; margin-top:4px; background:#1a0a30; color:var(--acc); border:1px solid #4a1a80; }
+  .toggle-btn  { margin:8px 10px 10px; padding:7px; border:none; border-radius:8px; font-size:0.77rem; font-weight:700; cursor:pointer; background:#12082a; color:var(--acc); border:1px solid var(--acc); }
+
+  footer { text-align:center; padding:20px; border-top:1px solid var(--border); color:var(--muted); font-size:0.8rem; background:#060610; margin-top:16px; }
+  footer a { color:var(--gold); text-decoration:none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 100 100">
+      <path d="M12 22 Q12 18 16 18 L48 18 L48 82 L16 82 Q12 82 12 78 Z" fill="#10103a" stroke="#f7931a" stroke-width="2"/>
+      <path d="M88 22 Q88 18 84 18 L52 18 L52 82 L84 82 Q88 82 88 78 Z" fill="#10103a" stroke="#f7931a" stroke-width="2"/>
+      <rect x="47" y="16" width="6" height="68" fill="#f7931a" rx="1"/>
+      <line x1="20" y1="32" x2="44" y2="32" stroke="#2a2a60" stroke-width="1.5"/>
+      <line x1="20" y1="40" x2="44" y2="40" stroke="#2a2a60" stroke-width="1.5"/>
+      <line x1="20" y1="48" x2="44" y2="48" stroke="#2a2a60" stroke-width="1.5"/>
+      <text x="70" y="58" text-anchor="middle" font-size="28" font-weight="900" fill="#f7931a" font-family="Arial,sans-serif">&#8383;</text>
+      <path d="M64 20 L57 42 L63 42 L56 62 L72 36 L65 36 Z" fill="#a855f7" opacity="0.95"/>
+    </svg>
+    <div>
+      <div class="site-title">Kaz&apos;a <span>Bitcoin</span></div>
+      <div class="site-subtitle">Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</div>
+    </div>
+  </div>
+  <div class="badge-theme">TH&Egrave;ME 2 &mdash; VIOLET LIGHTNING</div>
+</header>
+
+<div class="band band-how">
+  &#x26A1; <strong>Comment emprunter&nbsp;?</strong>
+  Contactez-moi pour r&eacute;server un livre, puis r&eacute;cup&eacute;rez-le lors du <strong>meet-up mensuel Bitcoin Gwada</strong>.
+  Caution&nbsp;: <strong><span class="sats">25&thinsp;000 sats</span></strong> en Lightning &mdash; rembours&eacute;e &agrave; la restitution.
+  Contrat sign&eacute; <strong>une seule fois</strong>, r&eacute;-emprunt <strong>sans limite</strong>.
+</div>
+<div class="band band-contact">
+  &#128236; Pour emprunter&nbsp;:
+  <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://twitter.com/ProfScofield2" target="_blank">Twitter @ProfScofield2</a>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active">Tous les livres</button>
+  <button class="filter-btn">&#8383; Fondamentaux</button>
+  <button class="filter-btn">&Eacute;conomie &amp; Libert&eacute;</button>
+  <button class="filter-btn">Initiation</button>
+</div>
+
+<div class="grid">
+  <div class="book-card">
+    <div class="card-img-wrap">
+      <img src="../kaza-bitcoin/images/bitcoin_standard.jpeg" alt="">
+      <span class="status-badge badge-dispo">&#128215; Dispo</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Le Standard Bitcoin</div>
+      <div class="card-author">Saifedean Ammous</div>
+      <div class="card-meta">Essai &eacute;conomique &middot; 2018</div>
+      <span class="card-cat">&#8383; Fondamentaux</span>
+    </div>
+    <button class="toggle-btn">&#128228; Marquer emprunt&eacute;</button>
+  </div>
+  <div class="book-card emprunte">
+    <div class="card-img-wrap">
+      <img src="../kaza-bitcoin/images/alice_cryptos.jpg" alt="">
+      <span class="status-badge badge-emprunte">&#128213; Emprunt&eacute;</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Alice au pays des Cryptos</div>
+      <div class="card-author">Nicolas Balas &amp; Daniel Villa Monteiro</div>
+      <div class="card-meta">BD / Initiation &middot; 2023</div>
+      <span class="card-cat">Initiation</span>
+    </div>
+    <button class="toggle-btn">&#8617; Marquer disponible</button>
+  </div>
+  <div class="book-card">
+    <div class="card-img-wrap">
+      <img src="../kaza-bitcoin/images/elegance_bitcoin.jpg" alt="">
+      <span class="status-badge badge-dispo">&#128215; Dispo</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">L&apos;&Eacute;l&eacute;gance de Bitcoin</div>
+      <div class="card-author">Ludovic Lars</div>
+      <div class="card-meta">Essai technique &middot; 2023</div>
+      <span class="card-cat">Technique &amp; Pratique</span>
+    </div>
+    <button class="toggle-btn">&#128228; Marquer emprunt&eacute;</button>
+  </div>
+  <div class="book-card">
+    <div class="card-img-wrap">
+      <img src="../kaza-bitcoin/images/crypto_dystopies.jpg" alt="">
+      <span class="status-badge badge-dispo">&#128215; Dispo</span>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Crypto Dystopies 2035</div>
+      <div class="card-author">Benjamin Loiseau</div>
+      <div class="card-meta">Fiction / Dystopie &middot; 2023</div>
+      <span class="card-cat">Fiction &amp; Dystopie</span>
+    </div>
+    <button class="toggle-btn">&#128228; Marquer emprunt&eacute;</button>
+  </div>
+</div>
+
+<footer>
+  Kaz&apos;a Bitcoin &mdash; Biblioth&egrave;que Lightning &#x26A1; Guadeloupe &nbsp;&middot;&nbsp;
+  <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaz'a Bitcoin — Bibliothèque Lightning</title>
+<style>
+  :root {
+    --bg:     #f5f0e8;
+    --card:   #ffffff;
+    --gold:   #c47a0a;
+    --gold2:  #a05e00;
+    --text:   #1a1208;
+    --muted:  #7a6a50;
+    --green:  #166534;
+    --red:    #991b1b;
+    --border: #d4c8b0;
+    --shadow: rgba(0,0,0,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a1008 0%, #2a1a08 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 24px 20px 20px;
+    text-align: center;
+  }
+  .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px; }
+  .logo-svg { width: 72px; height: 72px; flex-shrink: 0; }
+  .site-title { font-size: 2.2rem; font-weight: 800; color: #f5e8c8; letter-spacing: 1px; line-height: 1.1; font-family: 'Georgia', serif; }
+  .site-title span { color: #f7931a; }
+  .site-subtitle { color: #9a8060; font-size: 0.95rem; margin-top: 4px; letter-spacing: 0.5px; }
+
+  /* INFO BANDS */
+  .band {
+    padding: 13px 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .band-how {
+    background: #fdf5e4;
+    border-top: 1px solid #e8d8b0;
+    border-bottom: 1px solid #e8d8b0;
+    color: #3a2808;
+  }
+  .band-how strong { color: var(--gold); }
+  .band-how .sats { font-size: inherit; font-weight: 800; color: #b06a00; }
+  .band-contact {
+    background: #fff8ee;
+    border-bottom: 2px solid var(--border);
+    color: var(--muted);
+  }
+  .band-contact a { color: var(--gold); text-decoration: none; font-weight: 600; }
+  .band-contact a:hover { text-decoration: underline; }
+
+  /* FILTERS */
+  .filters {
+    padding: 14px 20px;
+    background: #ede8dc;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-toggle {
+    display: none;
+    width: 100%;
+    background: #fff;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .filter-toggle .toggle-arrow { transition: transform 0.2s; display: inline-block; }
+  .filters.open .filter-toggle .toggle-arrow { transform: rotate(180deg); }
+  .filters-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .filter-btn {
+    background: #fff;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: #1a1008; color: #f5e8c8; border-color: #1a1008; font-weight: 700; }
+  .filter-btn.avail-active { background: var(--green); color: #fff; border-color: var(--green); }
+  .filter-btn.cdc-active { background: #c0392b; color: #fff; border-color: #c0392b; }
+
+  @media (max-width: 600px) {
+    .filter-toggle { display: flex; }
+    .filters-inner { display: none; margin-top: 10px; }
+    .filters.open .filters-inner { display: flex; }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    text-align: center;
+    padding: 9px 20px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: #ede8dc;
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-bar span { color: var(--text); font-weight: 600; }
+
+  /* GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 24px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* CARD */
+  .book-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px var(--shadow);
+    position: relative;
+  }
+  .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(196,122,10,0.18); }
+  .book-card.emprunte { border-color: #e0b8b8; opacity: 0.65; }
+  .book-card.emprunte:hover { box-shadow: 0 8px 24px rgba(153,27,27,0.12); }
+  .book-card.is-cdc { border-color: #e8b4a8; border-width: 2px; }
+
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    background: #f0e8d8;
+    position: relative;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .book-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+  .status-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+  .badge-dispo    { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .badge-emprunte { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+  /* Badge coup de cœur sur la couverture */
+  .cdc-flag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #c0392b;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(192,57,43,0.35);
+  }
+
+  .card-body {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .card-title  { font-size: 0.87rem; font-weight: 700; color: var(--text); line-height: 1.3; font-family: 'Georgia', serif; }
+  .card-author { font-size: 0.76rem; color: var(--gold); font-style: italic; }
+  .card-author a { color: var(--gold); text-decoration: none; font-weight: 700; }
+  .card-author a:hover { text-decoration: underline; color: #1da1f2; }
+  .card-meta   { font-size: 0.71rem; color: var(--muted); margin-top: 2px; }
+  .card-cat {
+    font-size: 0.67rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+  .cat-fondamentaux { background: #fff3e0; color: #8a4a00; border: 1px solid #f0c878; }
+  .cat-economie     { background: #f0faf4; color: #166534; border: 1px solid #86efac; }
+  .cat-technique    { background: #e8f4fd; color: #1a5c8a; border: 1px solid #90caf9; }
+  .cat-histoire     { background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; }
+  .cat-fiction      { background: #fdf4ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+  .cat-initiation   { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
+  .cat-bd           { background: #fff0fb; color: #86198f; border: 1px solid #f0abfc; }
+  .cat-enfants      { background: #fffbea; color: #854d0e; border: 1px solid #fde68a; }
+  .cat-whitepaper   { background: #f5f3ff; color: #4c1d95; border: 1px solid #c4b5fd; }
+  .cat-cdc          { background: #fff0ee; color: #c0392b; border: 1px solid #f4a89a; }
+
+  /* Rubrique coup de cœur — visible uniquement dans la vue CDC */
+  .card-rubrique {
+    display: none;
+    font-size: 0.75rem;
+    color: #5a3a2a;
+    line-height: 1.55;
+    font-style: italic;
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px dashed #e8b4a8;
+  }
+  .grid.show-rubrique .card-rubrique { display: block; }
+
+  /* TOGGLE BUTTON */
+  .toggle-btn {
+    margin: 10px 12px 12px;
+    padding: 7px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .toggle-dispo    { background: #f0faf4; color: var(--green); border: 1px solid #86efac; }
+  .toggle-dispo:hover    { background: #dcfce7; }
+  .toggle-emprunte { background: #fff1f1; color: var(--red); border: 1px solid #fca5a5; }
+  .toggle-emprunte:hover { background: #fee2e2; }
+
+  /* Bouton téléchargement ebook */
+  .ebook-btn {
+    display: block;
+    margin: 0 12px 10px;
+    padding: 7px;
+    border-radius: 8px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    background: #eff6ff;
+    color: #1a56a8;
+    border: 1px solid #93c5fd;
+    transition: all 0.2s;
+  }
+  .ebook-btn:hover { background: #dbeafe; text-decoration: none; }
+
+  /* Nom auteur cliquable */
+  .author-link {
+    cursor: pointer;
+    border-bottom: 1px dashed var(--gold);
+    transition: color 0.2s;
+  }
+  .author-link:hover { color: var(--gold2); }
+
+  /* Bouton don auteur */
+  .don-auteur-btn {
+    display: block;
+    margin: 0 12px 10px;
+    padding: 7px;
+    border-radius: 8px;
+    font-size: 0.77rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    background: #fff8ee;
+    color: #b06a00;
+    border: 1px solid #f0c878;
+    transition: all 0.2s;
+  }
+  .don-auteur-btn:hover { background: #fff3e0; }
+
+  /* MODAL AUTEUR */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 28px 22px;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+    position: relative;
+    border-top: 4px solid var(--gold);
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: none; border: none;
+    font-size: 1.3rem; cursor: pointer;
+    color: var(--muted);
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-auteur-nom {
+    font-family: 'Georgia', serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+  .modal-row .modal-icon { font-size: 1rem; flex-shrink: 0; }
+  .modal-row a { color: var(--gold); text-decoration: none; font-weight: 600; }
+  .modal-row a:hover { text-decoration: underline; }
+  .modal-ln-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+  .modal-ln-addr { font-family: monospace; font-size: 0.82rem; color: #b06a00; flex: 1; word-break: break-all; }
+  .modal-copy-btn {
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .modal-copy-btn:hover { background: var(--gold2); }
+  .modal-copy-btn.copied { background: #166534; }
+  .modal-bio {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .modal-specialite {
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-dates {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* MODAL LIVRE */
+  #book-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  #book-modal-overlay.open { display: flex; }
+  .book-modal-box {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    position: relative;
+    border-top: 4px solid var(--gold);
+  }
+  .book-modal-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: none; border: none;
+    font-size: 1.4rem; cursor: pointer;
+    color: var(--muted); line-height: 1;
+    z-index: 2;
+  }
+  .book-modal-close:hover { color: var(--text); }
+  .book-modal-inner {
+    display: flex;
+    gap: 0;
+  }
+  .book-modal-cover {
+    width: 200px;
+    flex-shrink: 0;
+    background: #f0e8d8;
+    border-radius: 0 0 0 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .book-modal-cover.has-3d {
+    overflow: visible;
+    background: #e8e0d0;
+  }
+  .book-modal-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── 3D Book flip in modal ── */
+  .bm-scene {
+    width: 156px;
+    height: 234px;
+    perspective: 900px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .bm-book {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.72s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotateY(-16deg) rotateX(2deg);
+  }
+  .bm-scene:hover .bm-book:not(.flipped) {
+    transform: rotateY(-21deg) rotateX(3deg);
+  }
+  .bm-book.flipped {
+    transform: rotateY(-180deg);
+  }
+  .bm-scene:hover .bm-book.flipped {
+    transform: rotateY(-159deg) rotateX(2deg);
+  }
+  .bm-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 2px 5px 5px 2px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 3px rgba(0,0,0,0.22);
+  }
+  .bm-face-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .bm-face-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(160deg, #1a0e04 0%, #2d1a08 100%);
+    border-radius: 5px 2px 2px 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px 12px;
+  }
+  .bm-back-deco {
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    margin: 0 auto 10px;
+    border-radius: 1px;
+  }
+  .bm-back-text {
+    font-size: 0.62rem;
+    color: #e8d8b8;
+    line-height: 1.55;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 15;
+    -webkit-box-orient: vertical;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+  }
+  /* Tranche (pages) */
+  .bm-pages {
+    position: absolute;
+    right: -17px;
+    top: 1px;
+    width: 17px;
+    height: calc(100% - 2px);
+    transform: rotateY(90deg);
+    transform-origin: left center;
+    background: repeating-linear-gradient(
+      to bottom,
+      #f5f0e8 0px, #f5f0e8 2px,
+      #ddd5c5 2px, #ddd5c5 3px
+    );
+    border-radius: 0 2px 2px 0;
+  }
+  /* Dos (reliure) */
+  .bm-spine {
+    position: absolute;
+    left: -17px;
+    top: 1px;
+    width: 17px;
+    height: calc(100% - 2px);
+    transform: rotateY(-90deg);
+    transform-origin: right center;
+    background: linear-gradient(to right, #5c3000, #8a5200);
+    border-radius: 2px 0 0 2px;
+  }
+  /* Top / Bottom */
+  .bm-top {
+    position: absolute;
+    top: -9px;
+    left: 0;
+    width: 100%;
+    height: 17px;
+    transform: rotateX(90deg);
+    transform-origin: bottom center;
+    background: linear-gradient(to bottom, #f5f0e8, #e8e0d0);
+  }
+  .bm-bottom {
+    position: absolute;
+    bottom: -9px;
+    left: 0;
+    width: 100%;
+    height: 17px;
+    transform: rotateX(-90deg);
+    transform-origin: top center;
+    background: #e0d8c8;
+  }
+
+  /* 4ème de couverture dans le panel info */
+  .book-modal-quatrieme {
+    font-size: 0.82rem;
+    color: #4a3820;
+    line-height: 1.72;
+    font-style: italic;
+    background: #fdf8f2;
+    border-left: 3px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+  }
+  .book-modal-passage {
+    font-size: 0.8rem;
+    color: #3a2a18;
+    line-height: 1.65;
+    font-style: italic;
+    padding: 8px 14px;
+    border-left: 2px solid var(--border);
+    background: #fafaf8;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 8px;
+  }
+  .book-modal-info {
+    flex: 1;
+    padding: 28px 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .book-modal-title {
+    font-family: 'Georgia', serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+    padding-right: 28px;
+  }
+  .book-modal-author {
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .book-modal-meta {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .book-modal-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .book-modal-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 8px 0;
+  }
+  .book-modal-rubrique {
+    font-size: 0.85rem;
+    color: #4a3820;
+    line-height: 1.65;
+    font-style: italic;
+  }
+  .book-modal-section-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .book-modal-auteur-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .book-modal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: #fdf8f0;
+    transition: all 0.2s;
+  }
+  .book-modal-link:hover { border-color: var(--gold); color: var(--gold); }
+  .book-modal-ln {
+    margin-top: 6px;
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .book-modal-ln-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #b06a00;
+    margin-bottom: 6px;
+  }
+  .book-modal-ln-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .book-modal-ln-addr {
+    font-family: monospace;
+    font-size: 0.82rem;
+    color: #b06a00;
+    flex: 1;
+    word-break: break-all;
+  }
+  .book-modal-ebook {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    background: #eff6ff;
+    color: #1a56a8;
+    border: 1px solid #93c5fd;
+    transition: background 0.2s;
+    align-self: flex-start;
+  }
+  .book-modal-ebook:hover { background: #dbeafe; }
+
+  /* Cartes cliquables */
+  .book-card { cursor: pointer; }
+
+  @media (max-width: 540px) {
+    .book-modal-inner { flex-direction: column; }
+    .book-modal-cover { width: 100%; height: 220px; border-radius: 0; }
+    .book-modal-info { padding: 18px; }
+  }
+
+  /* Zoom survol couverture */
+  #bm-zoom {
+    display: none;
+    position: fixed;
+    z-index: 600;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    pointer-events: none;
+    border: 2px solid var(--gold);
+  }
+  #bm-zoom img {
+    width: 375px;
+    height: 563px;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* MODAL QR CODE */
+  #qr-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+  }
+  #qr-overlay.open { display: flex; }
+  .qr-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 28px 22px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    position: relative;
+    border-top: 4px solid var(--gold);
+  }
+  .qr-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: none; border: none;
+    font-size: 1.3rem; cursor: pointer;
+    color: var(--muted); line-height: 1;
+  }
+  .qr-close:hover { color: var(--text); }
+  .qr-title {
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .qr-img {
+    width: 220px;
+    height: 220px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto 14px;
+  }
+  .qr-addr {
+    font-family: monospace;
+    font-size: 0.78rem;
+    color: #b06a00;
+    word-break: break-all;
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 8px;
+  }
+  .qr-hint {
+    font-size: 0.74rem;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .ln-address { cursor: pointer; border-bottom: 1px dashed #f7931a; transition: color 0.2s; }
+  .ln-address:hover { color: #f7931a; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 24px 20px;
+    border-top: 2px solid var(--border);
+    color: var(--muted);
+    font-size: 0.82rem;
+    background: #ede8dc;
+    margin-top: 20px;
+  }
+  footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+  /* DONATION */
+  .donation-band {
+    background: linear-gradient(135deg, #1a1008 0%, #2a1a08 100%);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .donation-band p { color: #c8a86a; font-size: 0.88rem; margin-bottom: 10px; }
+  .donation-band strong { color: #f5e8c8; }
+  .ln-address-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #2a1a08;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 8px 14px;
+  }
+  .ln-address {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #f7931a;
+    letter-spacing: 0.3px;
+  }
+  .copy-btn {
+    background: var(--gold);
+    color: #1a1008;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .copy-btn:hover { background: #f7931a; }
+  .copy-btn.copied { background: #166534; color: #fff; }
+
+  @media (max-width: 480px) {
+    .site-title { font-size: 1.5rem; }
+    .logo-svg { width: 52px; height: 52px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 16px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22 Q12 18 16 18 L48 18 L48 82 L16 82 Q12 82 12 78 Z" fill="#2a1a08" stroke="#f7931a" stroke-width="2"/>
+      <path d="M88 22 Q88 18 84 18 L52 18 L52 82 L84 82 Q88 82 88 78 Z" fill="#2a1a08" stroke="#f7931a" stroke-width="2"/>
+      <rect x="47" y="16" width="6" height="68" fill="#f7931a" rx="1"/>
+      <line x1="20" y1="32" x2="44" y2="32" stroke="#3a2800" stroke-width="1.5"/>
+      <line x1="20" y1="40" x2="44" y2="40" stroke="#3a2800" stroke-width="1.5"/>
+      <line x1="20" y1="48" x2="44" y2="48" stroke="#3a2800" stroke-width="1.5"/>
+      <text x="70" y="58" text-anchor="middle" font-size="28" font-weight="900" fill="#f7931a" font-family="Arial,sans-serif">&#8383;</text>
+      <path d="M64 20 L57 42 L63 42 L56 62 L72 36 L65 36 Z" fill="#ffd060" opacity="0.95"/>
+    </svg>
+    <div>
+      <div class="site-title">Kaz&apos;a <span>Bitcoin</span></div>
+      <div class="site-subtitle">Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</div>
+    </div>
+  </div>
+</header>
+
+<!-- BAND : COMMENT EMPRUNTER + CAUTION -->
+<div class="band band-how">
+  &#x26A1; <strong>Comment emprunter&nbsp;?</strong>
+  &nbsp;&nbsp;
+  <strong>1.</strong> Contactez-moi par <a href="https://t.me/BitcoinGwada" target="_blank" style="color:var(--gold);font-weight:700;text-decoration:none;">Telegram</a>, email ou Twitter pour r&eacute;server.
+  &nbsp;&nbsp;
+  <strong>2.</strong> R&eacute;cup&eacute;rez votre livre au <strong>meet-up mensuel Bitcoin Gwada</strong>.
+  &nbsp;&nbsp;
+  <strong>3.</strong> Une caution de <strong><span class="sats">25&thinsp;000 sats</span></strong> en Lightning, rembours&eacute;e d&egrave;s la restitution. Le contrat est sign&eacute; <strong>une seule fois</strong>, valable pour tous vos emprunts suivants <strong>sans limite</strong>.
+</div>
+
+<!-- BAND CONTACTS -->
+<div class="band band-contact">
+  &#128236; Pour emprunter un livre, contactez-moi&nbsp;:&nbsp;&nbsp;
+  <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://twitter.com/ProfScofield2" target="_blank">Twitter @ProfScofield2</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://t.me/BitcoinGwada" target="_blank">Telegram Bitcoin Gwada</a>
+</div>
+
+<!-- FILTERS -->
+<div class="filters" id="filters-bar">
+  <button class="filter-toggle" onclick="toggleFilterMenu()" id="filter-toggle-btn">
+    <span id="filter-toggle-label">&#x1F50D; Filtrer les livres</span>
+    <span class="toggle-arrow">&#x25BE;</span>
+  </button>
+  <div class="filters-inner">
+    <button class="filter-btn active"  onclick="setFilter('all',this)">&#x1F4DA; Tous les livres</button>
+    <button class="filter-btn"         onclick="setFilter('Bitcoin Fondamentaux',this)">&#8383; Fondamentaux</button>
+    <button class="filter-btn"         onclick="setFilter('White Papers',this)">&#x1F4C4; White Papers</button>
+    <button class="filter-btn"         onclick="setFilter('Initiation',this)">&#x1F331; Initiation</button>
+    <button class="filter-btn"         onclick="setFilter('Technique Pratique',this)">&#x2699;&#xFE0F; Technique &amp; Pratique</button>
+    <button class="filter-btn"         onclick="setFilter('Histoire Culture',this)">&#x1F4DC; Histoire &amp; Culture</button>
+    <button class="filter-btn"         onclick="setFilter('Economie Liberte',this)">&#x2696;&#xFE0F; &Eacute;conomie &amp; Libert&eacute;</button>
+    <button class="filter-btn"         onclick="setFilter('Fiction Dystopie',this)">&#x1F52E; Fiction &amp; Dystopie</button>
+    <button class="filter-btn"         onclick="setFilter('Bande dessinee',this)">&#x1F4D6; Bande dessin&eacute;e</button>
+    <button class="filter-btn"         onclick="setFilter('Enfants',this)">&#x1F9D2; Enfants</button>
+    <button class="filter-btn"         onclick="setFilter('ebook',this)">&#x1F4E5; T&eacute;l&eacute;chargeables</button>
+    <button class="filter-btn"         onclick="setFilter('coupDeCoeur',this)">&#x1F9E1; Coup de c&oelig;ur</button>
+    <button class="filter-btn" id="avail-btn" onclick="toggleAvailFilter(this)">&#x2705; Disponibles seulement</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <span id="stats-text">Chargement&hellip;</span>
+</div>
+
+<!-- GRID -->
+<div class="grid" id="grid"></div>
+
+<!-- DONATION -->
+<div class="donation-band">
+  <p>&#x1F9E1;&#x26A1;&#xFE0F; Si vous souhaitez soutenir et aider la Biblioth&egrave;que Lightning, vous pouvez faire un don en bitcoin via le Lightning &agrave; l&apos;adresse suivante.</p>
+  <div class="ln-address-wrap">
+    <span class="ln-address" id="ln-addr" onclick="openQR('profscofield@marmottoshis.com','Biblioth\u00e8que Lightning')" title="Cliquez pour afficher le QR code">profscofield@marmottoshis.com</span>
+    <button class="copy-btn" id="copy-btn" onclick="copyLN()">Copier</button>
+  </div>
+  <p style="margin-top:12px; font-size:0.8rem; color:#9a8060; line-height:1.6;">
+    Vous pouvez aussi soutenir directement les auteurs en consultant <a href="auteurs-ln.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">la page d&apos;adresse de don Lightning</a>.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Kaz&apos;a Bitcoin &mdash; Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</p>
+  <p style="margin-top:6px">
+    <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+    <a href="https://twitter.com/ProfScofield2" target="_blank">@ProfScofield2</a>
+  </p>
+</footer>
+
+<!-- MODAL QR CODE -->
+<div id="qr-overlay" onclick="closeQR(event)">
+  <div class="qr-box">
+    <button class="qr-close" onclick="closeQR(null)">&times;</button>
+    <div class="qr-title">&#x26A1; Don Lightning — <span id="qr-label"></span></div>
+    <img class="qr-img" id="qr-img" src="" alt="QR Code Lightning">
+    <div class="qr-addr" id="qr-addr-display"></div>
+    <p class="qr-hint">Scannez ce QR code avec votre wallet Lightning pour faire un don du montant de votre choix.</p>
+  </div>
+</div>
+
+<!-- MODAL LIVRE -->
+<div id="book-modal-overlay" onclick="closeBookModal(event)">
+  <div class="book-modal-box" id="book-modal-box">
+    <button class="book-modal-close" onclick="closeBookModal(null)">&times;</button>
+    <div class="book-modal-inner">
+      <div class="book-modal-cover" id="bm-cover-wrap"></div>
+      <div class="book-modal-info" id="bm-info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AUTEUR -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModal(null)">&times;</button>
+    <div class="modal-auteur-nom" id="modal-nom"></div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+const livres = [
+  // ── White Papers ─────────────────────────────────────────────────────────
+  { titre:"Bitcoin : Un syst\u00e8me de monnaie \u00e9lectronique pair-\u00e0-pair", auteur:"Satoshi Nakamoto", genre:"White Paper", annee:2008, cat:"White Papers", img:"whitepaper_bitcoin.svg",
+    versions:[{label:"\uD83C\uDDEB\uD83C\uDDF7 Version fran\u00e7aise", file:"White Paper/Bitcoin/whitepaper_bitcoin_fr.pdf"},{label:"\uD83C\uDDEC\uD83C\uDDE7 English version", file:"White Paper/Bitcoin/whitepaper_bitcoin_en.pdf"}],
+    rubrique:"Le document fondateur publi\u00e9 par Satoshi Nakamoto en 2008, d\u00e9crivant Bitcoin comme un syst\u00e8me de monnaie \u00e9lectronique pair-\u00e0-pair sans tiers de confiance. Le texte qui a tout chang\u00e9." },
+  { titre:"The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments", auteur:"Joseph Poon \u0026 Thaddeus Dryja", genre:"White Paper", annee:2016, cat:"White Papers", img:"whitepaper_lightning.svg",
+    versions:[{label:"Draft 0.5", file:"White Paper/Lightning/lightning_paper_draft_05.pdf"},{label:"Draft 0.5.9.2", file:"White Paper/Lightning/lightning_paper_draft_0592.pdf"}],
+    rubrique:"Le document original de Poon et Dryja d\u00e9crivant le r\u00e9seau Lightning, solution de paiements instantan\u00e9s hors-cha\u00eene pour Bitcoin. Document de r\u00e9f\u00e9rence pour comprendre la couche 2 de Bitcoin." },
+
+  // ── Bitcoin Fondamentaux ──────────────────────────────────────────────────
+  { titre:"The Bitcoin Standard", auteur:"Saifedean Ammous", genre:"\u00c9conomique", annee:2018, cat:"Bitcoin Fondamentaux", img:"bitcoin_standard.webp",
+    rubrique:"Le livre fondateur qui a converti des milliers de personnes \u00e0 Bitcoin. Ammous retrace l\u2019histoire de la monnaie solide et explique pourquoi Bitcoin est l\u2019or num\u00e9rique du XXI\u1d49 si\u00e8cle." },
+  { titre:"21 Le\u00e7ons", auteur:"Gigi", genre:"Philosophie", annee:2019, cat:"Bitcoin Fondamentaux", img:"21_lecons_hq.jpg",
+    rubrique:"Gigi explore Bitcoin sous l\u2019angle de la philosophie, de l\u2019\u00e9conomie et de la technologie en 21 r\u00e9flexions profondes. Un voyage intellectuel unique pour comprendre ce que Bitcoin nous enseigne sur nous-m\u00eames." },
+  { titre:"Bitcoin, la monnaie ac\u00e9phale (2e \u00e9d.)", auteur:"Adli Takkal Bataille \u0026 Jacques Favier", genre:"Analyse & culture", annee:2017, cat:"Bitcoin Fondamentaux", img:"bitcoin_monnaie_acephale_hq.jpg",
+    rubrique:"Un regard franco-fran\u00e7ais sur Bitcoin\u00a0: Bataille et Favier analysent avec finesse ce ph\u00e9nom\u00e8ne sans t\u00eate, sans chef, et pourtant irr\u00e9sistible. La r\u00e9f\u00e9rence incontournable de la litt\u00e9rature Bitcoin francophone." },
+  { titre:"L\u2019\u00c9talon Bitcoin", auteur:"Saifedean Ammous", genre:"\u00c9conomique", annee:2019, cat:"Bitcoin Fondamentaux", img:"etalon_bitcoin_hq.jpg",
+    rubrique:"Suite au Standard Bitcoin, Ammous approfondit la vision d\u2019un monde fonctionnant sur un \u00e9talon Bitcoin. Un livre ambitieux qui dessine les contours d\u2019une \u00e9conomie radicalement diff\u00e9rente." },
+  { titre:"L\u2019\u00c9tincelle Bitcoin", auteur:"Jon Black", genre:"Libert\u00e9 financi\u00e8re", annee:2024, cat:"Bitcoin Fondamentaux", img:"etincelle_bitcoin_hq.jpg",
+    rubrique:"Jon Black raconte comment Bitcoin peut \u00eatre l\u2019\u00e9tincelle d\u2019une \u00e9mancipation financi\u00e8re mondiale. Un texte court, percutant, taill\u00e9 pour convaincre ceux qui h\u00e9sitent encore." },
+  { titre:"L\u2019\u00c9nergie, la face cach\u00e9e de la monnaie", auteur:"Pierre Noizat", genre:"\u00c9conomique", annee:2024, cat:"Bitcoin Fondamentaux", img:"energie_face_cachee_hq.jpg",
+    rubrique:"Pierre Noizat d\u00e9montre que l\u2019\u00e9nergie est au c\u0153ur de toute valeur mon\u00e9taire, et que Bitcoin en est la manifestation la plus pure. Une perspective originale sur la nature profonde de la monnaie." },
+  { titre:"Objective Thune", auteur:"Philippe Ratte \u0026 Jacques Favier", genre:"BD / Finance personnelle", annee:2019, cat:"Bande dessinee", cats:["Bande dessinee","Initiation"], img:"objectif_thune.png",
+    rubrique:"Ratte et Favier offrent un guide pratique et d\u00e9cal\u00e9 pour comprendre Bitcoin depuis z\u00e9ro. Accessible, dr\u00f4le et instructif \u2014 le livre id\u00e9al pour les curieux qui veulent passer \u00e0 l\u2019action." },
+  { titre:"Cryptocommunisme", auteur:"Mark Alizart", genre:"Philosophique", annee:2019, cat:"Bitcoin Fondamentaux", img:"cryptocommuniste_hq.jpg",
+    rubrique:"Mark Alizart, philosophe, explore la dimension politique et r\u00e9volutionnaire de Bitcoin avec un regard inattendu. Un essai court mais stimulant qui bouscule les cat\u00e9gories habituelles." },
+  { titre:"Pour une vraie concurrence des monnaies", auteur:"Friedrich Hayek", genre:"\u00c9conomique lib\u00e9ral", annee:1976, cat:"Economie Liberte", img:"concurrence_monnaies_hq.jpg",
+    rubrique:"Le texte fondateur de Hayek sur la d\u00e9nationalisation de la monnaie, \u00e9crit 40 ans avant Bitcoin. Visionnaire et rigoureux, il pose les bases th\u00e9oriques de tout ce qui a suivi." },
+
+  // ── Économie & Liberté ────────────────────────────────────────────────────
+  { titre:"L\u2019\u00c9talon Fiat", auteur:"Saifedean Ammous",
+    genre:"\u00c9conomique", annee:2021, cat:"Economie Liberte", img:"etalon_fiat_hq.jpg", emprunte:true, coupDeCoeur:true,
+    rubrique:"Saifedean Ammous d\u00e9monte avec rigueur les ravages du syst\u00e8me mon\u00e9taire fiat sur l\u2019\u00e9conomie et la soci\u00e9t\u00e9. Un indispensable pour comprendre pourquoi Bitcoin n\u2019est pas une option, mais une n\u00e9cessit\u00e9." },
+  { titre:"L\u2019\u00c9conomie en une le\u00e7on", auteur:"Henry Hazlitt", genre:"\u00c9conomique", annee:1946, cat:"Economie Liberte", img:"economie_une_lecon_hq.jpg",
+    rubrique:"Le classique absolu de Henry Hazlitt\u00a0: en une seule le\u00e7on, comprendre pourquoi toute politique \u00e9conomique doit \u00eatre \u00e9valu\u00e9e sur ses effets \u00e0 long terme pour tous. Simple, clair, d\u00e9vastateur." },
+  { titre:"La Route de la servitude", auteur:"Friedrich Hayek", genre:"Politique / Libert\u00e9", annee:1944, cat:"Economie Liberte", img:"route_servitude_hq.jpg",
+    rubrique:"L\u2019avertissement de Hayek contre le collectivisme et la planification centrale, \u00e9crit en 1944. Un livre qui a chang\u00e9 le cours de la pens\u00e9e lib\u00e9rale et reste d\u2019une actualit\u00e9 br\u00fblante." },
+  { titre:"Ce qu\u2019on voit et ce qu\u2019on ne voit pas", auteur:"Fr\u00e9d\u00e9ric Bastiat",
+    genre:"\u00c9conomique", annee:1850, cat:"Economie Liberte", img:"ce_quon_voit.webp", coupDeCoeur:true,
+    rubrique:"Le chef-d\u2019\u0153uvre de Bastiat en quelques pages lumineuses\u00a0: toute politique \u00e9conomique produit des effets visibles\u2026 et des effets invisibles souvent d\u00e9sastreux. Une le\u00e7on in\u00e9puisable, \u00e9crite en 1850 et plus actuelle que jamais." },
+  { titre:"La Loi", auteur:"Fr\u00e9d\u00e9ric Bastiat", genre:"Politique / Libert\u00e9", annee:1850, cat:"Economie Liberte", img:"la_loi.jpg",
+    rubrique:"En 50 pages, Bastiat d\u00e9molit l\u2019id\u00e9e que l\u2019\u00c9tat peut tout r\u00e9gler par la loi sans cr\u00e9er de la spoliation. Un texte lapidaire et lumineux, aussi tr\u00e8s accessible comme point d\u2019entr\u00e9e dans la pens\u00e9e lib\u00e9rale." },
+  { titre:"L\u2019Anatomie de l\u2019\u00c9tat", auteur:"Murray Rothbard", genre:"Libertarien", annee:1974, cat:"Economie Liberte", img:"anatomie_etat.webp",
+    rubrique:"Rothbard dissèque l\u2019\u00c9tat avec une pr\u00e9cision chirurgicale\u00a0: ce qu\u2019il est, comment il survit, et pourquoi il tend toujours \u00e0 cro\u00eetre. Un essai court et implacable pour comprendre le pouvoir." },
+  { titre:"L\u2019\u00c9ducation gratuite et obligatoire", auteur:"Murray Rothbard", genre:"Lib\u00e9ral / \u00c9ducation", annee:1972, cat:"Economie Liberte", img:"education_rothbard.webp",
+    rubrique:"Rothbard questionne le monopole \u00e9tatique sur l\u2019\u00e9ducation et d\u00e9fend la libert\u00e9 des familles. Un texte provocateur et document\u00e9 qui remet en cause des \u00e9vidences bien ancr\u00e9es." },
+  { titre:"L\u2019\u00c9cole autrichienne", auteur:"Jes\u00fas Huerta de Soto", genre:"Manuel / Histoire \u00e9conomique", annee:2010, cat:"Economie Liberte", img:"ecole_autrichienne_hq.jpg",
+    rubrique:"De Soto pr\u00e9sente l\u2019histoire et les id\u00e9es de l\u2019\u00e9cole autrichienne d\u2019\u00e9conomie avec une clart\u00e9 p\u00e9dagogique remarquable. Le manuel de r\u00e9f\u00e9rence pour comprendre Mises, Hayek et leurs h\u00e9ritiers." },
+  { titre:"Les D\u00e9rives de la surveillance financi\u00e8re", auteur:"Alexandre Stachtchenko", genre:"Libert\u00e9 num\u00e9rique", annee:2023, cat:"Economie Liberte", img:"derives_surveillance.jpg",
+    rubrique:"Stachtchenko dresse un tableau alarmant de la surveillance financi\u00e8re de masse et montre pourquoi Bitcoin est bien plus qu\u2019une monnaie\u00a0: un rempart pour la vie priv\u00e9e et la libert\u00e9 individuelle." },
+
+  // ── Technique & Pratique ─────────────────────────────────────────────────
+  { titre:"Le Culte de Bitcoin", auteur:"Ludovic Lars",
+    genre:"Essai", annee:2026, cat:"Technique Pratique", img:"culte_bitcoin.jpeg", ebook:"ebooks/ludovic-lars-culte-bitcoin-2026.epub",
+    rubrique:"Ludovic Lars explore la dimension culturelle et quasi-religieuse que Bitcoin inspire chez ses adeptes. Un essai original qui interroge la fascination profonde exerc\u00e9e par le protocole sur ceux qui le d\u00e9couvrent." },
+  { titre:"L\u2019\u00c9l\u00e9gance de Bitcoin", auteur:"Ludovic Lars",
+    genre:"Technique", annee:2023, cat:"Technique Pratique", img:"elegance_bitcoin_hq.jpg", coupDeCoeur:true,
+    rubrique:"La r\u00e9f\u00e9rence technique en fran\u00e7ais sur Bitcoin. Ludovic Lars y d\u00e9montre avec clart\u00e9 et rigueur la beaut\u00e9 math\u00e9matique du protocole\u00a0: un livre rare, profond et accessible \u00e0 la fois." },
+  { titre:"Dictionnaire de Bitcoin", auteur:"Lo\u00efc Morel", genre:"R\u00e9f\u00e9rence / Technique", annee:2026, cat:"Technique Pratique", img:"dictionnaire_bitcoin_hq.jpg",
+    rubrique:"Lo\u00efc Morel compile et d\u00e9finit avec pr\u00e9cision tous les termes essentiels de l\u2019\u00e9cosyst\u00e8me Bitcoin. Un outil de r\u00e9f\u00e9rence indispensable pour ne plus \u00eatre perdu face au vocabulaire technique et se forger un vocabulaire solide." },
+  { titre:"Le Manuel du Bitcoin", auteur:"Anil Patel", genre:"Guide pratique", annee:2023, cat:"Technique Pratique", img:"manuel_bitcoin_hq.jpg",
+    rubrique:"Un guide pratique et complet pour comprendre et utiliser Bitcoin au quotidien. Anil Patel couvre tout, des bases aux aspects les plus techniques, avec clart\u00e9 et p\u00e9dagogie." },
+
+  // ── Histoire & Culture ────────────────────────────────────────────────────
+  { titre:"Le Livre de Satoshi", auteur:"Phil Champagne", genre:"Compilation / Histoire", annee:2014, cat:"Histoire Culture", img:"livre_satoshi_hq.jpg",
+    rubrique:"Phil Champagne compile les \u00e9crits de Satoshi Nakamoto\u00a0: emails, posts de forum et extraits du White Paper. La source primaire pour comprendre la pens\u00e9e et les intentions du cr\u00e9ateur de Bitcoin." },
+  { titre:"La Guerre des blocs", auteur:"Jonathan Bier", genre:"R\u00e9cit historique", annee:2021, cat:"Histoire Culture", img:"guerre_blocs.jpg",
+    rubrique:"Jonathan Bier raconte de l\u2019int\u00e9rieur la guerre civile qui a d\u00e9chir\u00e9 la communaut\u00e9 Bitcoin entre 2015 et 2017. Un r\u00e9cit haletant sur les enjeux de gouvernance d\u2019un protocole d\u00e9centralis\u00e9." },
+
+  // ── Fiction & Dystopie ────────────────────────────────────────────────────
+  { titre:"Crypto Dystopies 2035", auteur:"Benjamin Loiseau", genre:"Fiction / Dystopie", annee:2023, cat:"Fiction Dystopie", img:"crypto_dystopies_hq.jpg",
+    rubrique:"Benjamin Loiseau imagine un futur o\u00f9 les cryptomonnaies ont transform\u00e9 \u2014 ou fractur\u00e9 \u2014 nos soci\u00e9t\u00e9s. Des nouvelles de science-fiction qui interrogent les d\u00e9rives possibles de la r\u00e9volution num\u00e9rique." },
+
+  // ── Bande dessinée ───────────────────────────────────────────────────────
+  { titre:"Les Grandes Le\u00e7ons de Marx - T01 : Le grand go\u00fbter \u00e9galitaire", auteur:"Scuba Wizard", genre:"BD / Satire", annee:2024, cat:"Bande dessinee", cats:["Bande dessinee","Enfants"], img:"grandes_lecons_marx_t01.png", ebook:"ebooks/grandes_lecons_marx_t01.pdf",
+    rubrique:"Scuba Wizard croque le marxisme avec humour dans cette BD satirique d\u00e8s 7 ans. Entre plan quinquennal du go\u00fbter et boulangerie collective, un album d\u00e9capant pour initier les enfants \u2014 et leurs parents \u2014 aux absurdit\u00e9s du collectivisme." },
+
+  // ── Initiation ────────────────────────────────────────────────────────────
+  { titre:"Alice au pays des Cryptos", auteur:"Nicolas Balas \u0026 Daniel Villa Monteiro", genre:"BD / Initiation", annee:2023, cat:"Initiation", cats:["Initiation","Bande dessinee"], img:"alice_cryptos_hq.jpg", emprunte:true,
+    rubrique:"En suivant Alice, cette BD entra\u00eene les lecteurs de tous \u00e2ges dans le monde des cryptomonnaies avec humour et p\u00e9dagogie. La porte d\u2019entr\u00e9e id\u00e9ale pour les n\u00e9ophytes." },
+  { titre:"Bitcoin et les cryptomonnaies faciles", auteur:"Claire Balva \u0026 Alexandre Stachtchenko", genre:"Guide d\u2019initiation", annee:2022, cat:"Initiation", img:"crypto_faciles_hq.jpg", emprunte:true,
+    rubrique:"Balva et Stachtchenko d\u00e9mystifient Bitcoin et les cryptos avec un langage accessible et des exemples concrets. Le guide parfait pour d\u00e9marrer sans se perdre dans le jargon technique." },
+  { titre:"Le Petit Satoshi", auteur:"Goku \u0026 Tewoz", genre:"BD / Jeunesse", annee:2023, cat:"Bande dessinee", cats:["Bande dessinee","Enfants"], img:"petit_satoshi.jpg",
+    rubrique:"Une BD jeunesse qui explique Bitcoin aux enfants avec des personnages attachants et une histoire simple. \u00c0 lire en famille pour parler monnaie autrement \u2014 et planter une graine d\u00e8s le plus jeune \u00e2ge." },
+  { titre:"Tout sur Bitcoin", auteur:"David St-Onge", genre:"Guide d\u2019initiation", annee:2021, cat:"Initiation", img:"tout_sur_bitcoin_hq.jpg",
+    rubrique:"David St-Onge couvre tous les aspects de Bitcoin\u00a0: histoire, technologie, \u00e9conomie et pratique. Un panorama complet pour celui qui veut tout savoir avant de se lancer." },
+];
+
+const CAT_LABEL = {
+  "Bitcoin Fondamentaux": "\u20BF Fondamentaux",
+  "Economie Liberte":     "\u00c9conomie \u0026 Libert\u00e9",
+  "Technique Pratique":   "Technique \u0026 Pratique",
+  "Histoire Culture":     "Histoire \u0026 Culture",
+  "Fiction Dystopie":     "Fiction \u0026 Dystopie",
+  "Initiation":           "Initiation",
+  "Bande dessinee":       "Bande dessin\u00e9e",
+  "Enfants":              "Enfants",
+  "White Papers":         "White Paper",
+};
+const CAT_CLASS = {
+  "Bitcoin Fondamentaux": "cat-fondamentaux",
+  "Economie Liberte":     "cat-economie",
+  "Technique Pratique":   "cat-technique",
+  "Histoire Culture":     "cat-histoire",
+  "Fiction Dystopie":     "cat-fiction",
+  "Initiation":           "cat-initiation",
+  "Bande dessinee":       "cat-bd",
+  "Enfants":              "cat-enfants",
+  "White Papers":         "cat-whitepaper",
+};
+const CAT_ORDER = {
+  "Bitcoin Fondamentaux": 0,
+  "White Papers":         1,
+  "Initiation":           2,
+  "Technique Pratique":   3,
+  "Histoire Culture":     4,
+  "Economie Liberte":     5,
+  "Fiction Dystopie":     6,
+  "Bande dessinee":       7,
+  "Enfants":              8,
+};
+
+const auteurs = {
+  "Lo\u00efc Morel":              { twitter:"https://twitter.com/Loic_Pandul",    site:"https://pandul.fr/",                          ln:"sats@pandul.fr"  },
+  "Ludovic Lars":              { twitter:"https://twitter.com/lugaxker",       site:"https://viresinnumeris.fr/",                  ln:"lugaxker@bitrefill.me" },
+  "Alexandre Stachtchenko":   { twitter:"https://twitter.com/StachAlex",      site:"https://alexstach.fr/",                       ln:null              },
+  "Saifedean Ammous":         { twitter:"https://twitter.com/saifedean",      site:"https://saifedean.com/",                      ln:null              },
+  "Gigi":                     { twitter:null,                                  site:"https://dergigi.com/",                        ln:null              },
+  "Jacques Favier":           { twitter:"https://twitter.com/cryptosaurien",  site:"https://blog.lavoiedubitcoin.info/",           ln:null              },
+  "Daniel Villa Monteiro":    { twitter:"https://twitter.com/MonteiroVilla",  site:null,                                          ln:null              },
+  "Pierre Noizat":            { twitter:"https://twitter.com/PierreNoizat",   site:null,                                          ln:null, redirectDon:true },
+  "Claire Balva":             { twitter:"https://twitter.com/ClaireBalva",    site:"https://linktr.ee/clairebalva",               ln:null              },
+  "Goku":                     { twitter:"https://twitter.com/Crypto_Goku",    site:"https://linktr.ee/crypto__goku",              ln:null              },
+  "David St-Onge":            { twitter:"https://twitter.com/DavidStOnge",    site:"https://everythingbitcoinbook.com/",          ln:null              },
+  "Benjamin Loiseau":         { twitter:"https://twitter.com/B3njj92",        site:"https://linktr.ee/benjamin.loiseau",          ln:null              },
+  "Phil Champagne":           { twitter:"https://twitter.com/egg_descrambler", site:"https://www.bookofsatoshi.com/",             ln:null              },
+  "Scuba Wizard":             { twitter:"https://twitter.com/Scuba_Wizard",     site:"https://linktr.ee/scuba_wizard",              ln:"scuba_wizard@getalby.com" },
+  "Satoshi Nakamoto":         { twitter:null, site:null, ln:null },
+  "Joseph Poon":              { twitter:null, site:null, ln:null },
+  "Thaddeus Dryja":           { twitter:null, site:null, ln:null },
+  "Adli Takkal Bataille":     { twitter:null, site:null, ln:null },
+  "Jon Black":                { twitter:null, site:"https://www.youtube.com/@JonBlackFR", ln:null },
+  "Philippe Ratte":           { twitter:null, site:null, ln:null },
+  "Mark Alizart":             { twitter:null, site:null, ln:null },
+  "Nicolas Balas":            { twitter:null, site:null, ln:null },
+  "Anil Patel":               { twitter:null, site:null, ln:null },
+  "Jonathan Bier":            { twitter:null, site:null, ln:null },
+  "Friedrich Hayek":          { twitter:null, site:null, ln:null },
+  "Henry Hazlitt":            { twitter:null, site:null, ln:null },
+  "Fr\u00e9d\u00e9ric Bastiat":      { twitter:null, site:null, ln:null },
+  "Murray Rothbard":          { twitter:null, site:null, ln:null },
+  "Jes\u00fas Huerta de Soto":  { twitter:null, site:null, ln:null },
+};
+
+function getAuteursConnus(auteurStr) {
+  var noms = auteurStr.split(' \u0026 ').map(function(n){ return n.trim(); });
+  return noms.filter(function(n){ return auteurs[n]; });
+}
+
+function getLNAuteur(auteurStr) {
+  var noms = auteurStr.split(' \u0026 ').map(function(n){ return n.trim(); });
+  for (var i = 0; i < noms.length; i++) {
+    if (auteurs[noms[i]] && auteurs[noms[i]].ln) return { nom: noms[i], ln: auteurs[noms[i]].ln };
+  }
+  return null;
+}
+
+function openModal(auteurStr) {
+  var noms = getAuteursConnus(auteurStr);
+  if (!noms.length) return;
+  var content = '';
+  noms.forEach(function(nom) {
+    var a = auteurs[nom];
+    var bio = bioData[nom] || {};
+    if (noms.length > 1) content += '<div style="font-weight:700;margin-bottom:6px;color:var(--gold)">' + esc(nom) + '</div>';
+    // Dates (auteurs décédés uniquement)
+    if (bio.naissance && bio.deces) {
+      content += '<div class="modal-dates">' + bio.naissance + ' \u2013 ' + bio.deces + '</div>';
+    }
+    // Biographie
+    if (bio.bio) content += '<div class="modal-bio">' + esc(bio.bio) + '</div>';
+    // Spécialité
+    if (bio.specialite) content += '<div class="modal-specialite">\u2726 ' + esc(bio.specialite) + '</div>';
+    var xLogo = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+    if (a.twitter) content += '<div class="modal-row"><span class="modal-icon">' + xLogo + '</span><a href="' + esc(a.twitter) + '" target="_blank" rel="noopener">X (Twitter)</a></div>';
+    if (a.site)    content += '<div class="modal-row"><span class="modal-icon">&#x1F310;</span><a href="' + esc(a.site) + '" target="_blank" rel="noopener">' + esc(a.site.replace(/https?:\/\//, '').replace(/\/$/, '')) + '</a></div>';
+    var bibLN = 'profscofield@marmottoshis.com';
+    if (a.ln) {
+      content += '<div class="modal-row" style="margin-top:10px"><span class="modal-icon">&#x26A1;</span><strong>Adresse Lightning</strong></div>' +
+        '<div class="modal-ln-wrap">' +
+          '<span class="modal-ln-addr" style="cursor:pointer;border-bottom:1px dashed #c47a0a" onclick="openQR(\'' + esc(a.ln) + '\',\'' + esc(nom) + '\')" title="Cliquez pour afficher le QR code">' + esc(a.ln) + '</span>' +
+          '<button class="modal-copy-btn" onclick="copyModalLN(\'' + esc(a.ln) + '\', this)">Copier</button>' +
+        '</div>';
+    } else if (a.redirectDon) {
+      content += '<div class="modal-row" style="margin-top:10px"><span class="modal-icon">&#x26A1;</span><strong>Adresse Lightning</strong></div>' +
+        '<p style="font-size:0.78rem;font-style:italic;color:#8a5500;margin:4px 0 8px;line-height:1.5">L\u2019auteur a g\u00e9n\u00e9reusement souhait\u00e9 que ses dons soient revers\u00e9s \u00e0 la Biblioth\u00e8que Lightning.</p>' +
+        '<div class="modal-ln-wrap">' +
+          '<span class="modal-ln-addr" style="cursor:pointer;border-bottom:1px dashed #c47a0a" onclick="openQR(\'' + esc(bibLN) + '\',\'Biblioth\u00e8que Lightning\')" title="Cliquez pour afficher le QR code">' + esc(bibLN) + '</span>' +
+          '<button class="modal-copy-btn" onclick="copyModalLN(\'' + esc(bibLN) + '\', this)">Copier</button>' +
+        '</div>';
+    }
+    if (noms.length > 1) content += '<hr style="margin:12px 0;border:none;border-top:1px solid var(--border)">';
+  });
+  document.getElementById('modal-nom').textContent = noms.length === 1 ? noms[0] : auteurStr.replace(/\u0026/g, '&');
+  document.getElementById('modal-content').innerHTML = content;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function openBookModal(idx) {
+  var l = livres[idx];
+  var emp = emprunteSet.has(idx);
+  var xLogo = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+
+  // Couverture : 3D flip si 4ème de couverture disponible, sinon image statique
+  bookFlipped = false;
+  var coverWrap = document.getElementById('bm-cover-wrap');
+  var detail = livresDetails[l.titre];
+  if (detail && detail.quatrieme) {
+    coverWrap.className = 'book-modal-cover has-3d';
+    var frontSrc = 'images/' + l.img;
+    var backSrc  = detail.img4
+      ? 'images/' + detail.img4.split('/').map(encodeURIComponent).join('/')
+      : '';
+    coverWrap.innerHTML =
+      '<div class="bm-scene"' +
+        ' data-front="' + esc(frontSrc) + '"' +
+        (backSrc ? ' data-back="' + esc(backSrc) + '"' : '') +
+        ' onclick="toggleBookFlip()"' +
+        ' onmouseenter="autoBookZoom(this,event)"' +
+        ' onmousemove="moveBookZoom(event)"' +
+        ' onmouseleave="hideBookZoom()">' +
+        '<div class="bm-book" id="bm-book">' +
+          '<div class="bm-face bm-face-front">' +
+            '<img src="images/' + esc(l.img) + '" alt="' + esc(l.titre) + '">' +
+          '</div>' +
+          (detail.img4
+            ? (function(){
+                var parts = detail.img4.split('/');
+                var src = 'images/' + parts.map(encodeURIComponent).join('/');
+                return '<div class="bm-face bm-face-back" style="padding:0;border-radius:5px 2px 2px 5px">' +
+                  '<img src="' + src + '" style="width:100%;height:100%;object-fit:cover;display:block;" alt="4\u00e8me de couverture">' +
+                  '</div>';
+              })()
+            : '<div class="bm-face bm-face-back">' +
+                '<div class="bm-back-deco"></div>' +
+                '<div class="bm-back-text">' + esc(detail.quatrieme) + '</div>' +
+              '</div>'
+          ) +
+          '<div class="bm-pages"></div>' +
+          '<div class="bm-spine"></div>' +
+          '<div class="bm-top"></div>' +
+          '<div class="bm-bottom"></div>' +
+        '</div>' +
+      '</div>';
+  } else {
+    coverWrap.className = 'book-modal-cover';
+    var staticSrc = 'images/' + esc(l.img);
+    coverWrap.innerHTML = '<img src="' + staticSrc + '" alt="' + esc(l.titre) + '"' +
+      ' style="cursor:zoom-in"' +
+      ' onmouseenter="showBookZoom(\'' + staticSrc + '\',event)"' +
+      ' onmousemove="moveBookZoom(event)"' +
+      ' onmouseleave="hideBookZoom()">';
+  }
+
+  // Infos de base
+  var catLabel = CAT_LABEL[l.cat] || l.cat;
+  var catClass = CAT_CLASS[l.cat] || '';
+  var statusClass = emp ? 'badge-emprunte' : 'badge-dispo';
+  var statusTxt   = emp ? '\uD83D\uDCD5 Emprunt\u00e9' : '\uD83D\uDCD7 Disponible';
+  var cdcBadge    = l.coupDeCoeur ? '<span class="cdc-flag" style="position:relative;top:0;left:0;display:inline-block;margin-left:4px">&#x1F9E1; Coup de c&oelig;ur</span>' : '';
+
+  var html =
+    '<div class="book-modal-title">' + esc(l.titre) + '</div>' +
+    '<div class="book-modal-author">' + esc(l.auteur) + '</div>' +
+    '<div class="book-modal-meta">' + esc(l.genre) + ' &nbsp;&middot;&nbsp; ' + l.annee + '</div>' +
+    '<div class="book-modal-badges">' +
+      '<span class="card-cat ' + catClass + '">' + esc(catLabel) + '</span>' +
+      '<span class="status-badge ' + statusClass + '" style="position:relative;top:0;right:0;display:inline-block">' + statusTxt + '</span>' +
+      cdcBadge +
+    '</div>';
+
+  // Description (rubrique bibliothèque)
+  if (l.rubrique) {
+    html += '<hr class="book-modal-divider"><div class="book-modal-rubrique">' + esc(l.rubrique) + '</div>';
+  }
+
+  // 4ème de couverture officielle
+  if (detail && detail.quatrieme) {
+    html += '<hr class="book-modal-divider">' +
+      '<div class="book-modal-section-title">&#128216; 4\u00e8me de couverture</div>' +
+      '<div class="book-modal-quatrieme">' + esc(detail.quatrieme) + '</div>';
+  }
+
+  // Passages marquants (uniquement si non vide)
+  if (detail && detail.passages && detail.passages.length > 0) {
+    html += '<hr class="book-modal-divider">' +
+      '<div class="book-modal-section-title">&#10077; Passages marquants</div>';
+    detail.passages.forEach(function(p) {
+      html += '<div class="book-modal-passage">' + esc(p) + '</div>';
+    });
+  }
+
+  // Section auteur
+  var noms = getAuteursConnus(l.auteur);
+  if (noms.length) {
+    html += '<hr class="book-modal-divider"><div class="book-modal-section-title">&#128100; \u00c0 propos de l\u2019auteur</div>';
+    noms.forEach(function(nom) {
+      var a = auteurs[nom];
+      var bio = bioData[nom] || {};
+      if (noms.length > 1) html += '<div style="font-weight:700;font-size:0.82rem;color:var(--gold);margin:6px 0 4px">' + esc(nom) + '</div>';
+      // Dates (auteurs décédés)
+      if (bio.naissance && bio.deces) {
+        html += '<div class="modal-dates">' + bio.naissance + ' \u2013 ' + bio.deces + '</div>';
+      }
+      // Bio
+      if (bio.bio) html += '<div class="modal-bio">' + esc(bio.bio) + '</div>';
+      // Spécialité
+      if (bio.specialite) html += '<div class="modal-specialite">\u2726 ' + esc(bio.specialite) + '</div>';
+      var links = '';
+      if (a.twitter) links += '<a class="book-modal-link" href="' + esc(a.twitter) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + xLogo + ' X</a>';
+      if (a.site)    links += '<a class="book-modal-link" href="' + esc(a.site) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">&#x1F310; ' + esc(a.site.replace(/https?:\/\//, '').replace(/\/$/, '')) + '</a>';
+      if (links) html += '<div class="book-modal-auteur-links">' + links + '</div>';
+      var bibLN = 'profscofield@marmottoshis.com';
+      if (a.ln) {
+        html += '<div class="book-modal-ln">' +
+          '<div class="book-modal-ln-label">&#x26A1; Adresse Lightning</div>' +
+          '<div class="book-modal-ln-row">' +
+            '<span class="book-modal-ln-addr" style="cursor:pointer;border-bottom:1px dashed #c47a0a" onclick="event.stopPropagation();openQR(\'' + esc(a.ln) + '\',\'' + esc(nom) + '\')" title="Cliquez pour afficher le QR code">' + esc(a.ln) + '</span>' +
+            '<button class="modal-copy-btn" onclick="event.stopPropagation();copyModalLN(\'' + esc(a.ln) + '\',this)">Copier</button>' +
+          '</div>' +
+        '</div>';
+      } else if (a.redirectDon) {
+        html += '<div class="book-modal-ln">' +
+          '<div class="book-modal-ln-label">&#x26A1; Adresse Lightning</div>' +
+          '<p style="font-size:0.78rem;font-style:italic;color:#8a5500;margin:4px 0 8px;line-height:1.5">L\u2019auteur a g\u00e9n\u00e9reusement souhait\u00e9 que ses dons soient revers\u00e9s \u00e0 la Biblioth\u00e8que Lightning.</p>' +
+          '<div class="book-modal-ln-row">' +
+            '<span class="book-modal-ln-addr" style="cursor:pointer;border-bottom:1px dashed #c47a0a" onclick="event.stopPropagation();openQR(\'' + esc(bibLN) + '\',\'Biblioth\u00e8que Lightning\')" title="Cliquez pour afficher le QR code">' + esc(bibLN) + '</span>' +
+            '<button class="modal-copy-btn" onclick="event.stopPropagation();copyModalLN(\'' + esc(bibLN) + '\',this)">Copier</button>' +
+          '</div>' +
+        '</div>';
+      }
+    });
+  }
+
+  // E-book
+  if (l.ebook) {
+    html += '<a class="book-modal-ebook" href="' + esc(l.ebook) + '" download onclick="event.stopPropagation()">&#x1F4E5; T\u00e9l\u00e9charger (' + getFormatLabel(l.ebook) + ')</a>';
+  }
+
+  // Versions (White Papers)
+  if (l.versions) {
+    html += '<hr class="book-modal-divider"><div class="book-modal-section-title">&#x1F4E5; T\u00e9l\u00e9charger</div>';
+    l.versions.forEach(function(v) {
+      html += '<a class="book-modal-ebook" href="' + esc(v.file) + '" download onclick="event.stopPropagation()">' + esc(v.label) + '</a>';
+    });
+  }
+
+  document.getElementById('bm-info').innerHTML = html;
+  document.getElementById('book-modal-overlay').classList.add('open');
+}
+
+function closeBookModal(e) {
+  if (e && e.target !== document.getElementById('book-modal-overlay')) return;
+  document.getElementById('book-modal-overlay').classList.remove('open');
+  bookFlipped = false;
+}
+
+function copyModalLN(addr, btn) {
+  navigator.clipboard.writeText(addr).then(function() {
+    btn.textContent = '\u2713 Copi\u00e9\u00a0!';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+let emprunteSet = new Set(livres.map(function(l,i){ return l.emprunte ? i : -1; }).filter(function(i){ return i >= 0; }));
+let filterCat   = 'all';
+let filterAvail = false;
+let filterCDC   = false;
+let bioData = {};
+fetch('data/auteurs-bio.json')
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    data.auteurs.forEach(function(a){ bioData[a.nom] = a; });
+  })
+  .catch(function(){});
+
+const livresDetails = {
+  "L\u2019\u00c9l\u00e9gance de Bitcoin": {
+    "img4": "4\u00e8me de couverture/L'\u00e9l\u00e9gance de Bitcoin.jpg",
+    "quatrieme": "Bitcoin est un mod\u00e8le novateur de monnaie num\u00e9rique d\u00e9centralis\u00e9e, dont l\u2019existence vient bousculer l\u2019ordre \u00e9tabli en proposant une alternative audacieuse au syst\u00e8me bancaire classique.\n\nDepuis son \u00e9nigmatique conception par Satoshi Nakamoto en 2008, Bitcoin a connu une croissance fulgurante qui a marqu\u00e9 les esprits. Il a d\u00e9cha\u00een\u00e9 toutes les passions, de l\u2019enthousiasme d\u00e9mesur\u00e9 de ses promoteurs au rejet \u00e9pidermique de ses d\u00e9tracteurs.\n\nPlongez dans cet ouvrage captivant o\u00f9 l\u2019auteur propose un point de vue r\u00e9aliste et pragmatique sur Bitcoin. Vous d\u00e9couvrirez sa fantastique histoire, ainsi que les principes \u00e9conomiques, id\u00e9ologiques et techniques qui ont assur\u00e9 sa survie dans un environnement hostile.\n\nVous en ressortirez avec une compr\u00e9hension de Bitcoin susceptible de transformer votre vision du monde.",
+    "passages": []
+  },
+  "L\u2019\u00c9talon Bitcoin": {
+    "img4": "4\u00e8me de couverture/L'\u00e9talon Bitcoin.jpg",
+    "quatrieme": "Saifedean Ammous analyse le contexte historique de l\u2019\u00e9mergence de Bitcoin et ses propri\u00e9t\u00e9s sp\u00e9cifiques qui en font une monnaie forte. L\u2019auteur brosse un tableau passionnant des technologies de la monnaie depuis les syst\u00e8mes primitifs \u00e0 nos jours avec, en toile de fond, cette question qui revient comme une constante\u00a0: quelles sont les caract\u00e9ristiques d\u2019une bonne monnaie et ses cons\u00e9quences sur la paix, le commerce, la culture, l\u2019art et l\u2019accumulation du capital.",
+    "passages": []
+  },
+  "21 Le\u00e7ons": {
+    "img4": "4\u00e8me de couverture/21 Le\u00e7ons.jpg",
+    "quatrieme": "Qu\u2019est-ce que Bitcoin\u00a0? Il est \u00e9tonnamment complexe de r\u00e9pondre \u00e0 cette innocente question. Bitcoin est un r\u00e9seau d\u2019ordinateurs, un nouveau type de monnaie, un syst\u00e8me de paiement r\u00e9sistant \u00e0 la censure, une r\u00e9volution financi\u00e8re, une forme pacifique de protestation et bien plus que cela.\n\nCe livre n\u2019essaie pas de d\u00e9finir ce qu\u2019est Bitcoin. Il tente de r\u00e9pondre \u00e0 une autre question, plus personnelle\u00a0: Qu\u2019ai-je appris de Bitcoin\u00a0?",
+    "passages": []
+  },
+  "Crypto Dystopies 2035": {
+    "img4": "4\u00e8me de couverture/Crypto Dystopies.jpg",
+    "quatrieme": "Bitcoin et les cryptomonnaies vous int\u00e9ressent, mais leur complexit\u00e9 vous effraie\u00a0? D\u00e9couvrez ce nouvel univers \u00e0 travers 21 histoires. Dystopies.\n\nCes r\u00e9cits construisent un imaginaire entier en milieu cypherpunk, bien souvent abstrait et difficile \u00e0 appr\u00e9hender. Au gr\u00e9 des pages, sans m\u00eame vous en apercevoir, familiarisez-vous avec les aspects fondateurs de cette r\u00e9volution mon\u00e9taire\u00a0!\n\nCe recueil explore l\u2019univers des cryptomonnaies de mani\u00e8re in\u00e9dite, via l\u2019imaginaire. \u00c9lancez-vous \u00e0 l\u2019aventure dans le futur avec des robots, intelligences artificielles et extraterrestres.\n\nPartez d\u00e8s \u00e0 pr\u00e9sent \u00e0 la conqu\u00eate de ce nouveau vocabulaire en embarquant \u00e0 bord de la DeLorean des cryptomonnaies, direction 2035\u00a0!",
+    "passages": []
+  },
+  "Dictionnaire de Bitcoin": {
+    "img4": "4\u00e8me de couverture/Dictionnaire de Bitcoin.jpg",
+    "quatrieme": "Cet ouvrage recense tous les termes techniques en rapport avec Bitcoin et son environnement, ainsi que les d\u00e9finitions correspondantes. R\u00e9dig\u00e9 par Lo\u00efc Morel (Pandul), il est accessible gratuitement en open-source sur GitHub et vendu au format papier.\n\nDictionnaire de Bitcoin est un projet ouvert\u00a0: vous \u00eates libre de proposer des modifications, des corrections ou de soumettre de nouvelles d\u00e9finitions manquantes sur le d\u00e9p\u00f4t GitHub du projet.\n\nLo\u00efc Morel est r\u00e9dacteur sp\u00e9cialis\u00e9 sur Bitcoin et son \u00e9cosyst\u00e8me. Il est l\u2019auteur de plus de 200 articles techniques, formations et tutoriels sur Bitcoin en fran\u00e7ais, dont certains sont devenus des r\u00e9f\u00e9rences. Tous ses ouvrages techniques sont disponibles gratuitement et sous licence libre.",
+    "passages": []
+  },
+  "L\u2019Anatomie de l\u2019\u00c9tat": {
+    "img4": "4\u00e8me de couverture/L'Anatomie de l'\u00c9tat.jpg",
+    "quatrieme": "Murray Rothbard \u00e9tait connu comme le plus grand ennemi vivant de l\u2019\u00c9tat, et ce livre est sa d\u00e9claration la plus puissante \u00e0 ce sujet. Il explique ce qu\u2019est un \u00c9tat et ce qu\u2019il n\u2019est pas. Il montre que c\u2019est une institution qui viole tout ce que nous consid\u00e9rons comme honn\u00eate et moral, et comment elle fonctionne sous un faux pr\u00e9texte. Il montre comment l\u2019\u00c9tat d\u00e9truit la libert\u00e9, d\u00e9truit la civilisation et menace toutes les vies, les biens et le bien-\u00eatre social, le tout sous le couvert de \u00ab\u00a0bonnes intentions\u00a0\u00bb.",
+    "passages": []
+  },
+  "Les D\u00e9rives de la surveillance financi\u00e8re": {
+    "img4": "4\u00e8me de couverture/Les d\u00e9rives de la surveillance financi\u00e8re menacent nos d\u00e9mocraties.webp",
+    "quatrieme": "Dans cet essai, Alexandre Stachtchenko d\u00e9nonce les d\u00e9rives de la surveillance \u00e0 outrance et la r\u00e9pression excessive envers les d\u00e9veloppeurs d\u2019outils permettant d\u2019y \u00e9chapper. Loin d\u2019avoir fait ses preuves pour lutter contre la criminalit\u00e9 et le terrorisme, cette insidieuse r\u00e9pression repr\u00e9sente un pi\u00e9tinement des droits fondamentaux des citoyens et un gouffre financier pour les \u00c9tats qui la pratiquent. \u00c0 l\u2019aide d\u2019exemples actuels, l\u2019auteur d\u00e9montre que, sous couvert de lutte contre le blanchiment d\u2019argent, la censure financi\u00e8re menace la protection de la vie priv\u00e9e autant que l\u2019ind\u00e9pendance des individus.\n\nEt si les r\u00e9flexes s\u00e9curitaires \u00e9taient contreproductifs pour assurer notre s\u00e9curit\u00e9\u00a0? Et si l\u2019on imaginait une lutte contre la criminalit\u00e9 financi\u00e8re plus respectueuse des libert\u00e9s individuelles\u00a0?",
+    "passages": []
+  },
+  "Pour une vraie concurrence des monnaies": {
+    "img4": "4\u00e8me de couverture/Pour une vraie concurrence des monnaies.jpg",
+    "quatrieme": "Comment garantir la stabilit\u00e9 mon\u00e9taire\u00a0? Friedrich A. Hayek propose une r\u00e9ponse radicalement nouvelle \u00e0 cette question. Selon lui, le contr\u00f4le par l\u2019\u00c9tat de l\u2019\u00e9mission mon\u00e9taire conduit \u00e0 des crises \u00e9conomiques r\u00e9currentes. En 1976, Hayek d\u00e9fend au contraire, parall\u00e8lement aux monnaies nationales, l\u2019\u00e9mission de monnaies priv\u00e9es concurrentes. Les banques priv\u00e9es \u00e9mettraient alors des monnaies distinctes et seraient incit\u00e9es \u00e0 stabiliser leur valeur, permettant sur le long terme une inflation bien inf\u00e9rieure \u00e0 celle que nous connaissons depuis plusieurs d\u00e9cennies.\n\nPour Hayek, la r\u00e9forme mon\u00e9taire est urgente, car ce qui est en jeu n\u2019est pas seulement une question d\u2019ordre purement technique, mais \u00ab\u00a0le futur de la civilisation\u00a0\u00bb\u00a0: la cr\u00e9ation mon\u00e9taire par les banques centrales sape le bon fonctionnement du march\u00e9 et nourrit la croissance de l\u2019\u00c9tat. L\u2019avenir de la soci\u00e9t\u00e9 libre est donc li\u00e9 \u00e0 celui du syst\u00e8me mon\u00e9taire.",
+    "passages": []
+  },
+  "The Bitcoin Standard": {
+    "img4": "4\u00e8me de couverture/The Bitcoin Standard.jpg",
+    "quatrieme": "In The Bitcoin Standard, economist Saifedean Ammous walks readers through the fascinating history of the technologies of money and explores what properties these technologies their monetary role, how they lost it, what that teaches us about the desirable features of money, and how bitcoin is designed to improve on these technologies. Ammous elucidates the economic, social, cultural, and political benefits of sound money over unsound money, drawing an informed discussion of the potential role bitcoin could play in the digital economy of the future.\n\nRather than as a currency for criminals or a cheap mass consumer payment network, this book argues bitcoin is emerging as a decentralized, politically neutral, free-market alternative to national central banks, with potentially enormous implications for individual freedom and prosperity. For anyone looking for a clear understanding of this new digital money, The Bitcoin Standard is the essential resource.",
+    "passages": []
+  }
+};
+
+let bookFlipped = false;
+function toggleBookFlip() {
+  bookFlipped = !bookFlipped;
+  var book = document.getElementById('bm-book');
+  if (book) book.classList.toggle('flipped', bookFlipped);
+}
+
+var _zoomEl = null;
+function _initZoom() {
+  if (_zoomEl) return;
+  _zoomEl = document.createElement('div');
+  _zoomEl.id = 'bm-zoom';
+  _zoomEl.innerHTML = '<img id="bm-zoom-img" src="" alt="Couverture agrandie">';
+  document.body.appendChild(_zoomEl);
+}
+function showBookZoom(src, e) {
+  _initZoom();
+  var img = document.getElementById('bm-zoom-img');
+  if (img.src !== src) img.src = src;
+  _zoomEl.style.display = 'block';
+  moveBookZoom(e);
+}
+function moveBookZoom(e) {
+  if (!_zoomEl || _zoomEl.style.display === 'none') return;
+  var x = e.clientX + 24;
+  var y = e.clientY - 180;
+  if (x + 391 > window.innerWidth)  x = e.clientX - 399;
+  if (y < 8) y = 8;
+  if (y + 575 > window.innerHeight) y = window.innerHeight - 575;
+  _zoomEl.style.left = x + 'px';
+  _zoomEl.style.top  = y + 'px';
+}
+function hideBookZoom() {
+  if (_zoomEl) _zoomEl.style.display = 'none';
+}
+function autoBookZoom(el, e) {
+  var src = bookFlipped ? el.dataset.back : el.dataset.front;
+  if (src) showBookZoom(src, e);
+}
+
+function getFormatLabel(filename) {
+  var ext = (filename || '').split('.').pop().toLowerCase();
+  if (ext === 'epub') return 'EPUB';
+  if (ext === 'pdf')  return 'PDF';
+  return ext.toUpperCase();
+}
+
+let filterEbook = false;
+
+function saveState() {}
+function loadState() {}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  let shown = 0;
+
+  var indices = livres.map(function(_, i) { return i; });
+  if (filterCat === 'all' && !filterCDC && !filterEbook) {
+    indices.sort(function(a, b) {
+      var oa = CAT_ORDER[livres[a].cat] !== undefined ? CAT_ORDER[livres[a].cat] : 99;
+      var ob = CAT_ORDER[livres[b].cat] !== undefined ? CAT_ORDER[livres[b].cat] : 99;
+      return oa - ob;
+    });
+  }
+
+  indices.forEach(function(i) {
+    var l = livres[i];
+    const emp = emprunteSet.has(i);
+    if (filterCDC   && !l.coupDeCoeur) return;
+    if (filterEbook && !l.ebook && !l.versions) return;
+    if (!filterCDC && !filterEbook && filterCat !== 'all') {
+      var bookCats = l.cats ? l.cats : [l.cat];
+      if (bookCats.indexOf(filterCat) === -1) return;
+    }
+    if (filterAvail && emp) return;
+    shown++;
+
+    var connus = getAuteursConnus(l.auteur);
+    var authorHtml = connus.length
+      ? '<span class="author-link" onclick="openModal(\'' + esc(l.auteur).replace(/'/g, "\\'") + '\')">' + esc(l.auteur) + '</span>'
+      : esc(l.auteur);
+    var donAuteur = getLNAuteur(l.auteur);
+
+    var catLabel = esc(CAT_LABEL[l.cat] || l.cat);
+    var catClass = CAT_CLASS[l.cat] || '';
+
+    const card = document.createElement('div');
+    card.className = 'book-card' + (emp ? ' emprunte' : '') + (l.coupDeCoeur ? ' is-cdc' : '');
+    card.setAttribute('onclick', 'openBookModal(' + i + ')');
+    card.innerHTML =
+      '<div class="card-img-wrap">' +
+        '<img src="images/' + esc(l.img) + '" alt="' + esc(l.titre) + '" loading="lazy">' +
+        (l.coupDeCoeur ? '<span class="cdc-flag">&#x1F9E1; Coup de c&oelig;ur</span>' : '') +
+        '<span class="status-badge ' + (emp ? 'badge-emprunte' : 'badge-dispo') + '">' + (emp ? '\uD83D\uDCD5 Emprunt\u00e9' : '\uD83D\uDCD7 Dispo') + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">' + esc(l.titre) + '</div>' +
+        '<div class="card-author" onclick="event.stopPropagation()">' + authorHtml + '</div>' +
+        '<div class="card-meta">' + esc(l.genre) + ' \u00b7 ' + l.annee + '</div>' +
+        '<span class="card-cat ' + catClass + '">' + catLabel + '</span>' +
+        (l.rubrique ? '<div class="card-rubrique">' + esc(l.rubrique) + '</div>' : '') +
+      '</div>' +
+      (l.ebook ? '<a class="ebook-btn" href="' + esc(l.ebook) + '" download onclick="event.stopPropagation()">&#x1F4E5; T\u00e9l\u00e9charger (' + getFormatLabel(l.ebook) + ')</a>' : '') +
+      (l.versions ? '<span class="ebook-btn" onclick="event.stopPropagation();openBookModal(' + i + ')">&#x1F4E5; T\u00e9l\u00e9charger</span>' : '');
+    grid.appendChild(card);
+  });
+  var total = livres.length;
+  var empC  = emprunteSet.size;
+  document.getElementById('stats-text').innerHTML =
+    '<span>' + shown + '</span> livre(s) affich\u00e9(s) \u00a0\u00b7\u00a0 ' +
+    '<span style="color:var(--green)">' + (total - empC) + ' disponible(s)</span> \u00a0\u00b7\u00a0 ' +
+    '<span style="color:var(--red)">'   + empC            + ' emprunt\u00e9(s)</span> \u00a0\u00b7\u00a0 ' +
+    '<span>' + total + ' au total</span>';
+}
+
+function toggleFilterMenu() {
+  var bar = document.getElementById('filters-bar');
+  bar.classList.toggle('open');
+}
+
+function closeFilterMenuOnMobile() {
+  if (window.innerWidth <= 600) {
+    document.getElementById('filters-bar').classList.remove('open');
+  }
+}
+
+function setFilter(cat, btn) {
+  filterCDC   = (cat === 'coupDeCoeur');
+  filterEbook = (cat === 'ebook');
+  filterCat   = (filterCDC || filterEbook) ? 'all' : cat;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.remove('active', 'cdc-active');
+    if (b.id === 'avail-btn' && filterAvail) b.classList.add('avail-active');
+  });
+  if (filterCDC) btn.classList.add('cdc-active');
+  else btn.classList.add('active');
+  var showRub = filterCDC || filterEbook || (filterCat !== 'all');
+  document.getElementById('grid').classList.toggle('show-rubrique', showRub);
+  closeFilterMenuOnMobile();
+  render();
+}
+
+function toggleAvailFilter(btn) {
+  filterAvail = !filterAvail;
+  btn.classList.toggle('avail-active', filterAvail);
+  closeFilterMenuOnMobile();
+  render();
+}
+
+function openQR(addr, label) {
+  var lnAddr = 'lightning:' + addr;
+  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=' + encodeURIComponent(lnAddr);
+  document.getElementById('qr-img').src = url;
+  document.getElementById('qr-label').textContent = label || addr;
+  document.getElementById('qr-addr-display').textContent = addr;
+  document.getElementById('qr-overlay').classList.add('open');
+}
+
+function closeQR(e) {
+  if (e && e.target !== document.getElementById('qr-overlay')) return;
+  document.getElementById('qr-overlay').classList.remove('open');
+}
+
+function copyLN() {
+  navigator.clipboard.writeText('profscofield@marmottoshis.com').then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '\u2713 Copi\u00e9\u00a0!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copier';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>

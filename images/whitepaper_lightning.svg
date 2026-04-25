@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280">
+  <rect width="200" height="280" fill="#0d0d1a"/>
+  <rect x="0" y="0" width="200" height="5" fill="#a855f7"/>
+  <text x="100" y="120" font-family="Georgia,serif" font-size="72" fill="#a855f7" text-anchor="middle" dominant-baseline="middle">⚡</text>
+  <text x="100" y="175" font-family="Georgia,serif" font-size="11" fill="#e9d5ff" text-anchor="middle" letter-spacing="2">LIGHTNING NETWORK</text>
+  <text x="100" y="198" font-family="Georgia,serif" font-size="10" fill="#7c3aed" text-anchor="middle" letter-spacing="1">WHITE PAPER</text>
+  <text x="100" y="230" font-family="Georgia,serif" font-size="9" fill="#6b5a80" text-anchor="middle">Poon &amp; Dryja — 2016</text>
+</svg>

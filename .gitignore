@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Images haute résolution générées (upscalées localement)
+images/*_hq.jpg
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.swp
+
+# Scripts sensibles et clés SSH — NE JAMAIS COMMITER
+setup-github.sh
+setup-github.sh.save
+push-github.sh
+.ssh/
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Node (si utilisé plus tard)
+node_modules/

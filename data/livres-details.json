@@ -1,0 +1,18 @@
+{
+  "livres": [
+    {
+      "titre": "L'Élégance de Bitcoin",
+      "auteur": "Ludovic Lars",
+      "img": "elegance_bitcoin.jpg",
+      "quatrieme": "Bitcoin est un modèle innovant de monnaie numérique décentralisée dont l'existence bouscule l'ordre établi en proposant une alternative audacieuse au système bancaire classique. Depuis sa conception énigmatique par Satoshi Nakamoto en 2008, Bitcoin a connu une croissance foudroyante qui a marqué les esprits. Il a déchaîné toutes les passions, de l'enthousiasme excessif de ses promoteurs au rejet viscéral de ses détracteurs.\n\nVous découvrirez son histoire fantastique, ainsi que les principes économiques, idéologiques et techniques qui ont assuré sa survie dans un environnement hostile. Vous en ressortirez avec une compréhension de Bitcoin susceptible de transformer votre vision du monde.",
+      "passages": []
+    },
+    {
+      "titre": "L'Étalon Bitcoin",
+      "auteur": "Saifedean Ammous",
+      "img": "etalon_bitcoin.jpg",
+      "quatrieme": "Dix ans après la naissance de Bitcoin, Saifedean Ammous analyse le contexte historique de son émergence et ses propriétés spécifiques qui en font une monnaie solide. Car si Bitcoin est une innovation de l'ère numérique, le problème qu'il cherche à résoudre est aussi vieux que le monde : comment transférer de la valeur dans le temps et dans l'espace.\n\nL'auteur brosse un fascinant tableau des technologies de la monnaie, des systèmes primitifs à nos jours, avec en toile de fond cette question : quelles sont les caractéristiques d'une bonne monnaie, et ses conséquences sur la paix, le commerce, la culture, l'art et l'accumulation du capital ?",
+      "passages": []
+    }
+  ]
+}
