@@ -5,9 +5,6 @@
 .Spotlight-V100
 .Trashes
 
-# Images haute résolution générées (upscalées localement)
-images/*_hq.jpg
-
 # Fichiers temporaires
 *.tmp
 *.bak
