@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Soutenir les auteurs — Kaz'a Bitcoin</title>
+<meta name="description" content="Soutenez directement les auteurs de la Bibliothèque Lightning Kaz'a Bitcoin grâce aux adresses Lightning Network.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1008'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='60' font-weight='900' fill='%23f7931a' font-family='Arial,sans-serif'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Soutenir les auteurs — Bibliothèque Lightning Kaz'a Bitcoin">
+<meta property="og:description" content="Adresses Lightning Network des auteurs de la Bibliothèque. Faites un don directement à vos auteurs préférés.">
+<meta name="twitter:card"       content="summary">
 <style>
   :root {
     --bg:     #f5f0e8;
@@ -22,25 +28,41 @@
     padding: 20px;
     text-align: center;
   }
-  .back-link { color: #9a8060; font-size: 0.85rem; text-decoration: none; display: inline-block; margin-bottom: 10px; }
+  .back-link { color: #c8b090; font-size: 0.9rem; font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: 10px; letter-spacing: 0.01em; }
   .back-link:hover { color: var(--gold); }
   .page-title { font-family: 'Georgia', serif; font-size: 1.6rem; font-weight: 800; color: #f5e8c8; }
   .page-title span { color: #f7931a; }
   .page-sub { color: #9a8060; font-size: 0.88rem; margin-top: 6px; }
 
   .intro {
-    max-width: 640px;
+    max-width: 700px;
     margin: 28px auto 0;
     padding: 0 20px;
     text-align: center;
     font-size: 0.9rem;
-    color: var(--muted);
+    font-weight: 500;
+    color: #4a3820;
     line-height: 1.7;
   }
 
+  .nav-link-bio {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: #b06a00;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #e8c878;
+    border-radius: 20px;
+    padding: 5px 14px;
+    background: #fdf8f0;
+    transition: all 0.2s;
+  }
+  .nav-link-bio:hover { background: #fdf0d8; border-color: var(--gold); color: var(--gold); }
+
   .auteurs-list {
-    max-width: 640px;
-    margin: 28px auto 48px;
+    max-width: 700px;
+    margin: 24px auto 48px;
     padding: 0 20px;
     display: flex;
     flex-direction: column;
@@ -51,7 +73,7 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 18px 20px;
+    padding: 20px 22px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .auteur-card.has-ln {
@@ -60,32 +82,11 @@
   }
   .auteur-nom {
     font-family: 'Georgia', serif;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: var(--text);
     margin-bottom: 10px;
   }
-  .auteur-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  .auteur-link-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    background: #fdf8f0;
-    transition: all 0.2s;
-  }
-  .auteur-link-btn:hover { border-color: var(--gold); color: var(--gold); }
 
   .ln-section { margin-top: 4px; }
   .ln-label {
@@ -106,7 +107,16 @@
     border-radius: 8px;
     padding: 8px 12px;
   }
-  .ln-addr { font-family: monospace; font-size: 0.85rem; color: #b06a00; flex: 1; word-break: break-all; }
+  .ln-addr {
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #b06a00;
+    flex: 1;
+    word-break: break-all;
+    cursor: pointer;
+    border-bottom: 1px dashed #c47a0a;
+  }
+  .ln-addr:hover { color: #8a4a00; }
   .copy-btn {
     background: var(--gold);
     color: #fff;
@@ -121,8 +131,6 @@
   }
   .copy-btn:hover { background: #a05e00; }
   .copy-btn.copied { background: #166534; }
-  .ln-addr { cursor: pointer; border-bottom: 1px dashed #c47a0a; }
-  .ln-addr:hover { color: #8a4a00; }
 
   /* MODAL QR CODE */
   #qr-overlay {
@@ -155,14 +163,95 @@
   }
   .qr-close:hover { color: var(--text); }
   .qr-title { font-family: 'Georgia', serif; font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 16px; }
-  .qr-img { width: 220px; height: 220px; border: 1px solid var(--border); border-radius: 10px; display: block; margin: 0 auto 14px; }
-  .qr-addr { font-family: monospace; font-size: 0.78rem; color: #b06a00; word-break: break-all; background: #fdf5e4; border: 1px solid #f0c878; border-radius: 8px; padding: 8px 10px; margin-top: 8px; }
+  #qr-canvas canvas, #qr-canvas img { border-radius: 10px; border: 1px solid var(--border); display: block; margin: 0 auto; }
+  .qr-addr {
+    font-family: monospace;
+    font-size: 0.78rem;
+    color: #b06a00;
+    word-break: break-all;
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    cursor: copy;
+    user-select: all;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .qr-addr:hover { background: #fdeeca; border-color: var(--gold); }
+  .qr-addr.copied { background: #dcfce7; border-color: #16a34a; color: #166534; }
   .qr-hint { font-size: 0.74rem; color: var(--muted); margin-top: 10px; }
 
   .no-ln {
     font-size: 0.78rem;
     color: #bba880;
     font-style: italic;
+  }
+
+  /* ── Barre de recherche ── */
+  .auteur-search-wrap {
+    max-width: 700px;
+    margin: 18px auto 0;
+    padding: 0 20px;
+    position: relative;
+  }
+  .auteur-search-wrap input {
+    width: 100%;
+    padding: 9px 36px 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.87rem;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .auteur-search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(196,122,10,0.15); }
+  .auteur-search-wrap input::placeholder { color: var(--muted); }
+  .auteur-search-clear {
+    position: absolute;
+    right: 28px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    font-size: 1rem; cursor: pointer;
+    color: var(--muted); display: none;
+    line-height: 1; padding: 2px;
+  }
+  .auteur-search-clear:hover { color: var(--text); }
+
+
+  /* ── Tooltip QR au survol ── */
+  #qr-hover {
+    display: none;
+    position: fixed;
+    z-index: 500;
+    background: #fff;
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 14px 14px 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+    pointer-events: none;
+    text-align: center;
+  }
+  #qr-hover-canvas canvas, #qr-hover-canvas img {
+    display: block;
+    width: 164px;
+    height: 164px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  #qr-hover .qr-hover-addr {
+    font-family: monospace;
+    font-size: 0.68rem;
+    color: #b06a00;
+    margin-top: 8px;
+    word-break: break-all;
+    max-width: 164px;
+  }
+  #qr-hover .qr-hover-hint {
+    font-size: 0.67rem;
+    color: var(--muted);
+    margin-top: 5px;
   }
 
   footer {
@@ -174,9 +263,8 @@
     background: #ede8dc;
   }
   footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
-
-  .x-logo { display: inline-block; vertical-align: middle; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -187,58 +275,92 @@
 </header>
 
 <p class="intro">
-  <strong>Vous avez apprécié un livre&nbsp;? Vous pouvez soutenir directement son auteur en lui envoyant des sats via Lightning. Copiez l'adresse associ&eacute;e et collez-la dans votre wallet.</strong>
+  <strong>Vous avez apprécié un livre&nbsp;? Vous pouvez soutenir directement son auteur en lui envoyant des sats via Lightning. Scannez directement le QR code, ou copiez l'adresse associée et collez-la dans votre wallet.</strong>
   <br><br>
   <em><span style="font-size:0.78rem;color:#9a8060;">(Certains auteurs ne disposent pas encore d'adresse de don ou ne l'ont pas rendue publique. Cette liste sera mise à jour dès que de nouvelles informations seront disponibles.)</span></em>
+  <br>
+  <a href="auteurs.html" class="nav-link-bio">&#128100; Découvrir les auteurs</a>
 </p>
 
 <!-- MODAL QR CODE -->
-<div id="qr-overlay" onclick="closeQR(event)">
+<div id="qr-overlay" role="dialog" aria-modal="true" aria-label="QR Code Lightning" onclick="closeQR(event)">
   <div class="qr-box">
-    <button class="qr-close" onclick="closeQR(null)">&times;</button>
+    <button class="qr-close" onclick="closeQR(null)" aria-label="Fermer">&times;</button>
     <div class="qr-title">&#x26A1; Don Lightning — <span id="qr-label"></span></div>
-    <img class="qr-img" id="qr-img" src="" alt="QR Code Lightning">
-    <div class="qr-addr" id="qr-addr-display"></div>
+    <div id="qr-canvas" style="width:220px;height:220px;margin:0 auto 14px;text-align:center;"></div>
+    
+    <div class="qr-addr" id="qr-addr-display" onclick="copyQRAddr(this)" title="Cliquer pour copier"></div>
     <p class="qr-hint">Scannez ce QR code avec votre wallet Lightning pour faire un don du montant de votre choix.</p>
   </div>
+</div>
+
+<!-- Tooltip QR au survol -->
+<div id="qr-hover">
+  <div id="qr-hover-canvas" style="width:164px;height:164px;margin:0 auto 4px;"></div>
+  <div class="qr-hover-addr" id="qr-hover-addr"></div>
+  <div class="qr-hover-hint">&#x26A1; Scanner avec votre wallet</div>
+</div>
+
+<div class="auteur-search-wrap">
+  <input type="search" id="auteur-search" placeholder="&#x1F50D;&#xFE0E; Rechercher un auteur&hellip;" autocomplete="off" oninput="onLNSearch(this)" aria-label="Rechercher un auteur">
+  <button class="auteur-search-clear" id="auteur-search-clear" onclick="clearLNSearch()" aria-label="Effacer">&times;</button>
 </div>
 
 <div class="auteurs-list" id="auteurs-list"></div>
 
 <footer>
-  <p><a href="index.html">&#8592; Retour à la Bibliothèque Lightning</a> &nbsp;&middot;&nbsp; <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a></p>
+  <p>Kaz&apos;a Bitcoin &mdash; Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</p>
+  <p style="margin-top:6px">
+    <a href="index.html">&#8592; Biblioth&egrave;que Lightning</a>
+    &nbsp;&middot;&nbsp;
+    <a href="auteurs.html">À propos des auteurs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mentions-legales.html">Mentions l&eacute;gales</a>
+  </p>
 </footer>
 
+<script src="data/kaza-data.js"></script>
 <script>
-const auteurs = [
-  { nom:"Lo\u00efc Morel",            twitter:"https://twitter.com/Loic_Pandul",   site:"https://pandul.fr/",                        ln:"sats@pandul.fr"  },
-  { nom:"Ludovic Lars",              twitter:"https://twitter.com/lugaxker",      site:"https://viresinnumeris.fr/",                ln:"lugaxker@bitrefill.me" },
-  { nom:"Saifedean Ammous",         twitter:"https://twitter.com/saifedean",     site:"https://saifedean.com/",                    ln:null              },
-  { nom:"Gigi",                     twitter:null,                                 site:"https://dergigi.com/",                      ln:null              },
-  { nom:"Alexandre Stachtchenko",   twitter:"https://twitter.com/StachAlex",     site:"https://alexstach.fr/",                     ln:null              },
-  { nom:"Jacques Favier",           twitter:"https://twitter.com/cryptosaurien", site:"https://blog.lavoiedubitcoin.info/",         ln:null              },
-  { nom:"Pierre Noizat",            twitter:"https://twitter.com/PierreNoizat",  site:null,                                        ln:null, redirectDon:true },
-  { nom:"Claire Balva",             twitter:"https://twitter.com/ClaireBalva",   site:"https://linktr.ee/clairebalva",             ln:null              },
-  { nom:"Daniel Villa Monteiro",    twitter:"https://twitter.com/MonteiroVilla", site:null,                                        ln:null              },
-  { nom:"Benjamin Loiseau",         twitter:"https://twitter.com/B3njj92",       site:"https://linktr.ee/benjamin.loiseau",        ln:null              },
-  { nom:"Goku",                     twitter:"https://twitter.com/Crypto_Goku",   site:"https://linktr.ee/crypto__goku",            ln:null              },
-  { nom:"David St-Onge",            twitter:"https://twitter.com/DavidStOnge",   site:"https://everythingbitcoinbook.com/",        ln:null              },
-  { nom:"Phil Champagne",           twitter:"https://twitter.com/egg_descrambler", site:"https://www.bookofsatoshi.com/",           ln:null              },
-  { nom:"Scuba Wizard",             twitter:"https://twitter.com/Scuba_Wizard",    site:"https://linktr.ee/scuba_wizard",           ln:"scuba_wizard@getalby.com" },
-];
+// Construit depuis kaza-data.js
+const auteurs = KAZA_AUTEURS;
 
-var xLogo = '<svg class="x-logo" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
 
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function openQR(addr, label) {
-  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=' + encodeURIComponent('lightning:' + addr);
-  document.getElementById('qr-img').src = url;
+  hideHoverQR();
+  var container = document.getElementById('qr-canvas');
+  container.innerHTML = '';
+  var lnAddr = 'lightning:' + addr;
+  if (typeof QRCode !== 'undefined') {
+    try {
+      var qr = new QRCode(container, {
+        text: lnAddr,
+        width: 220, height: 220,
+        colorDark: '#000000', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } catch(e) { _showQRError(container); }
+  } else {
+    var img = document.createElement('img');
+    img.style.cssText = 'width:220px;height:220px;border-radius:10px;border:1px solid var(--border)';
+    img.alt = 'QR Code'; img.onerror = function() { _showQRError(container); };
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=10&data=' + encodeURIComponent(lnAddr);
+    container.appendChild(img);
+  }
   document.getElementById('qr-label').textContent = label || addr;
   document.getElementById('qr-addr-display').textContent = addr;
   document.getElementById('qr-overlay').classList.add('open');
+}
+function _showQRError(container) {
+  container.innerHTML = '<div style="width:220px;height:220px;display:flex;align-items:center;justify-content:center;' +
+    'text-align:center;font-size:0.8rem;color:var(--muted);padding:16px;line-height:1.5;' +
+    'border:1px solid var(--border);border-radius:10px;">' +
+    '⚠️ QR code indisponible.<br>Copiez l’adresse ci-dessous.</div>';
 }
 
 function closeQR(e) {
@@ -246,43 +368,132 @@ function closeQR(e) {
   document.getElementById('qr-overlay').classList.remove('open');
 }
 
+function copyQRAddr(el) {
+  var addr = document.getElementById('qr-addr-display').textContent;
+  copyText(addr, function() {
+    el.textContent = '✓ Copié !';
+    el.classList.add('copied');
+    setTimeout(function(){ el.textContent = addr; el.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── Copie avec fallback pour file:// ──
+function copyText(text, onSuccess) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(function() { _copyFallback(text, onSuccess); });
+  } else { _copyFallback(text, onSuccess); }
+}
+function _copyFallback(text, onSuccess) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); onSuccess && onSuccess(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
 function copyLN(addr, btn) {
-  navigator.clipboard.writeText(addr).then(function() {
-    btn.textContent = '\u2713 Copi\u00e9\u00a0!';
+  copyText(addr, function() {
+    btn.textContent = '✓ Copié !';
     btn.classList.add('copied');
     setTimeout(function(){ btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
   });
 }
 
-var list = document.getElementById('auteurs-list');
+// ── Tooltip QR au survol ──
+var _qrHover     = document.getElementById('qr-hover');
+var _qrHoverAddr = document.getElementById('qr-hover-addr');
+var _qrHoverOn   = false;
+var _isTouchOnly = window.matchMedia('(hover: none)').matches;
 
-// Trier : ceux avec LN en premier
+function showHoverQR(addr, e) {
+  if (_isTouchOnly) return;
+  if (document.getElementById('qr-overlay').classList.contains('open')) return;
+  var container = document.getElementById('qr-hover-canvas');
+  if (container) {
+    container.innerHTML = '';
+    if (typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(container, { text: 'lightning:' + addr, width: 164, height: 164,
+          colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+        var el = container.querySelector('canvas,img');
+        if (el) el.style.borderRadius = '6px';
+      } catch(e2) {}
+    } else {
+      var img = document.createElement('img');
+      img.style.cssText = 'width:164px;height:164px;border-radius:6px';
+      img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=164x164&margin=8&data='
+        + encodeURIComponent('lightning:' + addr);
+      container.appendChild(img);
+    }
+  }
+  _qrHoverAddr.textContent = addr;
+  _qrHover.style.display = 'block';
+  _qrHoverOn = true;
+  _posHoverQR(e);
+}
+
+function moveHoverQR(e) {
+  if (_qrHoverOn) _posHoverQR(e);
+}
+
+function hideHoverQR() {
+  _qrHover.style.display = 'none';
+  _qrHoverOn = false;
+  var hc = document.getElementById('qr-hover-canvas'); if (hc) hc.innerHTML = '';
+}
+
+function _posHoverQR(e) {
+  var W = 196, H = 230;
+  var x = e.clientX + 18;
+  var y = e.clientY - H / 2;
+  if (x + W > window.innerWidth  - 8) x = e.clientX - W - 14;
+  if (y < 8) y = 8;
+  if (y + H > window.innerHeight - 8) y = window.innerHeight - H - 8;
+  _qrHover.style.left = x + 'px';
+  _qrHover.style.top  = y + 'px';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var ov = document.getElementById('qr-overlay');
+    if (ov && ov.classList.contains('open')) closeQR(null);
+  }
+});
+var list = document.getElementById('auteurs-list');
+var bibLN = KAZA_CONFIG.bibLN;
+
+// Trier : ceux avec LN en premier, puis alphabétique
 var sorted = auteurs.slice().sort(function(a, b) {
-  var lnDiff = ((b.ln||b.redirectDon) ? 1 : 0) - ((a.ln||a.redirectDon) ? 1 : 0);
+  var lnDiff = ((b.ln || b.redirectDon) ? 1 : 0) - ((a.ln || a.redirectDon) ? 1 : 0);
   if (lnDiff !== 0) return lnDiff;
   return a.nom.localeCompare(b.nom, 'fr');
 });
 
-sorted.forEach(function(a) {
-  var links = '';
-  if (a.twitter) links += '<a class="auteur-link-btn" href="' + esc(a.twitter) + '" target="_blank" rel="noopener">' + xLogo + ' X</a>';
-  if (a.site)    links += '<a class="auteur-link-btn" href="' + esc(a.site) + '" target="_blank" rel="noopener">&#x1F310; Site web</a>';
+function lnSpan(addr, label) {
+  return '<span class="ln-addr"' +
+    ' onmouseenter="showHoverQR(\'' + esc(addr) + '\',event)"' +
+    ' onmousemove="moveHoverQR(event)"' +
+    ' onmouseleave="hideHoverQR()"' +
+    ' onclick="openQR(\'' + esc(addr) + '\',\'' + esc(label) + '\')"' +
+    '>' +
+    esc(addr) + '</span>';
+}
 
-  var bibLN = 'profscofield@marmottoshis.com';
+sorted.forEach(function(a) {
   var lnHtml = a.ln
     ? '<div class="ln-section">' +
         '<div class="ln-label">&#x26A1; Adresse Lightning</div>' +
         '<div class="ln-wrap">' +
-          '<span class="ln-addr" onclick="openQR(\'' + esc(a.ln) + '\',\'' + esc(a.nom) + '\')" title="Cliquez pour afficher le QR code">' + esc(a.ln) + '</span>' +
+          lnSpan(a.ln, a.nom) +
           '<button class="copy-btn" onclick="copyLN(\'' + esc(a.ln) + '\', this)">Copier</button>' +
         '</div>' +
       '</div>'
     : a.redirectDon
     ? '<div class="ln-section">' +
         '<div class="ln-label">&#x26A1; Adresse Lightning</div>' +
-        '<p style="font-size:0.8rem;font-style:italic;color:#8a5500;margin:4px 0 8px;line-height:1.5">L\u2019auteur a g\u00e9n\u00e9reusement souhait\u00e9 que ses dons soient revers\u00e9s \u00e0 la Biblioth\u00e8que Lightning.</p>' +
+        '<p style="font-size:0.8rem;font-style:italic;color:#8a5500;margin:4px 0 8px;line-height:1.5">L\'auteur a généreusement souhaité que ses dons soient reversés à la Bibliothèque Lightning.</p>' +
         '<div class="ln-wrap">' +
-          '<span class="ln-addr" onclick="openQR(\'' + esc(bibLN) + '\',\'Biblioth\u00e8que Lightning\')" title="Cliquez pour afficher le QR code">' + esc(bibLN) + '</span>' +
+          lnSpan(bibLN, 'Bibliothèque Lightning') +
           '<button class="copy-btn" onclick="copyLN(\'' + esc(bibLN) + '\', this)">Copier</button>' +
         '</div>' +
       '</div>'
@@ -292,10 +503,28 @@ sorted.forEach(function(a) {
   card.className = 'auteur-card' + ((a.ln || a.redirectDon) ? ' has-ln' : '');
   card.innerHTML =
     '<div class="auteur-nom">' + esc(a.nom) + '</div>' +
-    (links ? '<div class="auteur-links">' + links + '</div>' : '') +
     lnHtml;
   list.appendChild(card);
 });
+function onLNSearch(input) {
+  var q = input.value.trim().toLowerCase();
+  var clearBtn = document.getElementById('auteur-search-clear');
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+  var cards = document.querySelectorAll('#auteurs-list .auteur-card');
+  cards.forEach(function(card) {
+    var text = card.textContent.toLowerCase();
+    card.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
+  });
+}
+
+function clearLNSearch() {
+  var input = document.getElementById('auteur-search');
+  if (input) { input.value = ''; input.focus(); }
+  var clearBtn = document.getElementById('auteur-search-clear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  document.querySelectorAll('#auteurs-list .auteur-card').forEach(function(c) { c.style.display = ''; });
+}
+
 </script>
 </body>
 </html>

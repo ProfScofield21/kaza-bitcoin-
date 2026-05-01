@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Les auteurs — Kaz'a Bitcoin</title>
+<meta name="description" content="À propos des auteurs de la Bibliothèque Lightning Kaz'a Bitcoin : économistes, philosophes, développeurs passionnés de Bitcoin et d'économie autrichienne.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1008'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='60' font-weight='900' fill='%23f7931a' font-family='Arial,sans-serif'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Les auteurs — Bibliothèque Lightning Kaz'a Bitcoin">
+<meta property="og:description" content="À propos des auteurs de la Bibliothèque Lightning : économistes, philosophes, développeurs passionnés de Bitcoin.">
+<meta name="twitter:card"       content="summary">
+<style>
+  :root {
+    --bg:     #f5f0e8;
+    --card:   #ffffff;
+    --gold:   #c47a0a;
+    --text:   #1a1208;
+    --muted:  #7a6a50;
+    --border: #d4c8b0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  header {
+    background: linear-gradient(135deg, #1a1008 0%, #2a1a08 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 20px;
+    text-align: center;
+  }
+  .back-link { color: #c8b090; font-size: 0.9rem; font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: 10px; letter-spacing: 0.01em; }
+  .back-link:hover { color: var(--gold); }
+  .page-title { font-family: 'Georgia', serif; font-size: 1.6rem; font-weight: 800; color: #f5e8c8; }
+  .page-title span { color: #f7931a; }
+  .page-sub { color: #9a8060; font-size: 0.88rem; margin-top: 6px; }
+
+  .intro {
+    max-width: 700px;
+    margin: 28px auto 0;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4a3820;
+    line-height: 1.7;
+  }
+
+  .nav-link-don {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: #b06a00;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid #e8c878;
+    border-radius: 20px;
+    padding: 5px 14px;
+    background: #fdf8f0;
+    transition: all 0.2s;
+  }
+  .nav-link-don:hover { background: #fdf0d8; border-color: var(--gold); color: var(--gold); }
+
+
+  .auteurs-list {
+    max-width: 700px;
+    margin: 24px auto 48px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .auteur-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .auteur-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .auteur-nom {
+    font-family: 'Georgia', serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .auteur-dates {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .auteur-specialite {
+    display: inline-block;
+    font-size: 0.72rem;
+    background: #f5f0e4;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2px 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .auteur-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 12px;
+  }
+  .auteur-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: #fdf8f0;
+    transition: all 0.2s;
+  }
+  .auteur-link-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .auteur-bio {
+    font-size: 0.85rem;
+    color: #4a3a22;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .auteur-livres {
+    margin-top: 10px;
+  }
+  .auteur-livres-label {
+    font-size: 0.73rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .auteur-livres-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .auteur-livre-tag {
+    font-size: 0.76rem;
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 8px;
+    padding: 3px 10px;
+    color: #8a5500;
+    font-style: italic;
+  }
+
+  .x-logo { display: inline-block; vertical-align: middle; }
+
+
+  /* Barre de recherche auteurs */
+  .auteur-search-wrap {
+    max-width: 700px;
+    margin: 18px auto 0;
+    padding: 0 20px;
+    position: relative;
+  }
+  .auteur-search-wrap input {
+    width: 100%;
+    padding: 9px 36px 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.87rem;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .auteur-search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(196,122,10,0.15); }
+  .auteur-search-wrap input::placeholder { color: var(--muted); }
+  .auteur-search-clear {
+    position: absolute;
+    right: 28px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    font-size: 1rem; cursor: pointer;
+    color: var(--muted); display: none;
+    line-height: 1; padding: 2px;
+  }
+  .auteur-search-clear:hover { color: var(--text); }
+  .auteur-livre-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold);
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 12px;
+    padding: 2px 9px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+    background: #ede8dc;
+  }
+  footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&#8592; Retour à la bibliothèque</a>
+  <div class="page-title">Les <span>auteurs</span></div>
+  <div class="page-sub">À propos des auteurs de la Bibliothèque Lightning</div>
+</header>
+
+<p class="intro">
+  <strong>Économistes, philosophes, développeurs, illustrateurs — les auteurs de la bibliothèque viennent d'horizons variés, unis par leur intérêt pour Bitcoin, la liberté monétaire et l'économie autrichienne.</strong>
+  <br>
+  <a href="auteurs-ln.html" class="nav-link-don">&#x26A1; Soutenir les auteurs</a>
+</p>
+
+<div class="auteur-search-wrap">
+  <input type="search" id="auteur-search" placeholder="&#x1F50D;&#xFE0E; Rechercher un auteur, une spécialité&hellip;" autocomplete="off" oninput="onAuteurSearch(this)" aria-label="Rechercher un auteur">
+  <button class="auteur-search-clear" id="auteur-search-clear" onclick="clearAuteurSearch()" aria-label="Effacer">&times;</button>
+</div>
+
+<div class="auteurs-list" id="auteurs-list"></div>
+
+<footer>
+  <p>Kaz&apos;a Bitcoin &mdash; Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</p>
+  <p style="margin-top:6px">
+    <a href="index.html">&#8592; Biblioth&egrave;que Lightning</a>
+    &nbsp;&middot;&nbsp;
+    <a href="auteurs-ln.html">&#x26A1; Soutenir les auteurs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mentions-legales.html">Mentions l&eacute;gales</a>
+  </p>
+</footer>
+
+<script src="data/kaza-data.js"></script>
+<script>
+var xLogo = '<svg class="x-logo" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function slugify(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+
+const auteurs = KAZA_AUTEURS;
+
+var list = document.getElementById('auteurs-list');
+
+auteurs.sort(function(a, b) { return a.nom.localeCompare(b.nom, 'fr'); });
+
+auteurs.forEach(function(a) {
+  var links = '';
+  if (a.twitter) links += '<a class="auteur-link-btn" href="' + esc(a.twitter) + '" target="_blank" rel="noopener">' + xLogo + ' X / Twitter</a>';
+  if (a.site)    links += '<a class="auteur-link-btn" href="' + esc(a.site) + '" target="_blank" rel="noopener">&#x1F310; Site web</a>';
+
+  var datesHtml = (a.naissance || a.deces)
+    ? '<span class="auteur-dates">(' + (a.naissance || '?') + '–' + (a.deces || '') + ')</span>'
+    : '';
+
+  var livresHtml = '';
+  if (a.livres && a.livres.length) {
+    var livreCount = a.livres.length;
+    livresHtml = '<div class="auteur-livres">' +
+      '<div class="auteur-livres-label">&#x1F4DA; Dans la biblioth&egrave;que <span class="auteur-livre-count">' + livreCount + ' livre' + (livreCount > 1 ? 's' : '') + '</span></div>' +
+      '<div class="auteur-livres-list">' +
+      a.livres.map(function(l){ return '<span class="auteur-livre-tag">' + esc(l) + '</span>'; }).join('') +
+      '</div></div>';
+  }
+
+  var card = document.createElement('div');
+  card.className = 'auteur-card';
+  card.id = slugify(a.nom);
+  card.innerHTML =
+    '<div class="auteur-header">' +
+      '<div>' +
+        '<span class="auteur-nom">' + esc(a.nom) + '</span>' + datesHtml +
+      '</div>' +
+      '<span class="auteur-specialite">' + esc(a.specialite) + '</span>' +
+    '</div>' +
+    (links ? '<div class="auteur-links">' + links + '</div>' : '') +
+    '<p class="auteur-bio">' + esc(a.bio) + '</p>' +
+    livresHtml;
+  list.appendChild(card);
+});
+
+// Scroll vers l'ancre si présente dans l'URL
+if (window.location.hash) {
+  var target = document.getElementById(window.location.hash.slice(1));
+  if (target) {
+    setTimeout(function() {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.style.transition = 'box-shadow 0.3s';
+      target.style.boxShadow = '0 0 0 3px var(--gold)';
+      setTimeout(function(){ target.style.boxShadow = ''; }, 2000);
+    }, 150);
+  }
+}
+
+function onAuteurSearch(input) {
+  var q = input.value.trim().toLowerCase();
+  var clearBtn = document.getElementById('auteur-search-clear');
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+  var cards = document.querySelectorAll('#auteurs-list .auteur-card');
+  var shown = 0;
+  cards.forEach(function(card) {
+    var text = card.textContent.toLowerCase();
+    var visible = !q || text.indexOf(q) !== -1;
+    card.style.display = visible ? '' : 'none';
+    if (visible) shown++;
+  });
+}
+
+function clearAuteurSearch() {
+  var input = document.getElementById('auteur-search');
+  if (input) { input.value = ''; input.focus(); }
+  var clearBtn = document.getElementById('auteur-search-clear');
+  if (clearBtn) clearBtn.style.display = 'none';
+  document.querySelectorAll('#auteurs-list .auteur-card').forEach(function(c) { c.style.display = ''; });
+}
+</script>
+</body>
+</html>
