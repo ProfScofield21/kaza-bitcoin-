@@ -1156,6 +1156,7 @@
 
 <script src="data/kaza-data.js"></script>
 <script src="data/kaza-livres.js"></script>
+<script src="data/kaza-dispo.js"></script>
 <script>
 // ── Garde-fou : si un fichier de données ne charge pas (faute de frappe,
 //    404…), on évite la page blanche en repliant sur des valeurs vides.
@@ -1509,7 +1510,16 @@ function copyModalLN(addr, btn) {
   });
 }
 
-let emprunteSet = new Set(livres.map(function(l,i){ return l.emprunte ? i : -1; }).filter(function(i){ return i >= 0; }));
+// Disponibilité : pilotée par data/kaza-dispo.js (liste KAZA_EMPRUNTES des
+// id de livres empruntés, mise à jour par le bot Telegram). Repli sur
+// l'ancien champ `emprunte` si le fichier de dispo n'est pas chargé.
+function livreId(l) { return l.id || slugify(l.titre); }
+var _empruntes = (typeof KAZA_EMPRUNTES !== 'undefined' && Array.isArray(KAZA_EMPRUNTES)) ? KAZA_EMPRUNTES : null;
+let emprunteSet = new Set();
+livres.forEach(function(l, i) {
+  var borrowed = _empruntes ? (_empruntes.indexOf(livreId(l)) !== -1) : !!l.emprunte;
+  if (borrowed) emprunteSet.add(i);
+});
 let filterCat   = 'all';
 let filterAvail = false;
 let filterCDC   = false;

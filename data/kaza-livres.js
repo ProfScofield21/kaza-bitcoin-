@@ -14,7 +14,10 @@
 //    ebook      : [optionnel] chemin vers l'ebook téléchargeable
 //    versions   : [optionnel] tableau de versions PDF pour les White Papers
 //                 Format : [{label:"...", file:"..."}, ...]
-//    emprunte   : [optionnel] true si le livre est actuellement emprunté
+//    id         : [optionnel] identifiant stable du livre. Si absent, il est
+//                 dérivé du titre (slug). Sert au suivi de disponibilité.
+//    DISPONIBILITÉ : ne se gère plus ici. Voir data/kaza-dispo.js, mis à jour
+//                 par le bot Telegram (commandes /emprunte, /rendu).
 //    coupDeCoeur: [optionnel] true pour afficher le badge Coup de cœur
 //    img4       : [optionnel] nom du fichier 4ème de couverture dans /images/
 //    quatrieme  : [optionnel] texte de la 4ème de couverture officielle
@@ -157,7 +160,6 @@ var KAZA_LIVRES = [
     annee:       2021,
     cat:         "Economie Liberte",
     img:         "etalon_fiat_hq.webp",
-    emprunte:    true,
     coupDeCoeur: true,
     rubrique:    "Saifedean Ammous démonte avec rigueur les ravages du système monétaire fiat sur l'économie et la société. Un indispensable pour comprendre pourquoi Bitcoin n'est pas une option, mais une nécessité.",
     img4:        "4eme-de-couverture/back_etalon_fiat.webp",
@@ -468,7 +470,6 @@ var KAZA_LIVRES = [
     cat:      "Initiation",
     cats:     ["Initiation", "Bande dessinee"],
     img:      "alice_cryptos_hq.webp",
-    emprunte: true,
     rubrique: "En suivant Alice, cette BD entraîne les lecteurs de tous âges dans le monde des cryptomonnaies avec humour et pédagogie. La porte d'entrée idéale pour les néophytes."
   },
 
@@ -479,7 +480,6 @@ var KAZA_LIVRES = [
     annee:    2022,
     cat:      "Initiation",
     img:      "crypto_faciles_hq.webp",
-    emprunte: true,
     rubrique: "Balva et Stachtchenko démystifient Bitcoin et les cryptos avec un langage accessible et des exemples concrets. Le guide parfait pour démarrer sans se perdre dans le jargon technique."
   },
 

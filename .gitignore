@@ -23,3 +23,7 @@ push-github.sh
 
 # Node (si utilisé plus tard)
 node_modules/
+
+# Secrets du bot Telegram — NE JAMAIS COMMITER
+scripts/bot.env
+*.env

@@ -1,0 +1,23 @@
+# Service systemd pour le bot Telegram Kaz'a Bitcoin.
+# 1. Adapte User= et le chemin du dépôt ci-dessous.
+# 2. Copie ce fichier :   sudo cp scripts/kaza-bot.service /etc/systemd/system/
+# 3. Active-le :          sudo systemctl daemon-reload
+#                         sudo systemctl enable --now kaza-bot
+# 4. Logs :               journalctl -u kaza-bot -f
+
+[Unit]
+Description=Bot Telegram de disponibilité — Kaz'a Bitcoin
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=umbrel
+WorkingDirectory=/home/umbrel/kaza-bitcoin
+EnvironmentFile=/home/umbrel/kaza-bitcoin/scripts/bot.env
+ExecStart=/usr/bin/python3 /home/umbrel/kaza-bitcoin/scripts/kaza-bot.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
