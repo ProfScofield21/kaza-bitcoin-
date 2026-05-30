@@ -19,6 +19,7 @@ push-github.sh
 # Éditeurs
 .vscode/
 .idea/
+.claude/
 
 # Node (si utilisé plus tard)
 node_modules/
