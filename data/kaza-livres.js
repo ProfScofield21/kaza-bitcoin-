@@ -108,7 +108,7 @@ var KAZA_LIVRES = [
     annee:    2019,
     cat:      "Bande dessinee",
     cats:     ["Bande dessinee", "Initiation"],
-    img:      "objectif_thune.png",
+    img:      "objectif_thune.jpg",
     rubrique: "Ratte et Favier offrent un guide pratique et décalé pour comprendre Bitcoin depuis zéro. Accessible, drôle et instructif — le livre idéal pour les curieux qui veulent passer à l'action."
   },
 
@@ -377,7 +377,7 @@ var KAZA_LIVRES = [
     annee:    2024,
     cat:      "Bande dessinee",
     cats:     ["Bande dessinee", "Enfants"],
-    img:      "grandes_lecons_marx_t01.png",
+    img:      "grandes_lecons_marx_t01.jpg",
     ebook:    "ebooks/grandes_lecons_marx_t01.pdf",
     rubrique: "Scuba Wizard croque le marxisme avec humour dans cette BD satirique dès 7 ans. Entre plan quinquennal du goûter et boulangerie collective, un album décapant pour initier les enfants — et leurs parents — aux absurdités du collectivisme."
   },
