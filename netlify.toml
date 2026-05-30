@@ -1,0 +1,45 @@
+# ============================================================
+#  Configuration Netlify — Kaz'a Bitcoin
+#  Site 100 % statique : aucune étape de build, on publie le dépôt tel quel.
+#  Chaque push sur la branche `main` déclenche un redéploiement automatique.
+# ============================================================
+
+[build]
+  publish = "."
+  # Pas de commande de build : rien à compiler.
+
+# ── En-têtes de sécurité (appliqués à tout le site) ─────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# ── Cache long pour les ressources qui changent rarement ────
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/White Paper/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/ebooks/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# ── HTML et données : toujours revalider (mises à jour rapides) ──
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

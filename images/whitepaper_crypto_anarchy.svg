@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600">
+
+  <!-- ── BACKGROUND ─────────────────────────────────────── -->
+  <rect width="400" height="600" fill="#0a0400"/>
+
+  <!-- Large Anarchy Circle-A (background, very subtle) -->
+  <circle cx="200" cy="205" r="148" fill="none" stroke="#2a1200" stroke-width="10"/>
+  <!-- Horizontal bar across A -->
+  <line x1="95" y1="205" x2="305" y2="205" stroke="#2a1200" stroke-width="10"/>
+
+  <!-- ── TOP STRIP ──────────────────────────────────────── -->
+  <rect x="0" y="0" width="400" height="38" fill="#221000"/>
+  <text x="200" y="25" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" font-weight="bold" fill="#cc7700" letter-spacing="5">CRYPTO ANARCHY</text>
+
+  <!-- ══════════════════════════════════════════════════════
+       PORTRAIT : TIMOTHY C. MAY
+       Bearded, bespectacled engineer — stencil art style
+       Amber/orange palette, 4-level shading
+       ══════════════════════════════════════════════════════ -->
+
+  <!-- ── Jacket / body (bottom half) ─────────────────────── -->
+  <rect x="108" y="320" width="184" height="230" rx="6" fill="#1a0900"/>
+  <!-- Left lapel -->
+  <polygon points="146,320 170,370 170,320" fill="#2a1400"/>
+  <!-- Right lapel -->
+  <polygon points="254,320 230,370 230,320" fill="#221000"/>
+  <!-- Collar/shirt V -->
+  <polygon points="178,320 200,355 222,320 200,340" fill="#331800"/>
+  <!-- Tie -->
+  <polygon points="196,322 200,332 204,322 202,400 198,400" fill="#993300"/>
+
+  <!-- ── Neck ───────────────────────────────────────────── -->
+  <rect x="182" y="298" width="36" height="28" fill="#6b3300"/>
+
+  <!-- ── Beard (large, distinctive) ───────────────────────
+       Tim May had a full beard — this is his most recognizable feature -->
+  <path d="M 140,295 Q 130,330 138,360 Q 160,395 200,400 Q 240,395 262,360 Q 270,330 260,295 Q 240,320 200,325 Q 160,320 140,295 Z" fill="#1f0c00"/>
+  <!-- Beard mid-layer (lighter amber-brown tones in beard) -->
+  <path d="M 150,298 Q 142,328 150,352 Q 170,385 200,390 Q 230,385 250,352 Q 258,328 250,298 Q 232,315 200,320 Q 168,315 150,298 Z" fill="#3a1800"/>
+  <!-- Beard highlight (sparse bright strands) -->
+  <path d="M 200,325 Q 175,332 162,355 Q 170,378 200,386 Q 230,378 238,355 Q 225,332 200,325 Z" fill="#5a2800" opacity="0.7"/>
+
+  <!-- ── Head/hair ─────────────────────────────────────── -->
+  <!-- Hair mass (dark) — slightly wilder/longer than average -->
+  <ellipse cx="200" cy="200" rx="82" ry="88" fill="#1a0900"/>
+  <!-- Hair top wisp right -->
+  <ellipse cx="255" cy="145" rx="28" ry="18" fill="#1a0900"/>
+  <!-- Hair top wisp left -->
+  <ellipse cx="145" cy="145" rx="28" ry="18" fill="#1a0900"/>
+
+  <!-- ── Face ───────────────────────────────────────────── -->
+  <!-- Face base (amber skin-tone, 3 layers for depth) -->
+  <ellipse cx="200" cy="208" rx="70" ry="78" fill="#5a2800"/>
+  <!-- Face midtone -->
+  <ellipse cx="200" cy="202" rx="60" ry="66" fill="#884400"/>
+  <!-- Face highlight (forehead/cheekbones) -->
+  <ellipse cx="200" cy="190" rx="46" ry="44" fill="#aa5500"/>
+
+  <!-- Forehead highlight (bald/shiny at top) -->
+  <ellipse cx="200" cy="155" rx="38" ry="20" fill="#cc7722" opacity="0.5"/>
+
+  <!-- ── Glasses ────────────────────────────────────────
+       Slightly thick-framed glasses — very characteristic for academics/engineers -->
+  <!-- Bridge -->
+  <line x1="182" y1="196" x2="218" y2="196" stroke="#ff9900" stroke-width="2"/>
+  <!-- Left lens frame -->
+  <rect x="148" y="185" width="34" height="22" rx="9" fill="none" stroke="#ff9900" stroke-width="2.5"/>
+  <!-- Right lens frame -->
+  <rect x="218" y="185" width="34" height="22" rx="9" fill="none" stroke="#ff9900" stroke-width="2.5"/>
+  <!-- Temples (arms going to ears) -->
+  <line x1="148" y1="196" x2="128" y2="200" stroke="#ff9900" stroke-width="2"/>
+  <line x1="252" y1="196" x2="272" y2="200" stroke="#ff9900" stroke-width="2"/>
+  <!-- Eyes (visible through lens — amber/amber) -->
+  <ellipse cx="165" cy="196" rx="10" ry="7" fill="#cc7700" opacity="0.8"/>
+  <ellipse cx="235" cy="196" rx="10" ry="7" fill="#cc7700" opacity="0.8"/>
+  <!-- Pupils -->
+  <ellipse cx="165" cy="196" rx="4" ry="4.5" fill="#1a0900"/>
+  <ellipse cx="235" cy="196" rx="4" ry="4.5" fill="#1a0900"/>
+  <!-- Eye gleam -->
+  <ellipse cx="163" cy="194" rx="1.5" ry="1.5" fill="#ffaa44" opacity="0.7"/>
+  <ellipse cx="233" cy="194" rx="1.5" ry="1.5" fill="#ffaa44" opacity="0.7"/>
+
+  <!-- ── Nose ────────────────────────────────────────── -->
+  <ellipse cx="200" cy="222" rx="9" ry="7" fill="#6b3300" opacity="0.7"/>
+  <!-- Nostrils -->
+  <ellipse cx="195" cy="224" rx="3.5" ry="2.5" fill="#3a1800" opacity="0.6"/>
+  <ellipse cx="205" cy="224" rx="3.5" ry="2.5" fill="#3a1800" opacity="0.6"/>
+
+  <!-- ── Moustache (merges into beard) ─────────────────── -->
+  <path d="M 176,240 Q 188,246 200,242 Q 212,246 224,240 Q 216,252 200,248 Q 184,252 176,240 Z" fill="#2a1200"/>
+
+  <!-- ── SHADOW / feet ──────────────────────────────────── -->
+  <rect x="0" y="468" width="400" height="16" fill="#0a0400" opacity="0.7"/>
+
+  <!-- ── DIVIDER ───────────────────────────────────────── -->
+  <rect x="40" y="472" width="320" height="1.5" fill="#cc6600" opacity="0.7"/>
+
+  <!-- ── TITLE BLOCK ──────────────────────────────────── -->
+  <text x="200" y="496" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#553300" letter-spacing="3">THE</text>
+  <text x="200" y="518" text-anchor="middle" font-family="'Courier New',monospace" font-size="17" font-weight="bold" fill="#cc7700" letter-spacing="1">CRYPTO ANARCHIST</text>
+  <text x="200" y="542" text-anchor="middle" font-family="'Courier New',monospace" font-size="22" font-weight="bold" fill="#ff9900" letter-spacing="1">MANIFESTO</text>
+
+  <rect x="120" y="549" width="160" height="1" fill="#884400" opacity="0.4"/>
+
+  <text x="200" y="567" text-anchor="middle" font-family="'Courier New',monospace" font-size="11" fill="#664400">Timothy C. May · 1988</text>
+
+  <!-- ── BOTTOM STRIP ──────────────────────────────────── -->
+  <rect x="0" y="582" width="400" height="18" fill="#221000"/>
+  <text x="200" y="595" text-anchor="middle" font-family="'Courier New',monospace" font-size="8" fill="#553300" letter-spacing="3">ARISE — NOTHING TO LOSE</text>
+
+</svg>

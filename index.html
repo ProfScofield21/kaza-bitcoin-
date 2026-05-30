@@ -126,6 +126,46 @@
   }
   .stats-bar span { color: var(--text); font-weight: 600; }
 
+  /* CARTE TEXTES FONDATEURS */
+  .textes-card {
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .textes-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .textes-card-covers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: #e8e0d0;
+    aspect-ratio: 2/3;
+    position: relative;
+  }
+  .textes-card-covers img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+  .textes-doc-badge {
+    position: absolute; top: 8px; left: 8px;
+    background: linear-gradient(135deg, #8a5a00, #c47a0a);
+    color: #fff; font-size: 0.65rem; font-weight: 800;
+    padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px;
+    z-index: 3; box-shadow: 0 2px 5px rgba(196,122,10,0.35);
+  }
+  .textes-dl-badge {
+    position: absolute; bottom: 8px; right: 8px;
+    font-size: 0.68rem; font-weight: 700;
+    padding: 3px 8px; border-radius: 12px;
+    z-index: 3;
+  }
+
   /* GRID */
   .grid {
     display: grid;
@@ -706,10 +746,10 @@
     border: 2px solid var(--gold);
   }
   #bm-zoom img {
-    width: 375px;
-    height: 563px;
-    object-fit: cover;
+    max-width: 375px;
+    max-height: 563px;
     display: block;
+    border-radius: 6px;
   }
 
   /* MODAL QR CODE */
@@ -812,6 +852,63 @@
   }
   .ln-address { cursor: pointer; border-bottom: 1px dashed #f7931a; transition: color 0.2s; }
   .ln-address:hover { color: #f7931a; }
+
+  /* ── Collection card ───────────────────────────────────── */
+  .collection-badge {
+    position: absolute; top: 8px; left: 8px;
+    background: linear-gradient(135deg, #6b21a8, #9333ea);
+    color: #fff; font-size: 0.65rem; font-weight: 800;
+    padding: 3px 8px; border-radius: 20px; letter-spacing: 0.5px;
+    z-index: 3; box-shadow: 0 2px 5px rgba(107,33,168,0.35);
+  }
+
+  /* ── Collection modal ──────────────────────────────────── */
+  #coll-modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65); z-index: 250;
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  #coll-modal-overlay.open { display: flex; }
+  .coll-modal-box {
+    background: #fff; border-radius: 16px;
+    max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    border-top: 4px solid #6b21a8; position: relative;
+  }
+  .coll-modal-close {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: none; font-size: 1.4rem;
+    cursor: pointer; color: var(--muted); line-height: 1; z-index: 2;
+  }
+  .coll-modal-close:hover { color: var(--text); }
+  .coll-modal-header { padding: 24px 28px 18px; border-bottom: 1px solid var(--border); }
+  .coll-modal-title { font-family: 'Georgia', serif; font-size: 1.35rem; font-weight: 800; color: var(--text); }
+  .coll-modal-sub { color: var(--gold); font-style: italic; font-size: 0.88rem; margin-top: 4px; }
+  .coll-modal-desc {
+    font-size: 0.83rem; color: #4a3820; line-height: 1.65; font-style: italic;
+    margin-top: 12px; padding: 10px 14px;
+    background: #fdf8f2; border-left: 3px solid #6b21a8; border-radius: 0 6px 6px 0;
+  }
+  .coll-modal-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 16px; padding: 22px 28px 28px;
+  }
+  .coll-tome-card {
+    cursor: pointer; border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; background: var(--card);
+  }
+  .coll-tome-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(107,33,168,0.18); border-color: #d8b4fe; }
+  .coll-tome-img { width: 100%; aspect-ratio: 2/3; overflow: hidden; background: #f0e8d8; position: relative; }
+  .coll-tome-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+  .coll-tome-card:hover .coll-tome-img img { transform: scale(1.04); }
+  .coll-tome-body { padding: 10px; }
+  .coll-tome-num { font-size: 0.65rem; font-weight: 800; color: #6b21a8; text-transform: uppercase; letter-spacing: 0.8px; }
+  .coll-tome-title { font-size: 0.8rem; font-weight: 700; font-family: 'Georgia', serif; color: var(--text); line-height: 1.3; margin-top: 3px; }
+  .coll-tome-rubrique { font-size: 0.7rem; color: var(--muted); line-height: 1.5; margin-top: 6px; font-style: italic; }
+  @media (max-width: 540px) {
+    .coll-modal-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; padding: 16px; }
+    .coll-modal-header { padding: 18px; }
+  }
 
   /* FOOTER */
   footer {
@@ -926,8 +1023,7 @@
   <div class="filters-inner">
     <button class="filter-btn active"  onclick="setFilter('all',this)">&#x1F4DA; Tous les livres</button>
     <button class="filter-btn"         onclick="setFilter('Bitcoin Fondamentaux',this)">&#8383; Fondamentaux</button>
-    <button class="filter-btn"         onclick="setFilter('White Papers',this)">&#x1F4C4; White Papers</button>
-    <button class="filter-btn"         onclick="setFilter('Initiation',this)">&#x1F331; Initiation</button>
+<button class="filter-btn"         onclick="setFilter('Initiation',this)">&#x1F331; Initiation</button>
     <button class="filter-btn"         onclick="setFilter('Technique Pratique',this)">&#x2699;&#xFE0F; Technique &amp; Pratique</button>
     <button class="filter-btn"         onclick="setFilter('Histoire Culture',this)">&#x1F4DC; Histoire &amp; Culture</button>
     <button class="filter-btn"         onclick="setFilter('Economie Liberte',this)">&#x2696;&#xFE0F; &Eacute;conomie &amp; Libert&eacute;</button>
@@ -962,6 +1058,7 @@
   </div>
   <p style="margin-top:12px; font-size:0.8rem; color:#9a8060; line-height:1.6;">
     Vous pouvez aussi soutenir directement les auteurs en consultant <a href="auteurs-ln.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">la page d&apos;adresse de don Lightning</a>.
+    &nbsp;&middot;&nbsp; <a href="textes.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">&#128196; Textes fondateurs</a>
     &nbsp;&middot;&nbsp; <a href="auteurs.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">&#128100; À propos des auteurs</a>
   </p>
 </div>
@@ -972,6 +1069,7 @@
   <p style="margin-top:6px">
     <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="https://twitter.com/ProfScofield2" target="_blank">@ProfScofield2</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+    <a href="textes.html">&#128196; Textes fondateurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="auteurs.html">À propos des auteurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="auteurs-ln.html">Soutenir les auteurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="mentions-legales.html">Mentions légales</a>
@@ -994,6 +1092,14 @@
   <div id="qr-hover-canvas" style="width:164px;height:164px;margin:0 auto 4px;"></div>
   <div class="qr-hover-addr" id="qr-hover-addr"></div>
   <div class="qr-hover-hint">&#x26A1; Scanner avec votre wallet</div>
+</div>
+
+<!-- MODAL COLLECTION -->
+<div id="coll-modal-overlay" role="dialog" aria-modal="true" aria-label="Collection" onclick="closeCollModal(event)">
+  <div class="coll-modal-box" id="coll-modal-box">
+    <button class="coll-modal-close" onclick="closeCollModal(null)" aria-label="Fermer">&times;</button>
+    <div id="coll-modal-content"></div>
+  </div>
 </div>
 
 <!-- MODAL LIVRE -->
@@ -1026,9 +1132,21 @@ const livres = KAZA_LIVRES.map(function(l) {
   if (l.versions)   entry.versions    = l.versions;
   if (l.ebook)      entry.ebook       = l.ebook;
   if (l.emprunte)   entry.emprunte    = l.emprunte;
-  if (l.coupDeCoeur) entry.coupDeCoeur = l.coupDeCoeur;
+  if (l.coupDeCoeur)    entry.coupDeCoeur    = l.coupDeCoeur;
+  if (l.collection)     entry.collection     = l.collection;
+  if (l.collectionDesc) entry.collectionDesc = l.collectionDesc;
   return entry;
 });
+
+// Map des collections : nom → { indices, desc }
+var COLL_MAP = {};
+KAZA_LIVRES.forEach(function(l, i) {
+  if (!l.collection) return;
+  if (!COLL_MAP[l.collection]) COLL_MAP[l.collection] = { indices: [], desc: '' };
+  COLL_MAP[l.collection].indices.push(i);
+  if (l.collectionDesc) COLL_MAP[l.collection].desc = l.collectionDesc;
+});
+
 const CAT_LABEL = {
   "Bitcoin Fondamentaux": "\u20BF Fondamentaux",
   "Economie Liberte":     "\u00c9conomie \u0026 Libert\u00e9",
@@ -1107,6 +1225,32 @@ function clearSearch() {
   render();
 }
 
+// Adapte la scène 3D au ratio naturel de l'image de couverture
+function fitBmScene(frontSrc) {
+  var scene = document.querySelector('#bm-cover-wrap .bm-scene');
+  var cover = document.getElementById('bm-cover-wrap');
+  if (!scene || !cover) return;
+  if (window.innerWidth <= 540) return; // sur mobile le CSS gère déjà
+  var img = new Image();
+  img.onload = function() {
+    var maxW = 186, maxH = 270;
+    var ar = img.naturalWidth / img.naturalHeight;
+    var w, h;
+    if (ar >= maxW / maxH) {
+      // format carré ou paysage : on bride par la largeur
+      w = maxW; h = Math.round(maxW / ar);
+    } else {
+      // format portrait standard : on bride par la hauteur
+      h = maxH; w = Math.round(maxH * ar);
+    }
+    w = Math.max(w, 90); h = Math.max(h, 110);
+    scene.style.width  = w + 'px';
+    scene.style.height = h + 'px';
+    cover.style.width  = (w + 44) + 'px';
+  };
+  img.src = frontSrc;
+}
+
 function openBookModal(idx) {
   var l = livres[idx];
   var emp = emprunteSet.has(idx);
@@ -1115,6 +1259,7 @@ function openBookModal(idx) {
   // Couverture : 3D flip si 4ème de couverture disponible, sinon image statique
   bookFlipped = false;
   var coverWrap = document.getElementById('bm-cover-wrap');
+  coverWrap.style.width = ''; // réinitialise avant redimensionnement
   var detail = livresDetails[l.titre];
   if (detail && detail.quatrieme) {
     coverWrap.className = 'book-modal-cover has-3d';
@@ -1158,6 +1303,7 @@ function openBookModal(idx) {
           '<div class="bm-bottom"></div>' +
         '</div>' +
       '</div>';
+    fitBmScene(frontSrc);
   } else {
     coverWrap.className = 'book-modal-cover has-3d';
     var frontSrc = 'images/' + l.img;
@@ -1177,6 +1323,7 @@ function openBookModal(idx) {
           '<div class="bm-bottom"></div>' +
         '</div>' +
       '</div>';
+    fitBmScene(frontSrc);
   }
 
   // Infos de base
@@ -1344,11 +1491,13 @@ function showBookZoom(src, e) {
 }
 function moveBookZoom(e) {
   if (!_zoomEl || _zoomEl.style.display === 'none') return;
+  var w = _zoomEl.offsetWidth  || 391;
+  var h = _zoomEl.offsetHeight || 575;
   var x = e.clientX + 24;
-  var y = e.clientY - 180;
-  if (x + 391 > window.innerWidth)  x = e.clientX - 399;
+  var y = e.clientY - Math.round(h / 3);
+  if (x + w + 16 > window.innerWidth)  x = e.clientX - w - 16;
   if (y < 8) y = 8;
-  if (y + 575 > window.innerHeight) y = window.innerHeight - 575;
+  if (y + h + 12 > window.innerHeight) y = window.innerHeight - h - 12;
   _zoomEl.style.left = x + 'px';
   _zoomEl.style.top  = y + 'px';
 }
@@ -1373,10 +1522,96 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function openCollModal(name) {
+  var coll = COLL_MAP[name];
+  if (!coll) return;
+  var lead  = livres[coll.indices[0]];
+  var total = coll.indices.length;
+  var avail = coll.indices.filter(function(j) { return !emprunteSet.has(j); }).length;
+
+  var html =
+    '<div class="coll-modal-header">' +
+      '<div class="coll-modal-title">&#x1F4DA; ' + esc(name) + '</div>' +
+      '<div class="coll-modal-sub">' + esc(lead.auteur) +
+        ' &nbsp;·&nbsp; ' + total + ' tomes' +
+        ' &nbsp;·&nbsp; <span style="color:' + (avail > 0 ? 'var(--green)' : 'var(--red)') + '">' +
+          avail + ' disponible' + (avail > 1 ? 's' : '') +
+        '</span>' +
+      '</div>' +
+      (coll.desc ? '<div class="coll-modal-desc">' + esc(coll.desc) + '</div>' : '') +
+    '</div>' +
+    '<div class="coll-modal-grid">';
+
+  coll.indices.forEach(function(i) {
+    var l   = livres[i];
+    var emp = emprunteSet.has(i);
+    var tomeMatch  = l.titre.match(/T0*(\d+)/i);
+    var tomeNum    = tomeMatch ? 'Tome ' + parseInt(tomeMatch[1]) : '';
+    var shortTitle = l.titre.replace(/^.+?:\s*/, '');
+    html +=
+      '<div class="coll-tome-card" id="coll-tome-' + i + '">' +
+        '<div class="coll-tome-img">' +
+          '<img src="images/' + esc(l.img) + '" alt="' + esc(l.titre) + '" loading="lazy">' +
+          '<span class="status-badge ' + (emp ? 'badge-emprunte' : 'badge-dispo') +
+            '" style="position:absolute;bottom:6px;right:6px;font-size:0.62rem">' +
+            (emp ? '📕 Emprunté' : '📗 Dispo') +
+          '</span>' +
+        '</div>' +
+        '<div class="coll-tome-body">' +
+          (tomeNum ? '<div class="coll-tome-num">' + tomeNum + '</div>' : '') +
+          '<div class="coll-tome-title">' + esc(shortTitle) + '</div>' +
+          (l.rubrique ? '<div class="coll-tome-rubrique">' + esc(l.rubrique) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+  });
+  html += '</div>';
+
+  document.getElementById('coll-modal-content').innerHTML = html;
+  coll.indices.forEach(function(i) {
+    var el = document.getElementById('coll-tome-' + i);
+    if (el) (function(idx) {
+      el.onclick = function(e) {
+        e.stopPropagation();
+        closeCollModal(null);
+        setTimeout(function() { openBookModal(idx); }, 80);
+      };
+    })(i);
+  });
+  document.getElementById('coll-modal-overlay').classList.add('open');
+}
+
+function closeCollModal(e) {
+  if (e && e.target !== document.getElementById('coll-modal-overlay')) return;
+  document.getElementById('coll-modal-overlay').classList.remove('open');
+}
+
 function render() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
   let shown = 0;
+
+  // ── Carte "Textes fondateurs" (visible quand pas de filtre actif) ────────
+  if (filterCat === 'all' && !filterCDC && !filterEbook && !filterText) {
+    var tc = document.createElement('a');
+    tc.href = 'textes.html';
+    tc.className = 'textes-card';
+    tc.innerHTML =
+      '<div class="textes-card-covers">' +
+        '<img src="images/whitepaper_crypto_anarchy_v1.jpg" alt="" loading="lazy">' +
+        '<img src="images/whitepaper_cypherpunk_v2.jpg"     alt="" loading="lazy">' +
+        '<img src="images/whitepaper_bitcoin.svg"            alt="" loading="lazy">' +
+        '<img src="images/whitepaper_lightning.svg"          alt="" loading="lazy">' +
+        '<span class="textes-doc-badge">&#x1F4DC;&nbsp;4&nbsp;textes</span>' +
+        '<span class="textes-dl-badge badge-dispo">&#x1F4E5;&nbsp;Téléchargeables</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">Textes fondateurs</div>' +
+        '<div class="card-author">Hughes · May · Nakamoto · Poon</div>' +
+        '<div class="card-meta">Manifestes &amp; White Papers · FR &amp; EN</div>' +
+        '<span class="card-cat cat-whitepaper">&#x1F4DC; Documents</span>' +
+      '</div>';
+    grid.appendChild(tc);
+  }
 
   var indices = livres.map(function(_, i) { return i; });
   if (filterCat === 'all' && !filterCDC && !filterEbook) {
@@ -1387,9 +1622,64 @@ function render() {
     });
   }
 
+  // ── First pass: which collections pass the active filters ──
+  var collsToShow = new Set();
+  var shownColls  = new Set();
+  indices.forEach(function(i) {
+    var l = livres[i];
+    if (!l.collection) return;
+    var emp = emprunteSet.has(i);
+    if (filterCDC   && !l.coupDeCoeur) return;
+    if (filterEbook && !l.ebook && !l.versions) return;
+    if (!filterCDC && !filterEbook && filterCat !== 'all') {
+      var bc = l.cats ? l.cats : [l.cat];
+      if (bc.indexOf(filterCat) === -1) return;
+    }
+    if (filterAvail && emp) return;
+    if (filterText) {
+      var hay = (l.titre + ' ' + l.auteur + ' ' + l.collection).toLowerCase();
+      if (hay.indexOf(filterText) === -1) return;
+    }
+    collsToShow.add(l.collection);
+  });
+
   indices.forEach(function(i) {
     var l = livres[i];
     const emp = emprunteSet.has(i);
+
+    // ── Collection card (shown once per collection) ────────
+    if (l.collection) {
+      if (!collsToShow.has(l.collection)) return;
+      if (shownColls.has(l.collection)) return;
+      shownColls.add(l.collection);
+      shown++;
+      var coll = COLL_MAP[l.collection];
+      var lead  = livres[coll.indices[0]];
+      var total = coll.indices.length;
+      var avail = coll.indices.filter(function(j) { return !emprunteSet.has(j); }).length;
+      var collCard = document.createElement('div');
+      collCard.className = 'book-card collection-card';
+      (function(name) { collCard.onclick = function() { openCollModal(name); }; })(l.collection);
+      collCard.innerHTML =
+        '<div class="card-img-wrap">' +
+          '<img src="images/' + esc(lead.img) + '" alt="' + esc(l.collection) + '" loading="lazy">' +
+          '<span class="collection-badge">&#x1F4DA;&nbsp;' + total + '&nbsp;tomes</span>' +
+          '<span class="status-badge ' + (avail > 0 ? 'badge-dispo' : 'badge-emprunte') + '">' +
+            (avail === total ? 'Tous dispos' : avail > 0 ? avail + ' dispo' : 'Empruntés') +
+          '</span>' +
+        '</div>' +
+        '<div class="card-body">' +
+          '<div class="card-title">' + esc(l.collection) + '</div>' +
+          '<div class="card-author">' + esc(lead.auteur) + '</div>' +
+          '<div class="card-meta">Série · BD · dès 7 ans</div>' +
+          '<span class="card-cat cat-bd">Bande dessinée</span>' +
+          ' <span class="card-cat cat-enfants">Enfants</span>' +
+        '</div>';
+      grid.appendChild(collCard);
+      return;
+    }
+
+    // ── Regular book filter checks ─────────────────────────
     if (filterCDC   && !l.coupDeCoeur) return;
     if (filterEbook && !l.ebook && !l.versions) return;
     if (!filterCDC && !filterEbook && filterCat !== 'all') {
@@ -1516,6 +1806,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Fermeture des modales avec Escape
   document.addEventListener('keydown', function(e) {
     if (e.key !== 'Escape') return;
+    if (document.getElementById('coll-modal-overlay').classList.contains('open')) {
+      closeCollModal(null); return;
+    }
     if (document.getElementById('book-modal-overlay').classList.contains('open')) {
       closeBookModal(null); return;
     }

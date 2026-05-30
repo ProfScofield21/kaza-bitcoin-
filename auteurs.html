@@ -127,6 +127,8 @@
     transition: all 0.2s;
   }
   .auteur-link-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .auteur-ln-btn { cursor: pointer; border-color: #f0c878; color: #b06a00; background: #fdf5e4; }
+  .auteur-ln-btn:hover { border-color: #f7931a; color: #f7931a; }
   .auteur-bio {
     font-size: 0.85rem;
     color: #4a3a22;
@@ -240,6 +242,8 @@
   <p style="margin-top:6px">
     <a href="index.html">&#8592; Biblioth&egrave;que Lightning</a>
     &nbsp;&middot;&nbsp;
+    <a href="textes.html">&#128196; Textes fondateurs</a>
+    &nbsp;&middot;&nbsp;
     <a href="auteurs-ln.html">&#x26A1; Soutenir les auteurs</a>
     &nbsp;&middot;&nbsp;
     <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>
@@ -266,10 +270,30 @@ var list = document.getElementById('auteurs-list');
 
 auteurs.sort(function(a, b) { return a.nom.localeCompare(b.nom, 'fr'); });
 
+function copyAuteurLN(addr, el) {
+  var orig = el.textContent;
+  var copy = function() {
+    el.textContent = '✓ Copié !';
+    setTimeout(function() { el.textContent = orig; }, 1800);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(addr).then(copy).catch(function() {
+      var t = document.createElement('textarea');
+      t.value = addr; document.body.appendChild(t); t.select();
+      document.execCommand('copy'); document.body.removeChild(t); copy();
+    });
+  } else {
+    var t = document.createElement('textarea');
+    t.value = addr; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t); copy();
+  }
+}
+
 auteurs.forEach(function(a) {
   var links = '';
   if (a.twitter) links += '<a class="auteur-link-btn" href="' + esc(a.twitter) + '" target="_blank" rel="noopener">' + xLogo + ' X / Twitter</a>';
   if (a.site)    links += '<a class="auteur-link-btn" href="' + esc(a.site) + '" target="_blank" rel="noopener">&#x1F310; Site web</a>';
+  if (a.ln)      links += '<span class="auteur-link-btn auteur-ln-btn" onclick="copyAuteurLN(\'' + esc(a.ln) + '\', this)">&#x26A1; ' + esc(a.ln) + '</span>';
 
   var datesHtml = (a.naissance || a.deces)
     ? '<span class="auteur-dates">(' + (a.naissance || '?') + '–' + (a.deces || '') + ')</span>'

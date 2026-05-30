@@ -24,36 +24,6 @@
 
 var KAZA_LIVRES = [
 
-  // ── White Papers ──────────────────────────────────────────
-
-  {
-    titre:    "Bitcoin : Un système de monnaie électronique pair-à-pair",
-    auteur:   "Satoshi Nakamoto",
-    genre:    "White Paper",
-    annee:    2008,
-    cat:      "White Papers",
-    img:      "whitepaper_bitcoin.svg",
-    versions: [
-      { label: "🇫🇷 Version française", file: "White Paper/Bitcoin/whitepaper_bitcoin_fr.pdf" },
-      { label: "🇬🇧 English version",   file: "White Paper/Bitcoin/whitepaper_bitcoin_en.pdf" }
-    ],
-    rubrique: "Le document fondateur publié par Satoshi Nakamoto en 2008, décrivant Bitcoin comme un système de monnaie électronique pair-à-pair sans tiers de confiance. Le texte qui a tout changé."
-  },
-
-  {
-    titre:    "The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments",
-    auteur:   "Joseph Poon & Thaddeus Dryja",
-    genre:    "White Paper",
-    annee:    2016,
-    cat:      "White Papers",
-    img:      "whitepaper_lightning.svg",
-    versions: [
-      { label: "Draft 0.5",     file: "White Paper/Lightning/lightning_paper_draft_05.pdf" },
-      { label: "Draft 0.5.9.2", file: "White Paper/Lightning/lightning_paper_draft_0592.pdf" }
-    ],
-    rubrique: "Le document original de Poon et Dryja décrivant le réseau Lightning, solution de paiements instantanés hors-chaîne pour Bitcoin. Document de référence pour comprendre la couche 2 de Bitcoin."
-  },
-
   // ── Bitcoin Fondamentaux ──────────────────────────────────
 
   {
@@ -162,6 +132,19 @@ var KAZA_LIVRES = [
     rubrique:  "Le texte fondateur de Hayek sur la dénationalisation de la monnaie, écrit 40 ans avant Bitcoin. Visionnaire et rigoureux, il pose les bases théoriques de tout ce qui a suivi.",
     img4:      "4eme-de-couverture/back_concurrence_monnaies.jpg",
     quatrieme: "Comment garantir la stabilité monétaire ? Friedrich A. Hayek propose une réponse radicalement nouvelle à cette question. Selon lui, le contrôle par l'État de l'émission monétaire conduit à des crises économiques récurrentes. En 1976, Hayek défend au contraire, parallèlement aux monnaies nationales, l'émission de monnaies privées concurrentes. Les banques privées émettraient alors des monnaies distinctes et seraient incitées à stabiliser leur valeur, permettant sur le long terme une inflation bien inférieure à celle que nous connaissons depuis plusieurs décennies.\n\nPour Hayek, la réforme monétaire est urgente, car ce qui est en jeu n'est pas seulement une question d'ordre purement technique, mais « le futur de la civilisation » : la création monétaire par les banques centrales sape le bon fonctionnement du marché et nourrit la croissance de l'État. L'avenir de la société libre est donc lié à celui du système monétaire.",
+    passages:  []
+  },
+
+  {
+    titre:     "Changement de Paradigme",
+    auteur:    "Benoît Berenger",
+    genre:     "Pédagogie / Essai",
+    annee:     2025,
+    cat:       "Bitcoin Fondamentaux",
+    img:       "Changement de Paradigme.jpg",
+    img4:      "4eme-de-couverture/Changement de Paradigme.jpg",
+    rubrique:  "Benoît Berenger propose un parcours clair et sans jargon pour comprendre Bitcoin non comme un actif spéculatif, mais comme un véritable changement de paradigme — une remise en question profonde de la monnaie, de la confiance et du pouvoir.",
+    quatrieme: "Lorsque j'ai découvert Bitcoin, je n'ai pas tout de suite compris ce que c'était. Je percevais avant d'avoir analysé la technologie, peut-être un placement risqué, un outil pour génies ou rebelles.\n\nAvec le temps, j'ai compris que Bitcoin est bien plus que simplement une nouvelle monnaie. C'est un changement de paradigme.\n\nUne remise en question de tout ce qui constitue notre vision de la monnaie, sur la confiance, sur le pouvoir, et même sur le temps.\n\nL'État-nation, produit de l'ère industrielle, est condamné à s'estomper devant cette période de transition. J'en suis persuadé, une immense majorité continuera de passer à côté de l'essentiel.\n\nCe livre est pour ceux qui sentent qu'il y a quelque chose qui cloche, sans forcément pouvoir mettre les mots dessus, et ceux qui veulent comprendre, sans jargon.\n\nCe livre offre un parcours accessible et honnête pour comprendre la révolution. Identifier les forces du changement à l'œuvre, et comprendre Bitcoin comme une réponse possible.\n\nJ'espère que ce voyage changera votre regard sur le monde, comme il a changé le mien.",
     passages:  []
   },
 
@@ -275,6 +258,19 @@ var KAZA_LIVRES = [
     passages:  []
   },
 
+  {
+    titre:     "L'Individu Souverain",
+    auteur:    "James Dale Davidson & Lord William Rees-Mogg",
+    genre:     "Liberté / Futurisme",
+    annee:     2026,
+    cat:       "Economie Liberte",
+    img:       "L'individu Souverain.jpg",
+    img4:      "4eme-de-couverture/L'individu Souverain.jpg",
+    rubrique:  "Écrit en 1997, L'Individu Souverain a prédit avec une précision stupéfiante la montée des cryptomonnaies, le déclin des États-nations et l'avènement de la souveraineté individuelle à l'ère de l'information. Un livre visionnaire devenu manuel de survie.",
+    quatrieme: "En 1997, deux investisseurs ont prédit l'avènement des cryptomonnaies, la montée du nomadisme digital et l'effondrement progressif de l'État-nation. Ils avaient raison sur toute la ligne.\n\nL'Individu souverain est aujourd'hui considéré comme l'un des livres les plus visionnaires du XXe siècle sur la liberté financière et la souveraineté individuelle. Préfacé par Peter Thiel dans sa version originale — l'édition française s'ouvre sur une préface de Francis Pouliot et se referme sur une postface d'Olivier Roland — ce livre est devenu une référence incontournable pour tous ceux qui veulent comprendre la révolution de l'information et s'y préparer.\n\nCe que Davidson et Rees-Mogg ont prédit dès 1997 :\n— L'émergence d'une monnaie numérique cryptographique hors du contrôle des États\n— La mobilité internationale du capital et l'optimisation fiscale mondiale\n— Le déclin de l'État-nation et la montée des souverainismes\n— Le développement de l'intelligence artificielle et son impact sur le marché du travail\n— L'essor du commerce numérique et la fin des frontières économiques\n\nÀ l'heure où chacune de ces prédictions se réalise, ce livre n'est plus un objet de curiosité intellectuelle. C'est un manuel de survie — une feuille de route — pour ceux qui veulent prendre le contrôle de leur liberté, de leur patrimoine et de leur destin dans l'ère de l'information.\n\nUne lecture indispensable pour tout esprit libre.",
+    passages:  []
+  },
+
   // ── Technique & Pratique ─────────────────────────────────
 
 
@@ -375,7 +371,7 @@ var KAZA_LIVRES = [
   // ── Bande dessinée ───────────────────────────────────────
 
   {
-    titre:    "Les Grandes Leçons de Marx - T01 : Le grand goûter égalitaire",
+    titre:    "Les grandes leçons de Marx - T01 : Le grand goûter égalitaire",
     auteur:   "Scuba Wizard",
     genre:    "BD / Satire",
     annee:    2024,
@@ -384,6 +380,82 @@ var KAZA_LIVRES = [
     img:      "grandes_lecons_marx_t01.png",
     ebook:    "ebooks/grandes_lecons_marx_t01.pdf",
     rubrique: "Scuba Wizard croque le marxisme avec humour dans cette BD satirique dès 7 ans. Entre plan quinquennal du goûter et boulangerie collective, un album décapant pour initier les enfants — et leurs parents — aux absurdités du collectivisme."
+  },
+
+  {
+    titre:     "Les petites leçons de Frédéric - T00 : Le grand carnet des idées",
+    auteur:    "Scuba Wizard",
+    genre:     "BD / Économie libérale",
+    annee:     2026,
+    cat:       "Bande dessinee",
+    cats:      ["Bande dessinee", "Enfants"],
+    collection: "Les petites leçons de Frédéric",
+    collectionDesc: "Série de BD illustrées pour les enfants à partir de 7 ans. Frédéric Bastiat guide Lina, Tom et Milo à travers les grandes idées de l'économie libérale : liberté, effets invisibles, coût d'opportunité, monnaie saine... Inspirée des œuvres de Frédéric Bastiat.",
+    img:       "petites-lecons-frederic-t00.jpg",
+    img4:      "4eme-de-couverture/petites-lecons-frederic-t00.jpg",
+    rubrique:  "Le tome 0 de la série : une introduction à l'univers, aux personnages et aux grands penseurs qui guideront la saga. Pour commencer dans le bon sens et apprendre à observer, expérimenter, puis choisir.",
+    quatrieme: "Bienvenue dans Les petites leçons de Frédéric.\nIci, on apprend sans se disputer : on observe, on expérimente, puis on choisit mieux.\n\nCe Tome 00 présente l'univers, les personnages, et les grands penseurs qui guideront la saga, pour aider les enfants à comprendre les règles, les échanges, la confiance... et le temps.\n\nUne introduction simple et lumineuse pour commencer la série dans le bon sens.",
+    passages:  []
+  },
+
+  {
+    titre:     "Les petites leçons de Frédéric - T01 : Les marchands de chandelles",
+    auteur:    "Scuba Wizard",
+    genre:     "BD / Économie libérale",
+    annee:     2026,
+    cat:       "Bande dessinee",
+    cats:      ["Bande dessinee", "Enfants"],
+    collection: "Les petites leçons de Frédéric",
+    img:       "petites-lecons-frederic-t01.jpg",
+    img4:      "4eme-de-couverture/petites-lecons-frederic-t01.jpg",
+    rubrique:  "Inspiré de la célèbre pétition de Bastiat, Frédéric explique à Lina, Tom et Milo pourquoi certains marchands veulent priver tout le monde de la lumière du soleil. Une première leçon sur la liberté, le choix et les effets invisibles.",
+    quatrieme: "Frédéric explique à Lina, Tom et Milo pourquoi certains petits marchands veulent empêcher tout le monde de profiter de la lumière du soleil.\n\nGrâce à leur ami, les enfants découvrent la part cachée des choses... et comprennent que la vraie lumière est celle que l'on choisit librement.\n\nUne première histoire douce et ludique pour apprendre aux enfants les notions de liberté, de choix et d'effets invisibles.",
+    passages:  []
+  },
+
+  {
+    titre:     "Les petites leçons de Frédéric - T02 : La vitre magique",
+    auteur:    "Scuba Wizard",
+    genre:     "BD / Économie libérale",
+    annee:     2026,
+    cat:       "Bande dessinee",
+    cats:      ["Bande dessinee", "Enfants"],
+    collection: "Les petites leçons de Frédéric",
+    img:       "petites-lecons-frederic-t02.jpg",
+    img4:      "4eme-de-couverture/petites-lecons-frederic-t02.jpg",
+    rubrique:  "Quand la fenêtre de la boulangerie se brise, tout le village croit que c'est une bonne nouvelle. Inspiré du sophisme de la vitre cassée de Bastiat, une leçon sur le coût d'opportunité et les effets invisibles de nos choix.",
+    quatrieme: "Une vitre cassée... et une grande leçon cachée derrière.\nQuand la fenêtre de la boulangerie se brise, tout le village pense que c'est une bonne nouvelle.\n\nAvec douceur et humour, cette aventure aide les enfants à comprendre le coût d'opportunité, la différence entre réparer et créer, et pourquoi un dégât n'est jamais une richesse.\n\nUne histoire chaleureuse pour apprendre à regarder au-delà des apparences et découvrir les effets invisibles de nos choix.",
+    passages:  []
+  },
+
+  {
+    titre:     "Les petites leçons de Frédéric - T03 : La grande fabrique des règles",
+    auteur:    "Scuba Wizard",
+    genre:     "BD / Économie libérale",
+    annee:     2026,
+    cat:       "Bande dessinee",
+    cats:      ["Bande dessinee", "Enfants"],
+    collection: "Les petites leçons de Frédéric",
+    img:       "petites-lecons-frederic-t03.jpg",
+    img4:      "4eme-de-couverture/petites-lecons-frederic-t03.jpg",
+    rubrique:  "Fred et ses amis découvrent une fabrique qui produit des règles sans fin. Avec humour et douceur, Frédéric leur montre que trop de règles peuvent éteindre la liberté — une leçon sur l'équilibre, la responsabilité et le bon sens.",
+    quatrieme: "Dans ce tome, Fred, Lina, Tom et Milo découvrent une fabrique bien étrange : une machine qui produit des règles sans fin !\n\nAvec humour et douceur, Fred leur montre que trop de règles... peuvent finir par éteindre la liberté.\n\nUne histoire lumineuse pour comprendre l'importance du bon sens, de la responsabilité... et d'un juste équilibre.",
+    passages:  []
+  },
+
+  {
+    titre:     "Les petites leçons de Frédéric - T04 : Le mystérieux argent de papier",
+    auteur:    "Scuba Wizard",
+    genre:     "BD / Économie libérale",
+    annee:     2026,
+    cat:       "Bande dessinee",
+    cats:      ["Bande dessinee", "Enfants"],
+    collection: "Les petites leçons de Frédéric",
+    img:       "petites-lecons-frederic-t04.jpg",
+    img4:      "4eme-de-couverture/petites-lecons-frederic-t04.jpg",
+    rubrique:  "Fred et ses amis découvrent une fabrique où l'on crée de l'argent en papier. Quand les prix augmentent, les enfants comprennent que la vraie richesse ne se fabrique pas — et qu'une monnaie plus honnête est possible.",
+    quatrieme: "Fred découvre avec ses amis une étrange Fabrique où l'on crée de l'argent en papier.\nMais quand tout le monde se met à utiliser ces billets tout neufs... les prix augmentent.\n\nLes enfants apprennent alors que la vraie richesse ne se fabrique pas comme du papier, et que certaines inventions du futur pourraient offrir une monnaie plus honnête...",
+    passages:  []
   },
 
   // ── Initiation ────────────────────────────────────────────

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Textes fondateurs — Kaz'a Bitcoin</title>
+<meta name="description" content="Manifestes, white papers et documents fondateurs du mouvement cypherpunk et de Bitcoin. Téléchargeables gratuitement en français et en anglais.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1008'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='60' font-weight='900' fill='%23f7931a' font-family='Arial,sans-serif'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Textes fondateurs — Bibliothèque Lightning Kaz'a Bitcoin">
+<meta property="og:description" content="Manifestes, white papers et documents fondateurs du mouvement cypherpunk et de Bitcoin.">
+<style>
+  :root {
+    --bg:     #f5f0e8;
+    --card:   #ffffff;
+    --gold:   #c47a0a;
+    --text:   #1a1208;
+    --muted:  #7a6a50;
+    --border: #d4c8b0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+  /* ── HEADER ────────────────────────────────────────────── */
+  header {
+    background: linear-gradient(135deg, #1a1008 0%, #2a1a08 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 20px;
+    text-align: center;
+  }
+  .back-link { color: #c8b090; font-size: 0.9rem; font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: 10px; }
+  .back-link:hover { color: var(--gold); }
+  .page-title { font-family: 'Georgia', serif; font-size: 1.6rem; font-weight: 800; color: #f5e8c8; }
+  .page-title span { color: #f7931a; }
+  .page-sub { color: #9a8060; font-size: 0.88rem; margin-top: 6px; }
+
+  /* ── INTRO ─────────────────────────────────────────────── */
+  .intro {
+    max-width: 720px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #4a3820;
+    line-height: 1.75;
+  }
+  .intro strong { color: var(--text); font-weight: 700; }
+
+  /* ── CONTENU ────────────────────────────────────────────── */
+  .content { max-width: 860px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── ÈRES ───────────────────────────────────────────────── */
+  .ere-block { margin-top: 44px; }
+  .ere-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .ere-line { flex: 1; height: 1px; background: var(--border); }
+  .ere-label {
+    font-family: 'Georgia', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ere-label span { color: var(--gold); }
+
+  /* ── CARTES ─────────────────────────────────────────────── */
+  .texte-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    margin-bottom: 16px;
+    transition: box-shadow 0.2s;
+  }
+  .texte-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+
+  .texte-cover {
+    width: 110px;
+    flex-shrink: 0;
+    background: #1a1008;
+    position: relative;
+    overflow: hidden;
+  }
+  .texte-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .texte-type-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    background: rgba(0,0,0,0.5);
+    padding: 3px 0;
+  }
+
+  .texte-body {
+    flex: 1;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .texte-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .texte-annee {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold);
+    background: #fdf5e4;
+    border: 1px solid #f0c878;
+    border-radius: 12px;
+    padding: 2px 8px;
+  }
+  .texte-type {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .texte-titre {
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .texte-titre-orig {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .texte-auteur {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5a4020;
+  }
+  .texte-rubrique {
+    font-size: 0.84rem;
+    color: #5a4820;
+    line-height: 1.65;
+  }
+  .texte-extrait {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--muted);
+    border-left: 3px solid var(--gold);
+    padding-left: 10px;
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .texte-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .btn-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    background: #fdf8f0;
+    transition: all 0.18s;
+  }
+  .btn-dl:hover { background: var(--gold); color: #fff; }
+  .btn-lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: #fdf8f0;
+    transition: all 0.18s;
+  }
+  .btn-lien:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── CONNEXIONS ─────────────────────────────────────────── */
+  .connexion-note {
+    background: #fdf5e4;
+    border: 1px solid #f0d890;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #6a4a10;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .connexion-note strong { color: var(--gold); }
+
+  /* ── FOOTER ─────────────────────────────────────────────── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+    background: #ede8dc;
+  }
+  footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 560px) {
+    .texte-cover { width: 80px; }
+    .texte-titre { font-size: 0.95rem; }
+    .texte-rubrique { font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">&#8592; Retour à la bibliothèque</a>
+  <div class="page-title">Textes <span>fondateurs</span></div>
+  <div class="page-sub">Manifestes, white papers &amp; documents essentiels — libres &amp; téléchargeables</div>
+</header>
+
+<p class="intro">
+  <strong>Ces textes sont à l'origine de tout.</strong> Des manifestes cypherpunks des années 80 au White Paper de Satoshi, ils forment la généalogie intellectuelle de Bitcoin. Tous sont en accès libre, téléchargeables en français et en anglais.
+</p>
+
+<div class="content" id="textes-content"></div>
+
+<footer>
+  <p>Kaz&apos;a Bitcoin &mdash; Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</p>
+  <p style="margin-top:6px">
+    <a href="index.html">&#8592; Biblioth&egrave;que Lightning</a>
+    &nbsp;&middot;&nbsp;
+    <a href="auteurs.html">&#128100; Les auteurs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="auteurs-ln.html">&#x26A1; Soutenir les auteurs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>
+    &nbsp;&middot;&nbsp;
+    <a href="mentions-legales.html">Mentions l&eacute;gales</a>
+  </p>
+</footer>
+
+<script src="data/kaza-textes.js"></script>
+<script>
+var ERES = [
+  {
+    id:    "precurseurs",
+    label: "Précurseurs",
+    years: "1985 – 1992",
+    note:  "Avant même qu'on parle de cypherpunks, des mathématiciens et ingénieurs imaginent la monnaie numérique anonyme. <strong>Timothy C. May</strong> écrit son manifeste en 1988, quatre ans avant la création de la liste de diffusion cypherpunk."
+  },
+  {
+    id:    "cypherpunks",
+    label: "Cypherpunks",
+    years: "1993 – 2007",
+    note:  "Le mouvement cypherpunk prend forme en 1992 à San Francisco. <strong>Eric Hughes</strong> publie son manifeste en 1993, la même année que la célèbre couverture de Wired. Les idées s'affinent, se diffusent — Satoshi les lit toutes."
+  },
+  {
+    id:    "bitcoin",
+    label: "Bitcoin",
+    years: "2008 – ",
+    note:  "<strong>Satoshi Nakamoto</strong> cite Wei Dai (b-money), Adam Back (Hashcash) et les travaux des cypherpunks dans son white paper. Le réseau Lightning de <strong>Poon &amp; Dryja</strong> (2016) est la couche 2 qui permet les micropaiements instantanés."
+  }
+];
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+var container = document.getElementById('textes-content');
+
+ERES.forEach(function(ere) {
+  var textes = KAZA_TEXTES.filter(function(t) { return t.ere === ere.id; });
+  if (!textes.length) return;
+
+  var block = document.createElement('div');
+  block.className = 'ere-block';
+
+  // En-tête d'ère
+  block.innerHTML =
+    '<div class="ere-header">' +
+      '<div class="ere-line"></div>' +
+      '<div class="ere-label">' + esc(ere.label) + ' <span>· ' + esc(ere.years) + '</span></div>' +
+      '<div class="ere-line"></div>' +
+    '</div>' +
+    '<div class="connexion-note">' + ere.note + '</div>';
+
+  // Cartes
+  textes.forEach(function(t) {
+    var versionsHtml = '';
+    if (t.versions && t.versions.length) {
+      t.versions.forEach(function(v) {
+        versionsHtml += '<a class="btn-dl" href="' + esc(v.file) + '" download>&#x1F4E5; ' + esc(v.label) + '</a>';
+      });
+    }
+    if (t.lien) {
+      versionsHtml += '<a class="btn-lien" href="' + esc(t.lien) + '" target="_blank" rel="noopener">&#x1F517; Texte en ligne</a>';
+    }
+
+    var card = document.createElement('div');
+    card.className = 'texte-card';
+    card.innerHTML =
+      '<div class="texte-cover">' +
+        '<img src="images/' + esc(t.img) + '" alt="' + esc(t.titre) + '" loading="lazy">' +
+        '<div class="texte-type-badge">' + esc(t.type) + '</div>' +
+      '</div>' +
+      '<div class="texte-body">' +
+        '<div class="texte-meta">' +
+          '<span class="texte-annee">' + esc(String(t.annee)) + '</span>' +
+          '<span class="texte-type">' + esc(t.type) + '</span>' +
+        '</div>' +
+        '<div class="texte-titre">' + esc(t.titre) + '</div>' +
+        (t.titre_orig && t.titre_orig !== t.titre
+          ? '<div class="texte-titre-orig">' + esc(t.titre_orig) + '</div>'
+          : '') +
+        '<div class="texte-auteur">' + esc(t.auteur) + '</div>' +
+        '<div class="texte-rubrique">' + esc(t.rubrique) + '</div>' +
+        (t.extrait ? '<div class="texte-extrait">« ' + esc(t.extrait) + ' »</div>' : '') +
+        (versionsHtml ? '<div class="texte-actions">' + versionsHtml + '</div>' : '') +
+      '</div>';
+
+    block.appendChild(card);
+  });
+
+  container.appendChild(block);
+});
+</script>
+</body>
+</html>
