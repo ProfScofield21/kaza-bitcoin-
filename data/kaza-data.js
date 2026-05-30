@@ -4,10 +4,12 @@
 // ============================================================
 
 // ── Configuration générale ────────────────────────────────
-//  Modifiez ici l'adresse Lightning de la bibliothèque.
+//  Modifiez ici les coordonnées de la bibliothèque.
 var KAZA_CONFIG = {
-  bibLN:   "profscofield@marmottoshis.com",  // adresse LN de la bibliothèque
-  bibNom:  "Bibliothèque Lightning",          // nom affiché dans les modales
+  bibLN:       "profscofield@marmottoshis.com",  // adresse LN de la bibliothèque
+  bibNom:      "Bibliothèque Lightning",          // nom affiché dans les modales
+  bibEmail:    "kazabitcoin@proton.me",           // email de réservation
+  bibTelegram: "https://t.me/BitcoinGwada",       // lien Telegram de contact
 };
 
 const KAZA_AUTEURS = [

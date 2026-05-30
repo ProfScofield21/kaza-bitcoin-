@@ -707,6 +707,46 @@
   }
   .book-modal-ebook:hover { background: #dbeafe; }
 
+  /* Bouton Réserver */
+  .book-modal-reserve {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    margin-top: 14px;
+  }
+  .reserve-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border-radius: 9px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-decoration: none;
+    background: var(--gold);
+    color: #fff;
+    border: 1px solid var(--gold2);
+    box-shadow: 0 2px 8px rgba(196,122,10,0.25);
+    transition: background 0.2s, transform 0.1s;
+  }
+  .reserve-btn:hover { background: var(--gold2); }
+  .reserve-btn:active { transform: translateY(1px); }
+  .reserve-btn-wait {
+    background: #fff;
+    color: var(--gold2);
+    box-shadow: none;
+  }
+  .reserve-btn-wait:hover { background: #fdf5e4; }
+  .reserve-tg {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--border);
+  }
+  .reserve-tg:hover { color: var(--gold); border-color: var(--gold); }
+
   .book-modal-bio-btn {
     display: inline-flex;
     align-items: center;
@@ -1348,6 +1388,23 @@ function openBookModal(idx) {
       '<span class="card-cat ' + catClass + '">' + esc(catLabel) + '</span>' +
       '<span class="status-badge ' + statusClass + '" style="position:relative;top:0;right:0;display:inline-block">' + statusTxt + '</span>' +
       cdcBadge +
+    '</div>';
+
+  // ── Bouton Réserver (email pré-rempli + lien Telegram) ──
+  var bibMail = KAZA_CONFIG.bibEmail || 'kazabitcoin@proton.me';
+  var bibTg   = KAZA_CONFIG.bibTelegram || 'https://t.me/BitcoinGwada';
+  var rSubj = encodeURIComponent((emp ? 'Disponibilité : ' : 'Réservation : ') + l.titre);
+  var rBody = encodeURIComponent('Bonjour,\n\n' +
+    (emp
+      ? 'Je souhaite être prévenu(e) quand le livre « ' + l.titre + ' » sera de nouveau disponible à la Bibliothèque Lightning.'
+      : 'Je souhaite emprunter le livre « ' + l.titre + ' » de la Bibliothèque Lightning.') +
+    '\n\nMerci !');
+  var rMailto = 'mailto:' + bibMail + '?subject=' + rSubj + '&body=' + rBody;
+  html += '<div class="book-modal-reserve">' +
+      '<a class="reserve-btn' + (emp ? ' reserve-btn-wait' : '') + '" href="' + esc(rMailto) + '" onclick="event.stopPropagation()">' +
+        (emp ? '&#128276; Me prévenir quand dispo' : '&#128233; Réserver ce livre') +
+      '</a>' +
+      '<a class="reserve-tg" href="' + esc(bibTg) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">ou via Telegram</a>' +
     '</div>';
 
   // Description (rubrique bibliothèque)
