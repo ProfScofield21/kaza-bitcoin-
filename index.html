@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaz'a Bitcoin — Bibliothèque Lightning</title>
-<meta name="description" content="Bibliothèque participative dédiée à Bitcoin, l'économie autrichienne et la liberté financière. 32 livres à emprunter en Guadeloupe, avec dons via Lightning Network.">
+<meta name="description" content="Bibliothèque participative dédiée à Bitcoin, l'économie autrichienne et la liberté financière. Une trentaine de livres à emprunter en Guadeloupe, avec dons via Lightning Network.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231a1008'/%3E%3Ctext x='50' y='72' text-anchor='middle' font-size='60' font-weight='900' fill='%23f7931a' font-family='Arial,sans-serif'%3E%E2%82%BF%3C/text%3E%3C/svg%3E">
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="Kaz'a Bitcoin — Bibliothèque Lightning ⚡ Guadeloupe">
@@ -1117,6 +1117,13 @@
 <script src="data/kaza-data.js"></script>
 <script src="data/kaza-livres.js"></script>
 <script>
+// ── Garde-fou : si un fichier de données ne charge pas (faute de frappe,
+//    404…), on évite la page blanche en repliant sur des valeurs vides.
+var DATA_OK = (typeof KAZA_LIVRES !== 'undefined') && (typeof KAZA_AUTEURS !== 'undefined');
+window.KAZA_LIVRES  = window.KAZA_LIVRES  || [];
+window.KAZA_AUTEURS = window.KAZA_AUTEURS || [];
+window.KAZA_CONFIG  = window.KAZA_CONFIG  || { bibLN: '', bibNom: 'Bibliothèque Lightning' };
+
 // Construit depuis kaza-livres.js
 const livres = KAZA_LIVRES.map(function(l) {
   var entry = {
@@ -1731,9 +1738,11 @@ function render() {
   if (shown === 0) {
     var msg = document.createElement('div');
     msg.className = 'no-results';
-    msg.innerHTML = filterText
-      ? '&#x1F50D; Aucun résultat pour <strong>&ldquo;' + esc(filterText) + '&rdquo;</strong>'
-      : 'Aucun livre ne correspond aux filtres sélectionnés.';
+    msg.innerHTML = !DATA_OK
+      ? '&#x26A0;&#xFE0F; Les données de la bibliothèque n’ont pas pu être chargées. Rechargez la page ou réessayez plus tard.'
+      : filterText
+        ? '&#x1F50D; Aucun résultat pour <strong>&ldquo;' + esc(filterText) + '&rdquo;</strong>'
+        : 'Aucun livre ne correspond aux filtres sélectionnés.';
     grid.appendChild(msg);
   }
 }
