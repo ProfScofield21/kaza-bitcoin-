@@ -130,7 +130,7 @@ var KAZA_TEXTES = [
     titre_orig: "Bitcoin: A Peer-to-Peer Electronic Cash System",
     auteur:     "Satoshi Nakamoto",
     annee:      2008,
-    img:        "whitepaper_bitcoin.svg",
+    img:        "satoshi.webp",
     type:       "White Paper",
     ere:        "bitcoin",
     rubrique:   "Le document fondateur publié par Satoshi Nakamoto en octobre 2008, décrivant Bitcoin comme un système de monnaie électronique pair-à-pair sans tiers de confiance. Le texte qui a tout changé.",
@@ -144,11 +144,11 @@ var KAZA_TEXTES = [
 
   {
     id:         "lightning-whitepaper",
-    titre:      "Le Réseau Lightning : Paiements instantanés hors-chaîne",
+    titre:      "Lightning Network : paiements instantanés hors-chaîne",
     titre_orig: "The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments",
     auteur:     "Joseph Poon & Thaddeus Dryja",
     annee:      2016,
-    img:        "whitepaper_lightning.svg",
+    img:        "lightning_network.webp",
     type:       "White Paper",
     ere:        "bitcoin",
     rubrique:   "Le document original de Poon et Dryja décrivant le réseau Lightning, solution de paiements instantanés hors-chaîne pour Bitcoin. Document de référence pour comprendre la couche 2 de Bitcoin.",
