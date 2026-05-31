@@ -1081,7 +1081,6 @@
   </div>
   <p style="margin-top:12px; font-size:0.8rem; color:#9a8060; line-height:1.6;">
     Vous pouvez aussi soutenir directement les auteurs en consultant <a href="auteurs-ln.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">la page d&apos;adresse de don Lightning</a>.
-    &nbsp;&middot;&nbsp; <a href="#textes-section" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">&#128196; Textes fondateurs</a>
     &nbsp;&middot;&nbsp; <a href="auteurs.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">&#128100; À propos des auteurs</a>
   </p>
 </div>
@@ -1800,10 +1799,20 @@ function render() {
       (l.versions ? '<span class="ebook-btn" onclick="event.stopPropagation();openBookModal(' + i + ')">&#x1F4E5; T\u00e9l\u00e9charger (PDF)</span>' : '');
     grid.appendChild(card);
   });
+
+  // Sous "Téléchargeables", les textes fondateurs rejoignent la grille,
+  // au même niveau que les livres (pas de section séparée en dessous).
+  if (filterEbook && !filterTextesOnly) {
+    textesMatchingSearch().forEach(function(t) {
+      grid.insertAdjacentHTML('beforeend', texteCardHTML(t));
+      shown++;
+    });
+  }
+
   var total = livres.length;
   var empC  = emprunteSet.size;
 
-  // Section "Textes fondateurs" (sous la grille)
+  // Section "Textes fondateurs" (vue générale / filtre dédié — pas sous Téléchargeables)
   var textesShown = renderTextesSection();
 
   if (filterTextesOnly) {
@@ -1829,67 +1838,66 @@ function render() {
   }
 }
 
-// ── Section "Textes fondateurs" ────────────────────────────
-// Rend les documents fondateurs (KAZA_TEXTES) en cartes distinctes,
-// dans l'ordre chronologique, avec téléchargement direct (FR/EN).
-// Visible en vue générale, sous le filtre "Téléchargeables", et en
-// recherche. Renvoie le nombre de textes affichés.
-function renderTextesSection() {
-  var sec = document.getElementById('textes-section');
-  if (!sec) return 0;
-  sec.innerHTML = '';
-  if (typeof KAZA_TEXTES === 'undefined' || !KAZA_TEXTES.length) return 0;
+// ── Textes fondateurs ──────────────────────────────────────
+// Documents fondateurs (KAZA_TEXTES) au même gabarit que les livres.
+//   • vue générale / filtre "Textes fondateurs" → section dédiée (titre + lignée)
+//   • filtre "Téléchargeables" → injectés dans la grille (voir render())
 
-  // Visible en vue générale, sous "Téléchargeables", ou via le filtre dédié
-  // "Textes fondateurs" (pas dans les catégories de livres ni "coup de cœur").
-  var contextOK = filterTextesOnly || (!filterCDC && (filterCat === 'all' || filterEbook));
-  if (!contextOK) return 0;
-
-  // Filtre recherche : sur titre / titre original / auteur / type.
-  var textes = KAZA_TEXTES.filter(function(t) {
+// Filtre recherche : titre / titre original / auteur / type.
+function textesMatchingSearch() {
+  if (typeof KAZA_TEXTES === 'undefined') return [];
+  return KAZA_TEXTES.filter(function(t) {
     if (!filterText) return true;
     var hay = (t.titre + ' ' + (t.titre_orig || '') + ' ' + t.auteur + ' ' + (t.type || '')).toLowerCase();
     return hay.indexOf(filterText) !== -1;
   });
-  if (!textes.length) return 0;
+}
 
-  // Libellé court pour les boutons FR/EN (les autres labels restent tels quels).
+// Carte d'un texte — même gabarit que les cartes de livres.
+function texteCardHTML(t) {
   function shortLabel(lab) {
     if (/fran[çc]ais/i.test(lab)) return '🇫🇷 FR';
-    if (/english/i.test(lab))         return '🇬🇧 EN';
+    if (/english/i.test(lab))     return '🇬🇧 EN';
     return lab;
   }
-
-  var cards = textes.map(function(t) {
-    var dl = (t.versions || []).map(function(v) {
-      return '<a class="texte-dl" href="' + esc(v.file) + '" download onclick="event.stopPropagation()">' + esc(shortLabel(v.label)) + '</a>';
-    }).join('');
-    var orig = t.lien
-      ? '<a class="texte-orig" href="' + esc(t.lien) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Texte original &#8599;</a>'
-      : '';
-    // Même gabarit que les cartes de livres (book-card / card-img-wrap / card-body)
-    return '<div class="book-card texte-card" onclick="openTexteModal(\'' + esc(t.id) + '\')">' +
-        '<div class="card-img-wrap">' +
-          '<img src="images/' + esc(t.img) + '" alt="' + esc(t.titre) + '" loading="lazy">' +
-          '<span class="status-badge badge-dispo">&#x1F4E5; Libre</span>' +
-        '</div>' +
-        '<div class="card-body">' +
-          '<div class="card-title">' + esc(t.titre) + '</div>' +
-          '<div class="card-author">' + esc(t.auteur) + '</div>' +
-          '<div class="card-meta">' + esc(t.type || 'Document') + ' · ' + esc(t.annee) + '</div>' +
-          '<span class="card-cat cat-whitepaper">&#x1F4DC; Document</span>' +
-          '<div class="texte-dls">' + dl + '</div>' +
-          orig +
-        '</div>' +
-      '</div>';
+  var dl = (t.versions || []).map(function(v) {
+    return '<a class="texte-dl" href="' + esc(v.file) + '" download onclick="event.stopPropagation()">' + esc(shortLabel(v.label)) + '</a>';
   }).join('');
+  var orig = t.lien
+    ? '<a class="texte-orig" href="' + esc(t.lien) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">Texte original &#8599;</a>'
+    : '';
+  return '<div class="book-card texte-card" onclick="openTexteModal(\'' + esc(t.id) + '\')">' +
+      '<div class="card-img-wrap">' +
+        '<img src="images/' + esc(t.img) + '" alt="' + esc(t.titre) + '" loading="lazy">' +
+        '<span class="status-badge badge-dispo">&#x1F4E5; Libre</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="card-title">' + esc(t.titre) + '</div>' +
+        '<div class="card-author">' + esc(t.auteur) + '</div>' +
+        '<div class="card-meta">' + esc(t.type || 'Document') + ' · ' + esc(t.annee) + '</div>' +
+        '<span class="card-cat cat-whitepaper">&#x1F4DC; Document</span>' +
+        '<div class="texte-dls">' + dl + '</div>' +
+        orig +
+      '</div>' +
+    '</div>';
+}
 
+// Section dédiée (titre + cartes). PAS sous "Téléchargeables" (là, les
+// textes sont injectés dans la grille des livres par render()).
+function renderTextesSection() {
+  var sec = document.getElementById('textes-section');
+  if (!sec) return 0;
+  sec.innerHTML = '';
+  var contextOK = filterTextesOnly || (filterCat === 'all' && !filterCDC && !filterEbook);
+  if (!contextOK) return 0;
+  var textes = textesMatchingSearch();
+  if (!textes.length) return 0;
   sec.innerHTML =
     '<div class="textes-head">' +
       '<h2>&#x1F4DC; Textes fondateurs</h2>' +
       '<p>La lignée intellectuelle de Bitcoin &middot; de la crypto-anarchie (1988) à Lightning (2016) &middot; <strong>libres &amp; téléchargeables</strong></p>' +
     '</div>' +
-    '<div class="textes-grid">' + cards + '</div>';
+    '<div class="textes-grid">' + textes.map(texteCardHTML).join('') + '</div>';
   return textes.length;
 }
 
