@@ -1057,7 +1057,7 @@
     <button class="filter-btn"         onclick="setFilter('Bande dessinee',this)">&#x1F4D6; Bande dessin&eacute;e</button>
     <button class="filter-btn"         onclick="setFilter('Enfants',this)">&#x1F9D2; Enfants</button>
     <button class="filter-btn"         onclick="setFilter('ebook',this)">&#x1F4E5; T&eacute;l&eacute;chargeables</button>
-    <button class="filter-btn"         onclick="setFilter('textes',this)">&#x1F4DC; Textes fondateurs</button>
+    <button class="filter-btn"         onclick="setFilter('textes',this)">&#x1F4DC; Sources</button>
     <button class="filter-btn"         onclick="setFilter('coupDeCoeur',this)">&#x1F9E1; Coup de c&oelig;ur</button>
     <button class="filter-btn" id="avail-btn" onclick="toggleAvailFilter(this)">&#x2705; Disponibles seulement</button>
   </div>
@@ -1837,7 +1837,7 @@ function render() {
 
   if (filterTextesOnly) {
     document.getElementById('stats-text').innerHTML =
-      '<span>' + textesShown + '</span> texte(s) fondateur(s) \u00b7 libres &amp; t\u00e9l\u00e9chargeables';
+      '<span>' + textesShown + '</span> source(s) \u00b7 libres &amp; t\u00e9l\u00e9chargeables';
   } else {
     document.getElementById('stats-text').innerHTML =
       '<span>' + shown + '</span> livre(s) affich\u00e9(s) \u00a0\u00b7\u00a0 ' +
@@ -1917,8 +1917,8 @@ function renderTextesSection() {
   // on n'affiche donc pas le titre pour éviter la redondance.
   var head = filterTextesOnly ? '' :
     '<div class="textes-head">' +
-      '<h2>&#x1F4DC; Aux origines de Bitcoin</h2>' +
-      '<p>Les <strong>textes fondateurs</strong> &middot; des manifestes cypherpunks aux white papers &middot; 1988 &rarr; 2016 &middot; libres &amp; téléchargeables</p>' +
+      '<h2>&#x1F4DC; Sources</h2>' +
+      '<p>Manifestes, white papers &amp; essais &middot; aux origines de Bitcoin &middot; libres &amp; téléchargeables</p>' +
     '</div>';
   sec.innerHTML = head + '<div class="textes-grid">' + textes.map(texteCardHTML).join('') + '</div>';
   return textes.length;
@@ -1930,7 +1930,7 @@ function renderFilterIntro() {
   if (!el) return;
   var html = '';
   if (filterTextesOnly) {
-    html = '<p><strong>&#x1F4DC; Les textes fondateurs</strong> — les écrits qui ont façonné l’esprit de Bitcoin : des manifestes cypherpunks défendant la vie privée et la liberté, aux white papers de Satoshi Nakamoto et du Lightning Network. De 1988 à 2016, ils retracent la lignée intellectuelle qui a rendu Bitcoin possible. Tous libres et téléchargeables (FR/EN).</p>';
+    html = '<p><strong>&#x1F4DC; Sources</strong> — les écrits aux origines de Bitcoin et de la culture cypherpunk : manifestes, white papers et essais. Tous libres et téléchargeables, en français et en anglais.</p>';
   } else if (filterEbook) {
     html = '<p><strong>&#x1F4E5; Libres &amp; téléchargeables</strong> — ces ouvrages et textes fondateurs sont disponibles gratuitement : lisez-les immédiatement, sans emprunt ni réservation.</p>';
   }
