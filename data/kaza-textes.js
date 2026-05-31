@@ -86,7 +86,24 @@ var KAZA_TEXTES = [
     lien: "https://www.eff.org/cyberspace-independence"
   },
 
-  // ── Précurseurs directs de Bitcoin (1998–2008) ───────────
+  // ── Précurseurs directs de Bitcoin (1997–2008) ───────────
+
+  {
+    id:         "hashcash",
+    titre:      "Hashcash",
+    titre_orig: "Hashcash — A Denial of Service Counter-Measure",
+    auteur:     "Adam Back",
+    annee:      1997,
+    img:        "adam_back.webp",
+    type:       "White Paper",
+    ere:        "cypherpunks",
+    rubrique:   "La preuve de travail (proof-of-work) avant Bitcoin. Proposée par Adam Back en 1997 et formalisée en 2002, Hashcash impose un coût de calcul pour limiter le spam — le mécanisme exact que Satoshi reprendra pour sécuriser Bitcoin, et qu'il citera dans son white paper.",
+    extrait:    "Hashcash calcule un jeton qui sert de preuve de travail : le produire coûte du temps de calcul, ce qui rend l'abus coûteux — sans aucun tiers de confiance.",
+    versions: [
+      { label: "🇬🇧 English version", file: "White Paper/Precurseurs/hashcash-back-2002.pdf" }
+    ],
+    lien: "http://www.hashcash.org/"
+  },
 
   {
     id:         "bit-gold",
