@@ -1020,10 +1020,70 @@
   /* ── Section Textes fondateurs ───────────────────────────── */
   #textes-section { max-width: 1400px; margin: 0 auto; padding: 0 20px 16px; }
   #textes-section:empty { display: none; }
-  .textes-head { text-align: center; max-width: 760px; margin: 4px auto 18px; padding-top: 22px; border-top: 1px solid var(--border); }
-  .textes-head h2 { font-family: 'Georgia', serif; color: var(--text); font-size: 1.55rem; letter-spacing: 0.3px; }
-  .textes-head p { color: var(--muted); font-size: 0.9rem; margin-top: 6px; line-height: 1.5; }
-  .textes-head strong { color: var(--gold); }
+  .textes-head {
+    text-align: center;
+    max-width: 880px;
+    margin: 6px auto 22px;
+    padding: 16px 24px 14px;
+    background: #fdf5e4;
+    border: 1px solid #e8d8b0;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  .textes-head-eyebrow {
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .textes-head h2 {
+    font-family: 'Georgia', serif;
+    color: var(--text);
+    font-size: 1.7rem;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .textes-head-sub {
+    color: #5a4a32;
+    font-size: 0.88rem;
+    margin: 7px auto 0;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .textes-head-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+  }
+  .textes-head-line i {
+    flex: 0 0 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c47a0a 25%, #c47a0a 75%, transparent);
+    position: relative;
+  }
+  .textes-head-line i::after {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 5px; height: 5px;
+    margin: -3px 0 0 -3px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  @media (max-width: 600px) {
+    .textes-head { padding: 14px 16px 12px; margin: 4px auto 18px; }
+    .textes-head h2 { font-size: 1.4rem; }
+    .textes-head-line i { flex-basis: 70px; }
+  }
   /* Même gabarit que la grille des livres */
   .textes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
   .texte-dls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -1140,7 +1200,7 @@
     <button class="filter-btn"         onclick="setFilter('Bande dessinee',this)">&#x1F4D6; Bande dessin&eacute;e</button>
     <button class="filter-btn"         onclick="setFilter('Enfants',this)">&#x1F9D2; Enfants</button>
     <button class="filter-btn"         onclick="setFilter('ebook',this)">&#x1F4E5; T&eacute;l&eacute;chargeables</button>
-    <button class="filter-btn"         onclick="setFilter('textes',this)">&#x1F4DC; Sources</button>
+    <button class="filter-btn"         onclick="setFilter('textes',this)">&#x1F4DC; Genèse</button>
     <button class="filter-btn"         onclick="setFilter('coupDeCoeur',this)">&#x1F9E1; Coup de c&oelig;ur</button>
     <button class="filter-btn" id="avail-btn" onclick="toggleAvailFilter(this)">&#x2705; Disponibles seulement</button>
   </div>
@@ -1996,7 +2056,7 @@ function render() {
 
   if (filterTextesOnly) {
     document.getElementById('stats-text').innerHTML =
-      '<span>' + textesShown + '</span> source(s) \u00b7 libres &amp; t\u00e9l\u00e9chargeables';
+      '<span>' + textesShown + '</span> texte(s) \u00b7 libres &amp; t\u00e9l\u00e9chargeables';
   } else {
     document.getElementById('stats-text').innerHTML =
       '<span>' + shown + '</span> livre(s) affich\u00e9(s) \u00a0\u00b7\u00a0 ' +
@@ -2074,10 +2134,12 @@ function renderTextesSection() {
   // En vue générale : titre de section. Sous le filtre "Textes fondateurs",
   // c'est l'encadré de présentation (#filter-intro) qui fait office d'intro,
   // on n'affiche donc pas le titre pour éviter la redondance.
-  var head = filterTextesOnly ? '' :
+  var head =
     '<div class="textes-head">' +
-      '<h2>&#x1F4DC; Sources</h2>' +
-      '<p>Manifestes, white papers &amp; essais &middot; aux origines de Bitcoin &middot; libres &amp; téléchargeables</p>' +
+      '<div class="textes-head-eyebrow">&#x1F4DC; Aux origines de Bitcoin</div>' +
+      '<h2>Genèse</h2>' +
+      '<p class="textes-head-sub">Les écrits fondateurs — manifestes, white papers &amp; essais qui ont façonné Bitcoin et la culture cypherpunk. Libres &amp; téléchargeables.</p>' +
+      '<div class="textes-head-line"><span>1988</span><i></i><span>2016</span></div>' +
     '</div>';
   sec.innerHTML = head + '<div class="textes-grid">' + textes.map(texteCardHTML).join('') + '</div>';
   return textes.length;
@@ -2087,10 +2149,10 @@ function renderTextesSection() {
 function renderFilterIntro() {
   var el = document.getElementById('filter-intro');
   if (!el) return;
+  // La section "Genèse" a sa propre bannière (textes-head), affichée dans
+  // les deux vues — donc pas d'encadré ici pour ce filtre.
   var html = '';
-  if (filterTextesOnly) {
-    html = '<p><strong>&#x1F4DC; Sources</strong> — les écrits aux origines de Bitcoin et de la culture cypherpunk : manifestes, white papers et essais. Tous libres et téléchargeables, en français et en anglais.</p>';
-  } else if (filterEbook) {
+  if (filterEbook) {
     html = '<p><strong>&#x1F4E5; Libres &amp; téléchargeables</strong> — ces ouvrages et textes fondateurs sont disponibles gratuitement : lisez-les immédiatement, sans emprunt ni réservation.</p>';
   }
   el.innerHTML = html;
