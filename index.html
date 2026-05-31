@@ -12,6 +12,35 @@
 <meta property="og:image"       content="images/bitcoin_standard.webp">
 <meta name="twitter:card"       content="summary">
 <meta name="twitter:site"       content="@ProfScofield2">
+<meta property="og:url"         content="https://kazabitcoin.netlify.app/">
+<link rel="canonical" href="https://kazabitcoin.netlify.app/">
+<!-- Données structurées (marque Kaz'a Bitcoin = vitrine Bitcoin locale en Guadeloupe). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://kazabitcoin.netlify.app/#org",
+      "name": "Kaz'a Bitcoin",
+      "url": "https://kazabitcoin.netlify.app/",
+      "email": "kazabitcoin@proton.me",
+      "description": "Kaz'a Bitcoin — vitrine Bitcoin en Guadeloupe. Première section : une bibliothèque Lightning de livres à emprunter (Bitcoin, économie autrichienne, culture cypherpunk) et des documents libres à télécharger.",
+      "areaServed": "Guadeloupe",
+      "knowsAbout": ["Bitcoin", "Lightning Network", "économie autrichienne", "cypherpunk"],
+      "sameAs": ["https://twitter.com/ProfScofield2"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://kazabitcoin.netlify.app/#website",
+      "url": "https://kazabitcoin.netlify.app/",
+      "name": "Kaz'a Bitcoin",
+      "inLanguage": "fr",
+      "publisher": { "@id": "https://kazabitcoin.netlify.app/#org" }
+    }
+  ]
+}
+</script>
 <style>
   :root {
     --bg:     #f5f0e8;
@@ -581,9 +610,23 @@
   .book-modal-badges {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
     margin-top: 2px;
   }
+  .share-btn {
+    margin-left: auto;
+    background: #fff;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 11px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .share-btn:hover { border-color: var(--gold); color: var(--gold); }
   .book-modal-divider {
     border: none;
     border-top: 1px solid var(--border);
@@ -1382,6 +1425,7 @@ function openBookModal(idx) {
       '<span class="card-cat ' + catClass + '">' + esc(catLabel) + '</span>' +
       '<span class="status-badge ' + statusClass + '" style="position:relative;top:0;right:0;display:inline-block">' + statusTxt + '</span>' +
       cdcBadge +
+      '<button class="share-btn" onclick="event.stopPropagation();shareFiche(\'livre\',\'' + esc(livreId(l)) + '\',this)" title="Copier le lien de ce livre">&#128279; Partager</button>' +
     '</div>';
 
   // ── Bouton Réserver (uniquement pour les livres physiques à emprunter) ──
@@ -1471,12 +1515,14 @@ function openBookModal(idx) {
 
   document.getElementById('bm-info').innerHTML = html;
   document.getElementById('book-modal-overlay').classList.add('open');
+  setFicheHash('livre', livreId(l));
 }
 
 function closeBookModal(e) {
   if (e && e.target !== document.getElementById('book-modal-overlay')) return;
   document.getElementById('book-modal-overlay').classList.remove('open');
   bookFlipped = false;
+  clearFicheHash();
 }
 
 // Fiche d'un texte fondateur — réutilise la modale des livres.
@@ -1510,6 +1556,7 @@ function openTexteModal(id) {
     '<div class="book-modal-badges">' +
       '<span class="card-cat cat-whitepaper">&#x1F4DC; ' + esc(t.type || 'Document') + '</span>' +
       '<span class="status-badge badge-dispo" style="position:relative;top:0;right:0;display:inline-block">&#x1F4E5; Libre</span>' +
+      '<button class="share-btn" onclick="event.stopPropagation();shareFiche(\'source\',\'' + esc(t.id) + '\',this)" title="Copier le lien de ce document">&#128279; Partager</button>' +
     '</div>' +
     (t.rubrique ? '<hr class="book-modal-divider"><div class="book-modal-rubrique">' + esc(t.rubrique) + '</div>' : '') +
     quotesHTML +
@@ -1518,6 +1565,7 @@ function openTexteModal(id) {
 
   document.getElementById('bm-info').innerHTML = html;
   document.getElementById('book-modal-overlay').classList.add('open');
+  setFicheHash('source', t.id);
 }
 
 // \u2500\u2500 Copie avec fallback pour file:// (Chrome bloque clipboard API hors HTTPS) \u2500\u2500
@@ -1989,6 +2037,51 @@ function toggleAvailFilter(btn) {
   render();
 }
 
+// ── URLs partageables par fiche (deep links) + données structurées ──
+var SITE_URL = 'https://kazabitcoin.netlify.app/';
+
+function setFicheHash(kind, id) {
+  try { history.replaceState(null, '', '#' + kind + '=' + encodeURIComponent(id)); } catch (e) {}
+}
+function clearFicheHash() {
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+}
+function shareFiche(kind, id, btn) {
+  var url = location.origin + location.pathname + '#' + kind + '=' + encodeURIComponent(id);
+  copyText(url, function () {
+    if (!btn) return;
+    var old = btn.innerHTML;
+    btn.innerHTML = '✓ Lien copié';
+    setTimeout(function () { btn.innerHTML = old; }, 1600);
+  });
+}
+function openFromHash() {
+  var m = (location.hash || '').match(/^#(livre|source)=(.+)$/);
+  if (!m) return;
+  var id = decodeURIComponent(m[2]);
+  if (m[1] === 'source') { openTexteModal(id); return; }
+  var idx = livres.findIndex(function (l) { return livreId(l) === id; });
+  if (idx >= 0) openBookModal(idx);
+}
+// Données structurées du catalogue (Book) — aide au référencement.
+function injectBooksJsonLd() {
+  try {
+    var items = livres.filter(function (l) { return !l.collection; }).map(function (l, i) {
+      var b = { "@type": "Book", "name": l.titre, "author": { "@type": "Person", "name": l.auteur },
+                "inLanguage": "fr", "url": SITE_URL + '#livre=' + encodeURIComponent(livreId(l)) };
+      if (l.img)   b.image = SITE_URL + 'images/' + l.img;
+      if (l.annee) b.datePublished = String(l.annee);
+      return { "@type": "ListItem", "position": i + 1, "item": b };
+    });
+    var data = { "@context": "https://schema.org", "@type": "ItemList",
+                 "name": "Catalogue — Bibliothèque Lightning Kaz'a Bitcoin", "itemListElement": items };
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(data);
+    document.head.appendChild(s);
+  } catch (e) {}
+}
+
 // ── Tooltip QR au survol ──
 var _qrHover     = null;
 var _qrHoverAddr = null;
@@ -2027,6 +2120,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.filter-btn').forEach(function(b) {
     b.setAttribute('aria-pressed', b.classList.contains('active') ? 'true' : 'false');
   });
+
+  // SEO catalogue + ouverture d'une fiche depuis l'URL (#livre=… / #source=…)
+  injectBooksJsonLd();
+  openFromHash();
 });
 
 function showHoverQR(addr, e) {
