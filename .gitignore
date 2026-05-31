@@ -27,3 +27,6 @@ node_modules/
 # Secrets du bot Telegram — NE JAMAIS COMMITER
 scripts/bot.env
 *.env
+
+# Dossier de tri local (non déployé)
+À trier/
