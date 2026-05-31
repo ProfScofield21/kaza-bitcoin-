@@ -1035,6 +1035,46 @@
     #textes-section { padding: 0 12px 12px; }
     .textes-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
   }
+
+  /* ── Modal réservation (formulaire) ──────────────────────── */
+  #reserve-modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(20,12,4,0.6); z-index: 700;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  #reserve-modal-overlay.open { display: flex; }
+  .reserve-box {
+    background: var(--card); border-radius: 16px;
+    max-width: 460px; width: 100%; max-height: 90vh; overflow-y: auto;
+    padding: 24px 22px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .reserve-close {
+    position: absolute; top: 10px; right: 12px; background: none; border: none;
+    font-size: 1.5rem; color: var(--muted); cursor: pointer; line-height: 1;
+  }
+  .reserve-box h3 { font-family: 'Georgia', serif; color: var(--text); font-size: 1.25rem; margin-right: 24px; }
+  .reserve-intro { color: var(--muted); font-size: 0.86rem; line-height: 1.5; margin: 8px 0 16px; }
+  #reserve-form label { display: block; font-size: 0.82rem; font-weight: 700; color: #3a2808; margin-bottom: 12px; }
+  #reserve-form input, #reserve-form textarea {
+    display: block; width: 100%; margin-top: 5px; padding: 9px 11px;
+    font-size: 0.9rem; font-family: inherit; border: 1px solid var(--border);
+    border-radius: 9px; background: #fff; color: var(--text);
+  }
+  #reserve-form input:focus, #reserve-form textarea:focus { outline: none; border-color: var(--gold); }
+  #reserve-form input[readonly] { background: #f5f0e8; color: var(--muted); font-weight: 600; }
+  .reserve-hp { position: absolute; left: -9999px; }
+  .reserve-submit {
+    width: 100%; margin-top: 4px; padding: 11px; background: var(--gold); color: #fff;
+    border: none; border-radius: 9px; font-size: 0.92rem; font-weight: 800; cursor: pointer; transition: background 0.2s;
+  }
+  .reserve-submit:hover { background: var(--gold2); }
+  .reserve-submit:disabled { opacity: 0.6; cursor: default; }
+  .reserve-alt { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 14px; }
+  .reserve-alt a { color: var(--gold); font-weight: 700; text-decoration: none; }
+  .reserve-alt a:hover { text-decoration: underline; }
+  #reserve-success, #reserve-error { padding: 16px; border-radius: 10px; font-size: 0.9rem; line-height: 1.5; text-align: center; }
+  #reserve-success { background: #dcfce7; color: #166534; }
+  #reserve-error { background: #fee2e2; color: #991b1b; margin-top: 12px; }
 </style>
 <script src="js/qrcode.min.js"></script>
 </head>
@@ -1184,6 +1224,39 @@
       <div class="book-modal-cover" id="bm-cover-wrap"></div>
       <div class="book-modal-info" id="bm-info"></div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL RÉSERVATION (formulaire Netlify) -->
+<div id="reserve-modal-overlay" role="dialog" aria-modal="true" aria-label="Réserver un livre" onclick="closeReserveModal(event)">
+  <div class="reserve-box">
+    <button class="reserve-close" onclick="closeReserveModal(null)" aria-label="Fermer">&times;</button>
+    <h3 id="reserve-title">&#128233; Réserver un livre</h3>
+    <p class="reserve-intro" id="reserve-intro">Indiquez vos coordonnées : je vous recontacte pour organiser l&apos;emprunt.</p>
+    <form name="reservation" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="reserve-form" onsubmit="return submitReservation(event)">
+      <input type="hidden" name="form-name" value="reservation">
+      <input type="hidden" name="demande" id="reserve-demande" value="Réservation">
+      <p class="reserve-hp"><label>Ne pas remplir&nbsp;: <input name="bot-field"></label></p>
+      <label>Livre / document
+        <input type="text" name="livre" id="reserve-livre" readonly>
+      </label>
+      <label>Votre nom ou pseudo *
+        <input type="text" name="nom" required autocomplete="name">
+      </label>
+      <label>Comment vous recontacter ? (email, Telegram, Nostr…) *
+        <input type="text" name="contact" required>
+      </label>
+      <label>Message (optionnel)
+        <textarea name="message" rows="3"></textarea>
+      </label>
+      <button type="submit" class="reserve-submit">&#128233; Envoyer la demande</button>
+    </form>
+    <p class="reserve-alt">ou directement par
+      <a id="reserve-tg" href="https://t.me/BitcoinGwada" target="_blank" rel="noopener">Telegram</a> ·
+      <a id="reserve-mail" href="mailto:kazabitcoin@proton.me">email</a>
+    </p>
+    <div id="reserve-success" hidden>&#9989; Demande envoyée&nbsp;! Je vous recontacte au plus vite. Merci &#129505;&#9889;</div>
+    <div id="reserve-error" hidden>&#9888;&#65039; L&apos;envoi a échoué. Réessayez, ou contactez-moi par Telegram/email ci-dessus.</div>
   </div>
 </div>
 
@@ -1431,21 +1504,12 @@ function openBookModal(idx) {
   // ── Bouton Réserver (uniquement pour les livres physiques à emprunter) ──
   //    Les ouvrages téléchargeables (ebook / PDF / white papers) sont
   //    toujours dispo : pas besoin de réserver ni de contacter la bibli.
+  //    Ouvre le formulaire de réservation (Netlify Forms), pré-rempli.
   if (!l.ebook && !l.versions) {
-    var bibMail = KAZA_CONFIG.bibEmail || 'kazabitcoin@proton.me';
-    var bibTg   = KAZA_CONFIG.bibTelegram || 'https://t.me/BitcoinGwada';
-    var rSubj = encodeURIComponent((emp ? 'Disponibilité : ' : 'Réservation : ') + l.titre);
-    var rBody = encodeURIComponent('Bonjour,\n\n' +
-      (emp
-        ? 'Je souhaite être prévenu(e) quand le livre « ' + l.titre + ' » sera de nouveau disponible à la Bibliothèque Lightning.'
-        : 'Je souhaite emprunter le livre « ' + l.titre + ' » de la Bibliothèque Lightning.') +
-      '\n\nMerci !');
-    var rMailto = 'mailto:' + bibMail + '?subject=' + rSubj + '&body=' + rBody;
     html += '<div class="book-modal-reserve">' +
-        '<a class="reserve-btn' + (emp ? ' reserve-btn-wait' : '') + '" href="' + esc(rMailto) + '" onclick="event.stopPropagation()">' +
+        '<button class="reserve-btn' + (emp ? ' reserve-btn-wait' : '') + '" onclick="event.stopPropagation();openReserveForBook(' + idx + ')">' +
           (emp ? '&#128276; Me prévenir quand dispo' : '&#128233; Réserver ce livre') +
-        '</a>' +
-        '<a class="reserve-tg" href="' + esc(bibTg) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">ou via Telegram</a>' +
+        '</button>' +
       '</div>';
   }
 
@@ -1566,6 +1630,53 @@ function openTexteModal(id) {
   document.getElementById('bm-info').innerHTML = html;
   document.getElementById('book-modal-overlay').classList.add('open');
   setFicheHash('source', t.id);
+}
+
+// ── Formulaire de réservation (Netlify Forms) ──
+function openReserveForBook(idx) {
+  var l = livres[idx];
+  if (l) openReserveModal(l.titre, emprunteSet.has(idx));
+}
+function openReserveModal(titre, emprunte) {
+  var demande = emprunte ? 'Disponibilité (prévenir au retour)' : 'Réservation';
+  document.getElementById('reserve-demande').value = demande;
+  document.getElementById('reserve-livre').value = titre || '';
+  document.getElementById('reserve-title').innerHTML = emprunte
+    ? '&#128276; Être prévenu(e) du retour'
+    : '&#128233; Réserver « ' + esc(titre || 'un livre') + ' »';
+  document.getElementById('reserve-intro').textContent = emprunte
+    ? 'Ce livre est actuellement emprunté. Laissez vos coordonnées : je vous préviens dès son retour.'
+    : 'Indiquez vos coordonnées : je vous recontacte pour organiser l’emprunt au prochain rendez-vous.';
+  var form = document.getElementById('reserve-form');
+  form.reset();
+  document.getElementById('reserve-livre').value = titre || '';
+  document.getElementById('reserve-demande').value = demande;
+  form.style.display = '';
+  document.getElementById('reserve-success').hidden = true;
+  document.getElementById('reserve-error').hidden = true;
+  var subj = encodeURIComponent(demande + (titre ? ' : ' + titre : ''));
+  document.getElementById('reserve-mail').href = 'mailto:' + (KAZA_CONFIG.bibEmail || 'kazabitcoin@proton.me') + '?subject=' + subj;
+  document.getElementById('reserve-tg').href = KAZA_CONFIG.bibTelegram || 'https://t.me/BitcoinGwada';
+  document.getElementById('reserve-modal-overlay').classList.add('open');
+}
+function closeReserveModal(e) {
+  if (e && e.target !== document.getElementById('reserve-modal-overlay')) return;
+  document.getElementById('reserve-modal-overlay').classList.remove('open');
+}
+function submitReservation(e) {
+  e.preventDefault();
+  var form = document.getElementById('reserve-form');
+  var btn  = form.querySelector('.reserve-submit');
+  var body = new URLSearchParams(new FormData(form)).toString();
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+    .then(function (r) { if (!r.ok) throw new Error('http');
+      form.style.display = 'none';
+      document.getElementById('reserve-success').hidden = false;
+    })
+    .catch(function () { document.getElementById('reserve-error').hidden = false; })
+    .finally(function () { if (btn) { btn.disabled = false; btn.innerHTML = '&#128233; Envoyer la demande'; } });
+  return false;
 }
 
 // \u2500\u2500 Copie avec fallback pour file:// (Chrome bloque clipboard API hors HTTPS) \u2500\u2500
@@ -2099,6 +2210,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Fermeture des modales avec Escape
   document.addEventListener('keydown', function(e) {
     if (e.key !== 'Escape') return;
+    if (document.getElementById('reserve-modal-overlay').classList.contains('open')) {
+      closeReserveModal(null); return;
+    }
     if (document.getElementById('coll-modal-overlay').classList.contains('open')) {
       closeCollModal(null); return;
     }
