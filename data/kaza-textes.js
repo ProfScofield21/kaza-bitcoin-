@@ -13,6 +13,7 @@
 //    type       : "Manifeste" | "White Paper" | "Essai" (obligatoire)
 //    rubrique   : description courte (obligatoire)
 //    extrait    : première phrase ou citation marquante (optionnel)
+//    passages   : [optionnel] tableau de citations marquantes supplémentaires
 //    versions   : [{label, file}] téléchargements PDF (optionnel)
 //    lien       : URL du texte original en ligne (optionnel)
 //    ere        : "precurseurs" | "cypherpunks" | "bitcoin" (obligatoire)
@@ -33,6 +34,10 @@ var KAZA_TEXTES = [
     ere:        "precurseurs",
     rubrique:   "Le texte prophétique de 1988 qui annonce l'avènement de la crypto-anarchie : des échanges anonymes, intraçables, hors du contrôle des États, rendus possibles par la cryptographie à clé publique.",
     extrait:    "Un spectre surgit dans le monde moderne, le spectre de la crypto-anarchie.",
+    passages: [
+      "De même que l'imprimerie a transformé et réduit le pouvoir des guildes médiévales et la structure du pouvoir social, les méthodes cryptographiques vont fondamentalement changer la nature des entreprises et de l'intervention de l'État dans les transactions économiques.",
+      "Levez-vous, vous n'avez rien à perdre que vos barbelés !"
+    ],
     versions: [
       { label: "🇫🇷 Version française", file: "White Paper/Cypherpunk/crypto-anarchist-manifesto-fr.pdf" },
       { label: "🇬🇧 English version",   file: "White Paper/Cypherpunk/crypto-anarchist-manifesto-en.pdf" }
@@ -53,6 +58,10 @@ var KAZA_TEXTES = [
     ere:        "cypherpunks",
     rubrique:   "Le texte fondateur du mouvement cypherpunk. En quelques paragraphes fulgurants, Eric Hughes pose les bases d'une philosophie de la vie privée par la cryptographie — directement à l'origine de Bitcoin.",
     extrait:    "La vie privée est nécessaire pour une société ouverte dans l'ère électronique.",
+    passages: [
+      "Nous devons défendre notre propre vie privée si nous voulons en avoir.",
+      "Les cypherpunks écrivent du code. Ils savent que quelqu'un doit écrire des logiciels pour défendre la vie privée, et c'est ce que nous allons faire."
+    ],
     versions: [
       { label: "🇫🇷 Version française", file: "White Paper/Cypherpunk/cypherpunk-manifesto-fr.pdf" },
       { label: "🇬🇧 English version",   file: "White Paper/Cypherpunk/cypherpunk-manifesto-en.pdf" }

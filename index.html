@@ -967,6 +967,13 @@
     .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 16px 12px; }
   }
 
+  /* ── Présentation selon le filtre ────────────────────────── */
+  #filter-intro { max-width: 820px; margin: 0 auto; padding: 4px 20px 0; }
+  #filter-intro:empty { display: none; }
+  #filter-intro p { background: #fdf5e4; border: 1px solid #e8d8b0; border-radius: 12px; padding: 14px 18px; color: #3a2808; font-size: 0.9rem; line-height: 1.6; text-align: center; margin: 0; }
+  #filter-intro strong { color: var(--gold); }
+  @media (max-width: 600px) { #filter-intro { padding: 4px 12px 0; } }
+
   /* ── Section Textes fondateurs ───────────────────────────── */
   #textes-section { max-width: 1400px; margin: 0 auto; padding: 0 20px 16px; }
   #textes-section:empty { display: none; }
@@ -1061,6 +1068,9 @@
   <span id="stats-text">Chargement&hellip;</span>
 </div>
 
+<!-- PRÉSENTATION SELON LE FILTRE (rempli par render) -->
+<div id="filter-intro"></div>
+
 <!-- GRID -->
 <div class="grid" id="grid"></div>
 
@@ -1091,7 +1101,6 @@
   <p style="margin-top:6px">
     <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="https://twitter.com/ProfScofield2" target="_blank">@ProfScofield2</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-    <a href="#textes-section">&#128196; Textes fondateurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="auteurs.html">À propos des auteurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="auteurs-ln.html">Soutenir les auteurs</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
     <a href="mentions-legales.html">Mentions légales</a>
@@ -1485,6 +1494,15 @@ function openTexteModal(id) {
     return '<a class="book-modal-ebook" href="' + esc(v.file) + '" download onclick="event.stopPropagation()">&#x1F4E5; ' + esc(v.label) + '</a>';
   }).join('');
 
+  // Citations : extrait principal + passages marquants éventuels
+  var quotes = [];
+  if (t.extrait) quotes.push(t.extrait);
+  if (t.passages) quotes = quotes.concat(t.passages);
+  var quotesHTML = quotes.length
+    ? '<hr class="book-modal-divider"><div class="book-modal-section-title">&#10077; ' + (quotes.length > 1 ? 'Extraits' : 'Extrait') + '</div>' +
+      quotes.map(function(q) { return '<div class="book-modal-passage">' + esc(q) + '</div>'; }).join('')
+    : '';
+
   var html =
     '<div class="book-modal-title">' + esc(t.titre) + '</div>' +
     (t.titre_orig ? '<div class="book-modal-author">' + esc(t.titre_orig) + '</div>' : '') +
@@ -1494,7 +1512,7 @@ function openTexteModal(id) {
       '<span class="status-badge badge-dispo" style="position:relative;top:0;right:0;display:inline-block">&#x1F4E5; Libre</span>' +
     '</div>' +
     (t.rubrique ? '<hr class="book-modal-divider"><div class="book-modal-rubrique">' + esc(t.rubrique) + '</div>' : '') +
-    (t.extrait ? '<hr class="book-modal-divider"><div class="book-modal-section-title">&#10077; Extrait</div><div class="book-modal-passage">' + esc(t.extrait) + '</div>' : '') +
+    quotesHTML +
     '<hr class="book-modal-divider"><div class="book-modal-section-title">&#x1F4E5; Télécharger</div>' + dls +
     (t.lien ? '<a class="book-modal-bio-btn" href="' + esc(t.lien) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">&#128196; Texte original &#8599;</a>' : '');
 
@@ -1684,6 +1702,8 @@ function render() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
   let shown = 0;
+
+  renderFilterIntro();
 
   // Les "Textes fondateurs" sont rendus dans leur propre section
   // (renderTextesSection), à la fin, sous la grille des livres.
@@ -1892,13 +1912,29 @@ function renderTextesSection() {
   if (!contextOK) return 0;
   var textes = textesMatchingSearch();
   if (!textes.length) return 0;
-  sec.innerHTML =
+  // En vue générale : titre de section. Sous le filtre "Textes fondateurs",
+  // c'est l'encadré de présentation (#filter-intro) qui fait office d'intro,
+  // on n'affiche donc pas le titre pour éviter la redondance.
+  var head = filterTextesOnly ? '' :
     '<div class="textes-head">' +
-      '<h2>&#x1F4DC; Textes fondateurs</h2>' +
-      '<p>La lignée intellectuelle de Bitcoin &middot; de la crypto-anarchie (1988) à Lightning (2016) &middot; <strong>libres &amp; téléchargeables</strong></p>' +
-    '</div>' +
-    '<div class="textes-grid">' + textes.map(texteCardHTML).join('') + '</div>';
+      '<h2>&#x1F4DC; Aux origines de Bitcoin</h2>' +
+      '<p>Les <strong>textes fondateurs</strong> &middot; des manifestes cypherpunks aux white papers &middot; 1988 &rarr; 2016 &middot; libres &amp; téléchargeables</p>' +
+    '</div>';
+  sec.innerHTML = head + '<div class="textes-grid">' + textes.map(texteCardHTML).join('') + '</div>';
   return textes.length;
+}
+
+// Présentation/définition affichée selon le filtre actif (comme une intro).
+function renderFilterIntro() {
+  var el = document.getElementById('filter-intro');
+  if (!el) return;
+  var html = '';
+  if (filterTextesOnly) {
+    html = '<p><strong>&#x1F4DC; Les textes fondateurs</strong> — les écrits qui ont façonné l’esprit de Bitcoin : des manifestes cypherpunks défendant la vie privée et la liberté, aux white papers de Satoshi Nakamoto et du Lightning Network. De 1988 à 2016, ils retracent la lignée intellectuelle qui a rendu Bitcoin possible. Tous libres et téléchargeables (FR/EN).</p>';
+  } else if (filterEbook) {
+    html = '<p><strong>&#x1F4E5; Libres &amp; téléchargeables</strong> — ces ouvrages et textes fondateurs sont disponibles gratuitement : lisez-les immédiatement, sans emprunt ni réservation.</p>';
+  }
+  el.innerHTML = html;
 }
 
 function toggleFilterMenu() {
