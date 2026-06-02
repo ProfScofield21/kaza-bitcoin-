@@ -63,35 +63,139 @@
     border-bottom: 3px solid var(--gold);
     padding: 24px 20px 20px;
     text-align: center;
+    position: relative;
   }
   .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 8px; }
+
+  /* QR don bibliothèque dans le header */
+  .header-don {
+    position: absolute;
+    top: 50%; right: 24px; transform: translateY(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: #ffffff;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 8px 8px 7px;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .header-don:hover { transform: translateY(-50%) scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.4); }
+  .header-don-qr { width: 104px; height: 104px; line-height: 0; }
+  .header-don-qr img, .header-don-qr canvas {
+    display: block; width: 104px !important; height: 104px !important; border-radius: 4px;
+  }
+  .header-don-cap {
+    font-size: 0.7rem; font-weight: 700; color: var(--gold2);
+    line-height: 1.25; text-align: center; letter-spacing: 0.2px;
+  }
+  @media (max-width: 760px) {
+    .header-don {
+      position: static; transform: none; margin: 16px auto 0;
+    }
+    .header-don:hover { transform: scale(1.04); }
+  }
+  @media (max-width: 600px) {
+    .intro-card { margin: 18px 12px 8px; padding: 22px 20px 20px; }
+    .intro-title { font-size: 1.2rem; }
+    .intro-text { font-size: 0.92rem; }
+  }
   .logo-svg { width: 72px; height: 72px; flex-shrink: 0; }
   .site-title { font-size: 2.2rem; font-weight: 800; color: #f5e8c8; letter-spacing: 1px; line-height: 1.1; font-family: 'Georgia', serif; }
   .site-title span { color: #f7931a; }
   .site-subtitle { color: #9a8060; font-size: 0.95rem; margin-top: 4px; letter-spacing: 0.5px; }
 
-  /* INFO BANDS */
-  .band {
-    padding: 13px 24px;
+  /* ENCADRÉ : LE PRINCIPE */
+  html { scroll-behavior: smooth; }
+  .intro-card {
+    max-width: 860px;
+    margin: 30px auto 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 4px 20px var(--shadow);
+    padding: 28px 32px 24px;
     text-align: center;
-    font-size: 0.9rem;
-    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
   }
-  .band-how {
+  .intro-card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--gold), #f7931a);
+  }
+  .intro-title {
+    font-family: 'Georgia', serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--gold2);
+    margin: 4px 0 14px;
+  }
+  .intro-text {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: 640px;
+    margin: 0 auto 20px;
+  }
+  .intro-text strong { color: var(--gold2); }
+  .intro-actions {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  }
+  .intro-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: inherit; font-size: 0.85rem; font-weight: 600;
+    color: var(--gold2);
     background: #fdf5e4;
-    border-top: 1px solid #e8d8b0;
-    border-bottom: 1px solid #e8d8b0;
-    color: #3a2808;
+    border: 1px solid #e8d8b0;
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer; text-decoration: none;
+    transition: background .15s, border-color .15s, transform .15s, color .15s;
   }
-  .band-how strong { color: var(--gold); }
-  .band-how .sats { font-size: inherit; font-weight: 800; color: #b06a00; }
-  .band-contact {
-    background: #fff8ee;
-    border-bottom: 2px solid var(--border);
-    color: var(--muted);
+  .intro-pill:hover {
+    background: #f7ead0; border-color: var(--gold); transform: translateY(-1px);
   }
-  .band-contact a { color: var(--gold); text-decoration: none; font-weight: 600; }
-  .band-contact a:hover { text-decoration: underline; }
+  .intro-pill[aria-expanded="true"] {
+    background: var(--gold); border-color: var(--gold); color: #fff8ee;
+  }
+  /* Panneau dépliable */
+  .howto-panel {
+    margin: 20px auto 2px;
+    max-width: 680px;
+    text-align: left;
+    border-top: 1px dashed var(--border);
+    padding-top: 18px;
+    animation: howtoIn .25s ease;
+  }
+  .howto-panel[hidden] { display: none; }
+  @keyframes howtoIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .howto-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    margin-bottom: 13px;
+    font-size: 0.9rem; line-height: 1.55; color: #3a2808;
+  }
+  .howto-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--gold); color: #fff8ee;
+    font-weight: 800; font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .howto-step a { color: var(--gold2); font-weight: 700; text-decoration: none; }
+  .howto-step a:hover { text-decoration: underline; }
+  .howto-step strong { color: var(--gold2); }
+  .howto-step .sats { font-weight: 800; color: #b06a00; }
+  .howto-contact {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem; color: var(--muted); text-align: center;
+  }
+  .howto-contact a { color: var(--gold2); font-weight: 600; text-decoration: none; }
+  .howto-contact a:hover { text-decoration: underline; }
 
   /* FILTERS */
   .filters {
@@ -1004,6 +1108,30 @@
   .copy-btn:hover { background: #f7931a; }
   .copy-btn.copied { background: #166534; color: #fff; }
 
+  /* Widget de don : QR + adresse */
+  .don-widget {
+    display: flex; align-items: center; justify-content: center;
+    gap: 26px; flex-wrap: wrap;
+    max-width: 720px; margin: 0 auto;
+  }
+  .don-qr {
+    width: 136px; height: 136px; flex-shrink: 0;
+    background: #fff; border-radius: 10px; padding: 8px;
+    line-height: 0; cursor: pointer;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.3);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .don-qr:hover { transform: scale(1.03); box-shadow: 0 5px 18px rgba(0,0,0,0.42); }
+  .don-qr img, .don-qr canvas {
+    display: block; width: 120px !important; height: 120px !important; border-radius: 3px;
+  }
+  .don-info { text-align: left; max-width: 410px; }
+  .don-lead { color: #c8a86a; font-size: 0.9rem; line-height: 1.55; margin-bottom: 12px; }
+  .don-lead strong { color: #f5e8c8; }
+  @media (max-width: 600px) {
+    .don-info { text-align: center; }
+  }
+
   @media (max-width: 480px) {
     .site-title { font-size: 1.5rem; }
     .logo-svg { width: 52px; height: 52px; }
@@ -1158,26 +1286,52 @@
       <div class="site-subtitle">Biblioth&egrave;que Lightning &#x26A1; Guadeloupe</div>
     </div>
   </div>
+
+  <!-- QR don bibliothèque (visible, scannable) -->
+  <button type="button" class="header-don"
+          onclick="openQR(KAZA_CONFIG.bibLN, 'Don &agrave; la biblioth&egrave;que')"
+          aria-label="Faire un don &agrave; la biblioth&egrave;que (QR Lightning)"
+          title="Scanner pour soutenir la biblioth&egrave;que">
+    <div class="header-don-qr" id="header-don-qr" aria-hidden="true"></div>
+    <span class="header-don-cap">&#x26A1; Soutenir<br>la biblioth&egrave;que</span>
+  </button>
 </header>
 
-<!-- BAND : COMMENT EMPRUNTER + CAUTION -->
-<div class="band band-how">
-  &#x26A1; <strong>Comment emprunter&nbsp;?</strong>
-  &nbsp;&nbsp;
-  <strong>1.</strong> Contactez-moi par <a href="https://t.me/BitcoinGwada" target="_blank" style="color:var(--gold);font-weight:700;text-decoration:none;">Telegram</a>, email ou Twitter pour r&eacute;server.
-  &nbsp;&nbsp;
-  <strong>2.</strong> R&eacute;cup&eacute;rez votre livre au <strong>meet-up mensuel Bitcoin Gwada</strong>.
-  &nbsp;&nbsp;
-  <strong>3.</strong> Une caution de <strong><span class="sats">25&thinsp;000 sats</span></strong> en Lightning, rembours&eacute;e d&egrave;s la restitution. Le contrat est sign&eacute; <strong>une seule fois</strong>, valable pour tous vos emprunts suivants <strong>sans limite</strong>.
-</div>
+<!-- ENCADRÉ : LE PRINCIPE -->
+<section class="intro-card">
+  <h2 class="intro-title">&#128218; Emprunter, lire, transmettre</h2>
+  <p class="intro-text">
+    <strong>Kaz&apos;a Bitcoin</strong> r&eacute;unit une collection de livres consacr&eacute;s &agrave; Bitcoin, &agrave; la monnaie saine, &agrave; l&apos;&eacute;conomie et &agrave; la libert&eacute;&nbsp;&mdash;&nbsp;des grands essais aux romans, bandes dessin&eacute;es et titres jeunesse&nbsp;&mdash;&nbsp;&agrave; emprunter librement en Guadeloupe. Le fonctionnement tient en une id&eacute;e&nbsp;: une caution en Lightning, <strong>int&eacute;gralement rembours&eacute;e</strong> d&egrave;s le retour de l&apos;ouvrage. Aucun abonnement, aucun interm&eacute;diaire&nbsp;&mdash;&nbsp;seulement des livres qui circulent.
+  </p>
+  <div class="intro-actions">
+    <button class="intro-pill" id="howto-btn" onclick="toggleHowto(this)" aria-expanded="false" aria-controls="howto-panel">&#x26A1; Comment emprunter</button>
+    <a class="intro-pill" href="auteurs-ln.html">&#x1F9E1; Soutenir les auteurs</a>
+    <a class="intro-pill" href="auteurs.html">&#128100; Les auteurs</a>
+    <a class="intro-pill" href="mailto:kazabitcoin@proton.me">&#9993;&#xFE0F; Contact</a>
+  </div>
 
-<!-- BAND CONTACTS -->
-<div class="band band-contact">
-  &#128236; Pour emprunter un livre, contactez-moi&nbsp;:&nbsp;&nbsp;
-  <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="https://twitter.com/ProfScofield2" target="_blank">Twitter @ProfScofield2</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="https://t.me/BitcoinGwada" target="_blank">Telegram Bitcoin Gwada</a>
-</div>
+  <!-- Panneau dépliable : démarche d'emprunt -->
+  <div class="howto-panel" id="howto-panel" hidden>
+    <div class="howto-step">
+      <span class="howto-num">1</span>
+      <span>Contactez-moi par <a href="https://t.me/BitcoinGwada" target="_blank">Telegram</a>, email ou Twitter pour r&eacute;server l&apos;ouvrage.</span>
+    </div>
+    <div class="howto-step">
+      <span class="howto-num">2</span>
+      <span>R&eacute;cup&eacute;rez votre livre au <strong>meet-up mensuel Bitcoin Gwada</strong>.</span>
+    </div>
+    <div class="howto-step">
+      <span class="howto-num">3</span>
+      <span>Une caution de <span class="sats">25&thinsp;000 sats</span> en Lightning, rembours&eacute;e d&egrave;s la restitution. Le contrat est sign&eacute; <strong>une seule fois</strong>, valable pour tous vos emprunts suivants <strong>sans limite</strong>.</span>
+    </div>
+    <div class="howto-contact">
+      &#128236; Pour r&eacute;server&nbsp;:&nbsp;
+      <a href="mailto:kazabitcoin@proton.me">kazabitcoin@proton.me</a>&nbsp;&middot;&nbsp;
+      <a href="https://twitter.com/ProfScofield2" target="_blank">@ProfScofield2</a>&nbsp;&middot;&nbsp;
+      <a href="https://t.me/BitcoinGwada" target="_blank">Telegram Bitcoin Gwada</a>
+    </div>
+  </div>
+</section>
 
 <!-- FILTERS -->
 <div class="filters" id="filters-bar">
@@ -1221,16 +1375,23 @@
 <section id="textes-section"></section>
 
 <!-- DONATION -->
-<div class="donation-band">
-  <p>&#x1F9E1;&#x26A1;&#xFE0F; Si vous souhaitez soutenir et aider la Biblioth&egrave;que Lightning, vous pouvez faire un don en bitcoin via le Lightning &agrave; l&apos;adresse suivante.</p>
-  <div class="ln-address-wrap">
-    <span class="ln-address" id="bib-ln-display"
-      onclick="openQR(KAZA_CONFIG.bibLN,KAZA_CONFIG.bibNom)"
-      onmouseenter="showHoverQR(KAZA_CONFIG.bibLN,event)"
-      onmousemove="moveHoverQR(event)"
-      onmouseleave="hideHoverQR()"
-     ></span>
-    <button class="copy-btn" id="copy-btn" onclick="copyLN()">Copier</button>
+<div class="donation-band" id="don">
+  <div class="don-widget">
+    <div class="don-qr" id="bib-don-qr"
+         onclick="openQR(KAZA_CONFIG.bibLN,KAZA_CONFIG.bibNom)"
+         title="Scanner pour faire un don &agrave; la biblioth&egrave;que"></div>
+    <div class="don-info">
+      <p class="don-lead">&#x1F9E1;&#x26A1;&#xFE0F; Soutenez la Biblioth&egrave;que Lightning&nbsp;: un don en bitcoin, via Lightning. <strong>Scannez le QR code</strong> ou copiez l&apos;adresse ci-dessous.</p>
+      <div class="ln-address-wrap">
+        <span class="ln-address" id="bib-ln-display"
+          onclick="openQR(KAZA_CONFIG.bibLN,KAZA_CONFIG.bibNom)"
+          onmouseenter="showHoverQR(KAZA_CONFIG.bibLN,event)"
+          onmousemove="moveHoverQR(event)"
+          onmouseleave="hideHoverQR()"
+         ></span>
+        <button class="copy-btn" id="copy-btn" onclick="copyLN()">Copier</button>
+      </div>
+    </div>
   </div>
   <p style="margin-top:12px; font-size:0.8rem; color:#9a8060; line-height:1.6;">
     Vous pouvez aussi soutenir directement les auteurs en consultant <a href="auteurs-ln.html" style="color:var(--gold);font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">la page d&apos;adresse de don Lightning</a>.
@@ -2163,6 +2324,15 @@ function toggleFilterMenu() {
   bar.classList.toggle('open');
 }
 
+function toggleHowto(btn) {
+  var panel = document.getElementById('howto-panel');
+  if (!panel) return;
+  var willOpen = panel.hasAttribute('hidden');
+  if (willOpen) { panel.removeAttribute('hidden'); }
+  else { panel.setAttribute('hidden', ''); }
+  btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+
 function closeFilterMenuOnMobile() {
   if (window.innerWidth <= 600) {
     document.getElementById('filters-bar').classList.remove('open');
@@ -2265,6 +2435,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // Injecter l'adresse LN de la bibliothèque
   var bibDisplay = document.getElementById('bib-ln-display');
   if (bibDisplay) bibDisplay.textContent = KAZA_CONFIG.bibLN;
+
+  // QR don bibliothèque visibles (header + bloc de don du bas)
+  [['header-don-qr', 104], ['bib-don-qr', 120]].forEach(function(cfg) {
+    var el = document.getElementById(cfg[0]);
+    if (el && KAZA_CONFIG.bibLN && typeof QRCode !== 'undefined') {
+      try {
+        new QRCode(el, {
+          text: 'lightning:' + KAZA_CONFIG.bibLN,
+          width: cfg[1], height: cfg[1],
+          colorDark: '#000000', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (e) {}
+    }
+  });
   _qrHover     = document.getElementById('qr-hover');
   _qrHoverAddr = document.getElementById('qr-hover-addr');
   _isTouchOnly = window.matchMedia('(hover: none)').matches;
