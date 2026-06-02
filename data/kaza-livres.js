@@ -201,7 +201,11 @@ var KAZA_LIVRES = [
     cat:         "Economie Liberte",
     img:         "ce_qu_on_voit.webp",
     coupDeCoeur: true,
-    rubrique:    "Le chef-d'œuvre de Bastiat en quelques pages lumineuses : toute politique économique produit des effets visibles… et des effets invisibles souvent désastreux. Une leçon inépuisable, écrite en 1850 et plus actuelle que jamais."
+    rubrique:    "Le chef-d'œuvre de Bastiat en quelques pages lumineuses : toute politique économique produit des effets visibles… et des effets invisibles souvent désastreux. Une leçon inépuisable, écrite en 1850 et plus actuelle que jamais.",
+    passages:  [
+      "Entre un mauvais et un bon Économiste, voici toute la différence : l'un s'en tient à l'effet visible ; l'autre tient compte et de l'effet qu'on voit et de ceux qu'il faut prévoir.",
+      "On ne voit pas que, puisque notre bourgeois a dépensé six francs à une chose, il ne pourra plus les dépenser à une autre."
+    ]
   },
 
   {
@@ -211,7 +215,11 @@ var KAZA_LIVRES = [
     annee:    1850,
     cat:      "Economie Liberte",
     img:      "la_loi.webp",
-    rubrique: "En 50 pages, Bastiat démoli l'idée que l'État peut tout régler par la loi sans créer de la spoliation. Un texte lapidaire et lumineux, aussi très accessible comme point d'entrée dans la pensée libérale."
+    rubrique: "En 50 pages, Bastiat démoli l'idée que l'État peut tout régler par la loi sans créer de la spoliation. Un texte lapidaire et lumineux, aussi très accessible comme point d'entrée dans la pensée libérale.",
+    passages: [
+      "Qu'est-ce donc que la Loi ? Ainsi que je l'ai dit ailleurs, c'est l'organisation collective du Droit individuel de légitime défense.",
+      "La loi pervertie ! La loi — et à sa suite toutes les forces collectives de la nation, — la Loi, dis-je, non seulement détournée de son but, mais appliquée à poursuivre un but directement contraire !"
+    ]
   },
 
   {
