@@ -39,7 +39,10 @@ var KAZA_LIVRES = [
     rubrique:  "Le livre fondateur qui a converti des milliers de personnes à Bitcoin. Ammous retrace l'histoire de la monnaie solide et explique pourquoi Bitcoin est l'or numérique du XXIᵉ siècle.",
     img4:      "4eme-de-couverture/back_bitcoin_standard.webp",
     quatrieme: "In The Bitcoin Standard, economist Saifedean Ammous walks readers through the fascinating history of the technologies of money and explores what properties these technologies their monetary role, how they lost it, what that teaches us about the desirable features of money, and how bitcoin is designed to improve on these technologies. Ammous elucidates the economic, social, cultural, and political benefits of sound money over unsound money, drawing an informed discussion of the potential role bitcoin could play in the digital economy of the future.\n\nRather than as a currency for criminals or a cheap mass consumer payment network, this book argues bitcoin is emerging as a decentralized, politically neutral, free-market alternative to national central banks, with potentially enormous implications for individual freedom and prosperity. For anyone looking for a clear understanding of this new digital money, The Bitcoin Standard is the essential resource.",
-    passages:  []
+    passages:  [
+      "History shows it is not possible to insulate yourself from the consequences of others holding money that is harder than yours.",
+      "Bitcoin can be best understood as distributed software that allows for transfer of value using a currency protected from unexpected inflation without trusting any third parties."
+    ]
   },
 
   {
