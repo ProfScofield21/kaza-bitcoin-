@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /contrat-kaza-bitcoin.pdf
 
 Sitemap: https://kazabitcoin.netlify.app/sitemap.xml
