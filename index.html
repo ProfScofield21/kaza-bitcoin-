@@ -1115,15 +1115,15 @@
     max-width: 720px; margin: 0 auto;
   }
   .don-qr {
-    width: 136px; height: 136px; flex-shrink: 0;
-    background: #fff; border-radius: 10px; padding: 8px;
+    width: 116px; height: 116px; flex-shrink: 0;
+    background: #fff; border-radius: 9px; padding: 6px;
     line-height: 0; cursor: pointer;
-    box-shadow: 0 3px 14px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.22);
     transition: transform .15s, box-shadow .15s;
   }
-  .don-qr:hover { transform: scale(1.03); box-shadow: 0 5px 18px rgba(0,0,0,0.42); }
+  .don-qr:hover { transform: scale(1.03); box-shadow: 0 4px 14px rgba(0,0,0,0.32); }
   .don-qr img, .don-qr canvas {
-    display: block; width: 120px !important; height: 120px !important; border-radius: 3px;
+    display: block; width: 104px !important; height: 104px !important; border-radius: 3px;
   }
   .don-info { text-align: left; max-width: 410px; }
   .don-lead { color: #c8a86a; font-size: 0.9rem; line-height: 1.55; margin-bottom: 12px; }
@@ -1381,7 +1381,7 @@
          onclick="openQR(KAZA_CONFIG.bibLN,KAZA_CONFIG.bibNom)"
          title="Scanner pour faire un don &agrave; la biblioth&egrave;que"></div>
     <div class="don-info">
-      <p class="don-lead">&#x1F9E1;&#x26A1;&#xFE0F; Soutenez la Biblioth&egrave;que Lightning&nbsp;: un don en bitcoin, via Lightning. <strong>Scannez le QR code</strong> ou copiez l&apos;adresse ci-dessous.</p>
+      <p class="don-lead">&#x1F9E1;&#x26A1;&#xFE0F; Soutenez la Biblioth&egrave;que Lightning&nbsp;: un don en sats, via Lightning. <strong>Scannez le QR code</strong> ou copiez l&apos;adresse ci-dessous.</p>
       <div class="ln-address-wrap">
         <span class="ln-address" id="bib-ln-display"
           onclick="openQR(KAZA_CONFIG.bibLN,KAZA_CONFIG.bibNom)"
@@ -2437,7 +2437,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (bibDisplay) bibDisplay.textContent = KAZA_CONFIG.bibLN;
 
   // QR don bibliothèque visibles (header + bloc de don du bas)
-  [['header-don-qr', 104], ['bib-don-qr', 120]].forEach(function(cfg) {
+  [['header-don-qr', 104], ['bib-don-qr', 104]].forEach(function(cfg) {
     var el = document.getElementById(cfg[0]);
     if (el && KAZA_CONFIG.bibLN && typeof QRCode !== 'undefined') {
       try {
